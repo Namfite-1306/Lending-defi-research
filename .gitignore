@@ -1,0 +1,6 @@
+__pycache__/
+.venv/
+.env
+data/rpc_cache/
+data/runs/
+data/test_tmp/
