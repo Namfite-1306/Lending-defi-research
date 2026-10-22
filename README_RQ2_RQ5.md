@@ -15,10 +15,6 @@ Cần event thanh lý và metadata để đo **Top-k/HHI theo số sự kiện**
 
 Lịch sử event chỉ cho biết **hoạt động**, không phải số dư vị thế. Cần thêm snapshot vị thế đồng bộ theo block cho borrower–protocol–asset, giá USD và validation on-chain. Mã hiện có xuất mạng mẫu và common-wallet overlap; nó **không** xác định được quan hệ chủ sở hữu giữa các ví, khoản nợ trực tiếp giữa hai giao thức hay cơ chế truyền nhiễm nhân quả. Không được gọi exposure mẫu là mạng toàn thị trường.
 
-### RQ1 (được yêu cầu chạy cùng RQ2)
-
-Cần toàn bộ borrower cohort có Borrow trước block snapshot `21762264`, positions cùng block, risk debt, collateral enablement, oracle/price, liquidation threshold/E-mode và validation so với `getUserAccountData`. Chỉ chạy RQ1 khi snapshot báo `full_snapshot_complete=true` và toàn bộ vị thế được validation đạt.
-
 ## 2. Chạy thu thập dữ liệu trên Windows
 
 Yêu cầu Python 3.11+ và PowerShell. Giải nén ZIP, mở PowerShell tại thư mục `Lending-defi-research-main`, rồi chạy:
