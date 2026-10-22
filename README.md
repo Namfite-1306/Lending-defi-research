@@ -8,6 +8,8 @@
 
 Pipeline chỉ đọc Ethereum mainnet, không ký hoặc gửi giao dịch. Python >= 3.11, không cần cài thư viện ngoài.
 
+Hướng dẫn công việc tiếp theo cho Người 2: [RQ1 và RQ4](NEXT_STEPS_N2_RQ1_RQ4.md). Ghi chú sửa lỗi và tạo lại dữ liệu giá: [README_EXPANSION.md](README_EXPANSION.md#sửa-lỗi-22102026-và-tạo-lại-đầu-ra).
+
 ## Chạy
 
 Trong thư mục này:
@@ -24,7 +26,7 @@ Lệnh mặc định thu thập cửa sổ **03/02/2025 00:00–03:00 UTC**, ch�
 Đổi thời gian, phạm vi mẫu và tên lần chạy:
 
 ```powershell
-$env:ETH_RPC_URLS = 'https://eth-mainnet.public.blastapi.io,https://rpc.flashbots.net'
+$env:ETH_RPC_URLS = 'https://eth-mainnet.public.blastapi.io,https://eth.drpc.org,https://rpc.mevblocker.io'
 python -m defi_data.pipeline --start 2025-02-02T00:00:00Z --end 2025-02-04T00:00:00Z --run-id stress_20250202_04 --max-wallets 20 --receipts 100
 ```
 
@@ -84,7 +86,16 @@ CSV dùng UTF-8 BOM để mở tiếng Việt; số nguyên blockchain được 
 
 ## Kiểm tra và truy nguồn
 
-Rà soát ngày 18/10/2026: đã sửa exposure giờ đầu dùng khoảng thời gian truy vấn thay vì timestamp block đầu. Số sự kiện giữ nguyên. Có 9 unit tests và 15 nhóm kiểm tra dữ liệu, gồm 6 logs thanh lý, 4 block biên và HF của 5 ví được đọc mới qua RPC. Chi tiết ở `data/runs/stress_20250203_smoke/audit/audit_results.json`; báo cáo PDF ở `output/pdf/`. Lệnh `audit_qa --live` cần truy cập mạng; bỏ `--live` chỉ chạy các kiểm tra nội bộ và sẽ ghi lại kết quả audit tương ứng.
+Rà soát ngày 22/10/2026: **108/108 unit tests đạt** trong `.venv` có NumPy/SciPy sau tích hợp bản mô hình và bản sửa RPC; **15/15 nhóm audit `--live` đạt** trên 4.294 sự kiện và 14 CSV, gồm 6 logs thanh lý, 4 block biên và HF của 5 ví được đọc mới qua RPC. Cài dependency mô hình theo `README_MODELS.md` để các test estimator không bị skip. Chi tiết audit ở `data/runs/stress_20250203_smoke/audit/audit_results.json`. PDF hiện có ở `output/pdf/` là bản ngày 18/10/2026, chưa được tạo lại trong lần sửa này.
+
+`audit_qa --live` dùng chung RPC client với pipeline và nhận cấu hình `ETH_RPC_URLS`; mặc định là Blast, dRPC, MEV Blocker. Các truy vấn trực tiếp luôn bỏ qua cache. Nếu một nhóm không lấy được dữ liệu mới, audit lưu nhóm đó là chưa đạt, giữ các kiểm tra đã thực hiện và trả exit code 1; không chuyển sang cache để báo đạt. Thông báo lỗi giữ mã HTTP/RPC và số thứ tự endpoint để chẩn đoán, không ghi URL/key. Bỏ `--live` chỉ chạy các kiểm tra nội bộ và ghi đè báo cáo bằng kết quả offline có `audit_mode=offline`.
+
+Nếu gặp `Fresh RPC unavailable: HTTPError,HTTPError` từ bản cũ, hàm audit còn dùng hai endpoint cố định và bỏ mất chi tiết lỗi HTTP. Đã thay hàm đó bằng client có fallback/retry và xử lý lỗi theo nhóm kiểm tra. Chạy lại:
+
+```powershell
+$env:ETH_RPC_URLS = 'https://eth-mainnet.public.blastapi.io,https://eth.drpc.org,https://rpc.mevblocker.io'
+python -m defi_data.audit_qa --live
+```
 
 - Kiểm tra chain ID=1; khóa block lịch sử đã cách head 64 block.
 - Deduplicate theo `(chain_id, transaction_hash, log_index)`.

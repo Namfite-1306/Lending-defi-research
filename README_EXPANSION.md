@@ -25,6 +25,25 @@ python -m defi_data.expansion_report
 
 Đặt `ETH_RPC_URLS` trong môi trường nếu có nguồn archive đủ năng lực; không ghi key vào mã hoặc báo cáo. Các nguồn công khai đã thử trả nhiều khoảng lịch sử rỗng bất thường hoặc giới hạn tốc độ. Không có tài khoản/API trả phí nào được mua hoặc tự tạo.
 
+### Khi `enrich` báo `-32601: rpc method is not whitelisted`
+
+Đây là endpoint từ chối phương thức JSON-RPC `eth_call`; chưa phải bằng chứng getter `getUserEMode` của hợp đồng bị lỗi. Cấu hình mặc định cũ dùng Blast + Flashbots. Lỗi từ endpoint cuối có thể che mất lỗi rate-limit/network của endpoint trước, nên traceback cũ chưa cho biết đầy đủ nguyên nhân từng nguồn.
+
+Đã đổi mặc định sang Blast, dRPC và MEV Blocker; giá trị `ETH_RPC_URLS` do người dùng đặt vẫn được ưu tiên. RPC client giữ lỗi của từng nguồn theo số thứ tự endpoint, thử lại khi có lỗi mạng/rate-limit tạm thời và bỏ qua phương thức mà một nguồn đã từ chối `-32601` trong cùng phiên client. Không thay lịch sử bằng `latest`, không đổi lỗi E-mode thành mode 0, không cache lỗi. URL/key không xuất hiện trong phần chẩn đoán.
+
+`enrich` kiểm tra chain ID và một `eth_call` tại block snapshot trước khi quét cohort. Tiến trình ghi `status`, `phase` và lỗi vào `data/runs/expansion_20260930/enrichment_status.json`; lỗi RPC ở CLI kết thúc với exit code 1 và thông báo theo bước, không chỉ một traceback thiếu ngữ cảnh.
+
+Chạy lại trong PowerShell:
+
+```powershell
+$env:ETH_RPC_URLS = 'https://eth-mainnet.public.blastapi.io,https://eth.drpc.org,https://rpc.mevblocker.io'
+python -m defi_data.expansion enrich
+```
+
+Kiểm tra ngày 22/10/2026: cả ba nguồn trên trả được single historical `getUserEMode` tại block 21762264; Flashbots trả lỗi HTTP trong cùng lần probe. Bản client mới đã đọc thành công batch E-mode của 3 ví thật tại block này trên chain ID 1, dùng cache tạm riêng. **56/56 test offline đạt**, gồm 10 test mới về quyền phương thức, HTTP error, retry/fallback và trạng thái `enrich`. Chưa xác nhận toàn bộ các bước `enrich` hoặc coverage toàn kỳ; khả năng phục vụ RPC công khai có thể thay đổi.
+
+Bổ sung sau sửa `audit_qa`: **64/64 test offline đạt và audit pilot trực tiếp 15/15 nhóm đạt**. Audit đã dùng chung RPC client, nhận `ETH_RPC_URLS`, bắt buộc đọc mới khi `--live` và lưu nhóm lỗi thay vì dừng bằng thông báo `HTTPError,HTTPError`. Kết quả này xác nhận pilot 3 giờ, chưa chứng nhận toàn bộ run expansion/recovery.
+
 Lần crawl lịch sử dài đã dừng để điều tra phản hồi rỗng. Các checkpoint là **bằng chứng truy vấn**, chưa chứng nhận lịch sử đủ hoặc thực sự không có sự kiện. Exporter hiện cố ý gắn `verified_coverage_fraction=0` và `complete=false`; chỉ thay cổng này sau đối chiếu receipt và nguồn độc lập. Đổi `--chunk` sẽ tạo lưới checkpoint khác; không cộng các lưới chồng nhau để đo coverage. Nên dùng run mới nếu đổi lưới khi tiếp tục toàn kỳ.
 
 ## Những cải thiện đã chạy thực tế
@@ -46,6 +65,27 @@ Snapshot là trạng thái **cuối block**, không phải trạng thái ngay tr
 Chạy được lưới shock trên mẫu Aave đã qua đối chiếu; số dư nợ đủ điều kiện thanh lý không phải số tiền chắc chắn thực thi. RQ2 có mô tả Aave trong 3 giờ pilot. Không có RQ nào đủ dữ liệu cho kết luận toàn kỳ 2023–09/2026. Unit tests kiểm tra mã không chứng minh coverage hay độ chính xác của nhãn nghiên cứu.
 
 Thứ tự cần hoàn tất: archive history → borrower universe & configuration timeline → snapshots nhiều ngày → flow labels & Morpho valuation → DEX replay/depth → calibrated cascade → policy experiments. Báo cáo ghi rõ phần đã đạt và phần chưa đạt; không có tác vụ nền tiếp tục sau bàn giao.
+
+## Sửa lỗi 22/10/2026 và tạo lại đầu ra
+
+Đã sửa sáu lỗi được tái hiện trong lần rà soát code:
+
+| Phần | Hành vi sau sửa |
+|---|---|
+| Trace funding | Chỉ xác nhận nhánh WETH → ETH → mint khi có call unwrap thành công và dòng ETH tương ứng, không có native balance ban đầu/nguồn native khác trong nhánh. Case không chứng minh được giữ `unresolved`. Nhãn trace cũ được xác minh lại, có `funding_proof_version=2`. |
+| Định giá liquidation | Chọn observation trước event theo `(block, transaction_index, log_index)`; không sắp cùng timestamp theo giá và không dùng update từ giao dịch sau. |
+| Cổng extended window | Phải có pilot hoàn tất, hash `events.csv` hợp lệ, validation nội bộ đạt và Borrow/Supply sentinel không rỗng. Thiếu đầu vào hoặc thiếu log đối chiếu thì `passed=false`; lần chạy mới vô hiệu hóa trạng thái đạt cũ trước khi bắt đầu. |
+| Tuổi giá Chainlink | Giữ `stamp`/updatedAt gốc để tính age; lưu riêng `available_stamp` là thời điểm observation khả dụng. Seed đọc trạng thái tại block được đánh dấu block-end, chưa dùng cho event trước đó trong cùng block. |
+| Batch RPC | Retry từng item lỗi bằng single call qua các endpoint đã cấu hình, kể cả lỗi `4444`; giữ kết quả item thành công và không cache lỗi. Endpoint không hỗ trợ batch cũng có đường fallback single call. |
+| Coverage | Hợp các checkpoint chồng nhau và cắt theo target trước khi tính số block/gaps. Cổng coverage xác minh của expansion vẫn chưa được nâng tự động. |
+
+Giá xuất bởi `recovery_prices` có `schema_version=2`, `stamp`, `available_stamp`, `transaction_index`, `log_index`. Hourly panel có thêm `source_available_utc`; `source_update_utc` vẫn là thời điểm cập nhật giá gốc. `recovery_features` từ chối CSV giá cũ thiếu metadata này và yêu cầu chạy lại `recovery_prices`, tránh âm thầm tiếp tục dùng thứ tự/tuổi giá sai.
+
+Sau khi có đủ dữ liệu lịch sử và endpoint hoạt động, tạo lại giá → model features → trace labels, rồi audit và khóa hashes mới. Không dùng kết quả định giá, nhãn funding hoặc freeze manifest cũ để xác nhận bản mới. Raw logs/checkpoint đã có không bị xóa bởi bản sửa code.
+
+Đã chạy **46/46 test offline**, gồm 20 test hồi quy mới trong `tests/test_review_regressions.py`, có cả đường hợp lệ và đường phải chặn. Chưa chạy lại toàn bộ qua RPC thật; sửa code không cung cấp thêm archive history cho các endpoint đang prune.
+
+Kế hoạch bàn giao Người 2 và lệnh chạy tiếp nằm ở [NEXT_STEPS_N2_RQ1_RQ4.md](NEXT_STEPS_N2_RQ1_RQ4.md).
 
 ## Nguồn
 

@@ -13,7 +13,7 @@ from .pipeline import ROOT,CONTRACTS
 def read(path):
     with path.open(encoding='utf-8-sig',newline='') as f: return list(csv.DictReader(f))
 
-def validate(run):
+def validate(run,write_report=True):
     m=json.loads((run/'manifest.json').read_text(encoding='utf-8'))
     if m['status']!='completed': raise ValueError('Run did not complete')
     for name,digest in m['outputs'].items():
@@ -64,7 +64,8 @@ def validate(run):
         '- RQ4: có panel số sự kiện và giá oracle theo giờ; cần lịch sử dài hơn và mô hình kiểm soát.',
         '- RQ5: có hoạt động ví–thị trường; chưa có mạng exposure đầy đủ hoặc kết luận nhân quả.',
         '- Xem README.md để mở rộng thời gian, chọn ví và hiểu quy tắc dữ liệu.']
-    (run/'DATA_REPORT.md').write_text('\n'.join(report)+'\n',encoding='utf-8')
+    if write_report:
+        (run/'DATA_REPORT.md').write_text('\n'.join(report)+'\n',encoding='utf-8')
     print(json.dumps({'status':'verified','events':len(events),'by_protocol':dict(summary),
         'aave_valued_liquidations':len(valued),'snapshot_validation':dict(Counter(v['status'] for v in validations))},ensure_ascii=True))
 

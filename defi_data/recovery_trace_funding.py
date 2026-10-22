@@ -12,6 +12,23 @@ def flatten(node):
     yield node
     for child in node.get('calls',[]):yield from flatten(child)
 
+
+def funded_unwrap(nodes,start,end,account,quantity,native_before):
+    """Require an explicit WETH withdrawal and its sole native inflow before mint."""
+    for i in range(start+1,end):
+        node=nodes[i]
+        if (node.get('type')!='CALL' or node.get('from')!=account or node.get('to')!=WETH
+            or node.get('input','')[:10]!='0x2e1a7d4d' or native_before[i]!=0):continue
+        args=words('0x'+node['input'][10:])
+        if len(args)!=1 or uint(args[0])!=quantity:continue
+        incoming=[n for n in flatten(node) if n.get('type')=='CALL' and n.get('from')==WETH
+                  and n.get('to')==account and int(n.get('value','0x0'),16)==quantity]
+        if len(incoming)!=1:continue
+        movements=[n for n in nodes[start+1:end] if n.get('type') in ('CALL','CREATE','CREATE2')
+                   and int(n.get('value','0x0'),16)>0 and account in (n.get('from'),n.get('to'))]
+        if len(movements)==1 and movements[0] is incoming[0]:return i
+    return None
+
 def traced(tx,tracer):
     path=RUN/'traces'/f'{tx}_{tracer}.json'
     if path.exists():return json.loads(path.read_text(encoding='utf8'))
@@ -28,11 +45,18 @@ def main():
     specs=parse_events((ROOT/'data/sources/IPool.sol').read_text(encoding='utf8'))
     for record in records:
         tx=record['tx'];a=record['account'];b=int(record['block'])
+        # Old trace labels must be re-proved by this stricter algorithm. A failed
+        # rerun cannot retain a positive label after its evidence is replaced.
+        if record.get('status','').startswith('verified') and record['status']!='verified_trace_funded_partial_collateral':continue
+        record['status']='unresolved';record['trace_required_for_unresolved']=True
+        for key in ('funded_collateral_raw','supplied_collateral_raw','funding_scope','funding_proof_version'):
+            record.pop(key,None)
         try:
             trace=traced(tx,'callTracer');pre=traced(tx,'prestateTracer');nodes=list(flatten(trace))
             native_initial=pre.get(a,{}).get('balance')
             if native_initial is None:raise ValueError('No native prestate balance')
             native=int(native_initial,16) if isinstance(native_initial,str) else native_initial
+            if native!=0:raise ValueError('Nonzero opening native balance; borrowed funding is not uniquely attributable')
             receipt=rpc.one('eth_getTransactionReceipt',[tx]);txidx=int(receipt['transactionIndex'],16)
             protocol_events=[]
             for log in receipt['logs']:
@@ -78,10 +102,17 @@ def main():
                     for k,deposit in enumerate(nodes[i+1:j],i+1):
                         if deposit.get('type')!='CALL' or deposit.get('from')!=a or int(deposit.get('value','0x0'),16)!=quantity:continue
                         if native_before[k]!=quantity:continue
+                        unwrap_index=funded_unwrap(nodes,i,k,a,quantity,native_before)
+                        if unwrap_index is None:continue
                         # Unique borrowed-token incoming transfer before this supply;
                         # supplies in trace and receipt are matched by asset/amount.
-                        supply_index=next((int(l['logIndex'],16) for l in receipt['logs'] if l['address'].lower()==pool and l['topics'][0]==topic('Supply(address,address,address,uint256,uint16)')
-                            and addr(l['topics'][1])==collateral and uint(words(l['data'])[1])==supplied),None)
+                        supply_index=None
+                        for log in receipt['logs']:
+                            if log['address'].lower()!=pool or not log['topics'] or log['topics'][0]!=specs['Supply']['topic']:continue
+                            decoded=decode_event(log,specs['Supply'])
+                            if (decoded['reserve']==collateral and decoded['user']==a
+                                and decoded['onBehalfOf']==a and decoded['amount']==supplied):
+                                supply_index=int(log['logIndex'],16);break
                         if supply_index is None:continue
                         incoming=0
                         for l in receipt['logs']:
@@ -102,18 +133,20 @@ def main():
                         record['status']='verified_trace_funded_partial_collateral'
                         record['reason']='WETH opening balance zero; borrowed WETH unwrapped; sole native balance funds mint; minted collateral supplied before same-token reborrow'
                         record['trace_required_for_unresolved']=False
+                        record['funding_proof_version']=2
                         record['funded_collateral_raw']=str(minted);record['supplied_collateral_raw']=str(supplied)
                         record['funding_scope']='proven minted component only; flash-loan/external remainder not attributed'
                         evidence.append({'tx':tx,'account':a,'borrowed_weth_raw':str(quantity),'native_initial':str(native_initial),
                                          'native_before_conversion':str(native_before[k]),'conversion_contract':deposit['to'],'minted_collateral_raw':str(minted),
                                          'collateral':collateral,'supplied_collateral_raw':str(supplied),'net_weth_debt_added_raw':str(net_debt),
-                                         'net_collateral_added_raw':str(net_collateral),'borrow_call_index':i,'supply_call_index':j})
+                                         'net_collateral_added_raw':str(net_collateral),'borrow_call_index':i,'unwrap_call_index':unwrap_index,
+                                         'supply_call_index':j,'funding_proof_version':2})
                         proved=True;break
                     if proved:break
                 if proved:break
             if not proved:record['reason']='Trace acquired; strict WETH/native/mint funding proof not met; remains unresolved'
         except Exception as e:record['reason']='Trace funding check unresolved: '+str(e)[:250]
         print(record['tx'][:12],record['status'],flush=True)
-        csv_write(OUT/'recursive_receipt_verification.csv',records)
     save_json(RUN/'trace_funding_evidence.json',evidence)
+    csv_write(OUT/'recursive_receipt_verification.csv',records)
 if __name__=='__main__':main()

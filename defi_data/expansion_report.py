@@ -26,7 +26,7 @@ def main():
     swaps=read_csv(OUT/'dex_swaps_sample.csv');gas=read_csv(OUT/'execution_gas_sample.csv');liq=read_csv(OUT/'dex_liquidity_sample.csv')
     markets=read_csv(OUT/'morpho_market_configs.csv');cross=read_csv(OUT/'cross_protocol_position_sample.csv');assets=read_csv(OUT/'compound_asset_configs.csv')
     sensitivity=read_csv(OUT/'recursive_window_sensitivity.csv');candidates=read_csv(OUT/'recursive_window_candidates.csv')
-    gate=json.loads((OUT/'extended_window_gate.json').read_text()) if (OUT/'extended_window_gate.json').exists() else {'passed':False}
+    gate=json.loads((OUT/'extended_window_gate.json').read_text(encoding='utf8')) if (OUT/'extended_window_gate.json').exists() else {'passed':False}
     coverage=read_csv(OUT/'history_coverage.csv');steps=[]
     with sqlite3.connect(RUN/'raw.sqlite') as c:
         history_chunks=c.execute('SELECT count(*) FROM coverage').fetchone()[0]
