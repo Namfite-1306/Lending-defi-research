@@ -103,11 +103,13 @@ def fit_prefix(start,end,events,cfg,out):
             'No ETH/BTC price-controlled Poisson here; full RQ4 pipeline remains required','Clustering and branching ratio are not causal self-excitation evidence']}
 
 
-def run(sample_run,data_run,cfg,out,header_reader):
+def run(sample_run,data_run,cfg,out,header_reader,models=None):
+    selected=list(dict.fromkeys([1,4] if models is None else models))
+    require(selected and set(selected).issubset({1,4}),'Select RQ1 and/or RQ4')
     require(cfg['protocol']=='aave_v3','Available-data runner only supports aave_v3')
     require(not out.exists(),f'Output already exists: {out}')
     out.mkdir(parents=True);failures=[];results=[];inputs=[]
-    for rq in [1,4]:
+    for rq in selected:
         dest=out/f'rq{rq}';dest.mkdir()
         try:
             if rq==1:
@@ -134,10 +136,11 @@ def run(sample_run,data_run,cfg,out,header_reader):
         'code_dirty':bool(subprocess.run(['git','status','--porcelain'],cwd=ROOT,capture_output=True,text=True,check=True).stdout.strip()),
         'code_files':[{'path':str(p.relative_to(ROOT)),'sha256':sha(p)} for p in [Path(__file__),ROOT/'defi_models/core.py',ROOT/'defi_models/analyses.py',ROOT/'defi_models/statistics.py',ROOT/'defi_live/models.py']],
         'config':cfg,'models':results,'all_executed':not failures,'errors':failures,'full_research_ready':False,
-        'source_files':[{'path':str(p),'sha256':sha(p)} for p in inputs],
-        'raw_database':{'path':str(data_run/'history.sqlite'),'sha256':None,'note':'Concurrent collection; consumed event rows and prefix boundary are saved in rq4/'}}
+        'source_files':[{'path':str(p),'sha256':sha(p)} for p in inputs]}
+    if 4 in selected:
+        manifest['raw_database']={'path':str(data_run/'history.sqlite'),'sha256':None,'note':'Consumed event rows and prefix boundary are saved in rq4/; independent audits remain required'}
     write_json(out/'manifest.json',manifest)
-    report=['# RQ1 và RQ4 từ dữ liệu hiện có','','Trạng thái: exploratory. Chưa phải kết quả toàn kỳ hoặc toàn bộ thị trường.',
+    report=['# '+' và '.join(f'RQ{i}' for i in selected)+' từ dữ liệu hiện có','','Trạng thái: exploratory. Chưa phải kết quả toàn kỳ hoặc toàn bộ thị trường.',
         f'Commit gốc: `{revision}`; các thay đổi local được ghi SHA-256 trong manifest.','']
     if (out/'rq1/summary.json').exists():
         s=json.loads((out/'rq1/summary.json').read_text(encoding='utf8'))
@@ -165,12 +168,13 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--sample-run',type=Path,default=ROOT/'data/runs/expansion_20260930')
     parser.add_argument('--data-run',type=Path,default=DEFAULT_RUN);parser.add_argument('--config',type=Path)
+    parser.add_argument('--models',nargs='+',type=int,choices=[1,4],default=[1,4],help='Run only selected available-data models; RQ1 alone needs no RPC/history database')
     parser.add_argument('--out',type=Path,default=ROOT/'results'/('rq14_available_'+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')))
     a=parser.parse_args();rpc=Rpc(ROOT/'data/rpc_cache',timeout=20,retry_attempts=2)
     def boundary(n):
         require(int(rpc.one('eth_chainId',[],cache=False),16)==1,'Expected Ethereum mainnet boundary header')
         return rpc.one('eth_getBlockByNumber',[hex(n),False],cache=False)
-    result=run(a.sample_run,a.data_run,config(a.config),a.out,boundary)
+    result=run(a.sample_run,a.data_run,config(a.config),a.out,boundary,models=a.models)
     print(json.dumps({'output':str(a.out),'models':result['models'],'errors':result['errors'],'full_research_ready':False},ensure_ascii=True,indent=2))
     return 0 if result['all_executed'] else 1
 

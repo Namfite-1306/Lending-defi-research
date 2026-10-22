@@ -1,23 +1,15 @@
 # Chạy mô hình RQ1–RQ7
 
+Để xem kết quả và thử các giả định trên giao diện Streamlit, xem [dashboard RQ1/RQ4](README_DASHBOARD.md).
+
 Code trong `defi_models/` đọc dữ liệu local, không crawl lại, không gọi RPC và không sửa dữ liệu nguồn. Python >= 3.11. Hai thư viện riêng cho mô hình: NumPy và SciPy; crawler gốc vẫn chỉ dùng standard library.
 
 ## 1. Cài đặt và kiểm tra
 
-Các lệnh bên dưới chạy trong thư mục `Lending-defi-research`. Nếu PowerShell đang ở thư mục cha `D:\Học tập with MC\New folder`, chuyển vào dự án trước:
+Mở PowerShell trong thư mục `Lending-defi-research`. Khi chưa có `.venv`, tạo và cài thư viện:
 
 ```powershell
-Set-Location -LiteralPath 'D:\Học tập with MC\New folder\Lending-defi-research'
-```
-
-Đường dẫn `.\.venv\Scripts\python.exe` được tính từ thư mục hiện tại. Nếu chạy từ `New folder`, PowerShell sẽ báo `CommandNotFoundException` dù môi trường trong dự án đã tồn tại. Không cần tạo lại `.venv` để sửa lỗi sai thư mục.
-
-Chỉ tạo môi trường nếu chưa có, sau đó cài thư viện và kiểm tra:
-
-```powershell
-if (-not (Test-Path -LiteralPath '.\.venv\Scripts\python.exe' -PathType Leaf)) {
-    python -m venv .venv
-}
+python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-models.txt
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 .\.venv\Scripts\python.exe -m defi_models check
@@ -40,24 +32,7 @@ Lệnh script tương đương cho bước sửa thư viện: `.\scripts\setup_m
 
 Dataset mặc định: `data/runs/recovery_20261020/`. Folder này không nằm trên GitHub. Máy khác phải lấy dữ liệu riêng, giữ cấu trúc và các file audit/freeze manifest. Dùng `--data-run 'D:/du-lieu/recovery_20261020'` khi dữ liệu ở nơi khác.
 
-Nếu chưa biết dataset ở đâu, tìm bản đã xuất trên máy chạy recovery hoặc hỏi người đã tạo bộ dữ liệu. Repo không kèm đường dẫn tải bộ recovery; toàn bộ `data/runs/` nằm trong `.gitignore`, vì vậy `git pull` không khôi phục dataset. Nếu không có bản sao, cần chạy quy trình thu thập recovery, xuất các bảng đầu vào và hoàn thành ba vòng audit; các lệnh mô hình không tự tải dữ liệu. Không đổi tên bộ pilot/expansion thành recovery để thay cho bước này.
-
-Đường dẫn thư mục ở trên không phải lệnh PowerShell. Từ thư mục gốc dự án, dùng các lệnh sau để kiểm tra:
-
-```powershell
-Test-Path -LiteralPath '.\data\runs\recovery_20261020' -PathType Container
-Get-ChildItem -LiteralPath '.\data\runs' -Directory
-```
-
-`Test-Path` trả `False` nghĩa là chưa có thư mục dataset tại vị trí mặc định. Cần sao chép bộ dữ liệu đầy đủ vào đó hoặc truyền `--data-run` tới nơi đã có dataset; tạo thư mục rỗng không giải quyết lỗi thiếu audit/manifest. Khi thư mục đã tồn tại, xem nội dung bằng `Get-ChildItem -LiteralPath '.\data\runs\recovery_20261020'`. Chạy các lệnh mô hình bên dưới từ thư mục gốc dự án.
-
 ## 2. Chạy thử toàn bộ
-
-Nếu chưa có dataset cho RQ1/RQ4, xem [quy trình thu thập và theo dõi](DATA_COLLECTION_RQ1_RQ4.md). Script `scripts/collect_rq1_rq4.ps1` tải lịch sử, xuất bảng và chạy audit riêng cho hai RQ. Kiểm tra bộ dữ liệu này bằng `python -m defi_models check --check-models 1 4`; audit giới hạn RQ1/RQ4 không chứng nhận toàn bộ bảy mô hình.
-
-Để tận dụng dữ liệu hiện có trong lúc lịch sử toàn kỳ còn đang tải, chạy `python -m defi_models.available_rq14 --config configs/models.example.json`. Runner xuất kết quả riêng trong `results/rq14_available_.../`: RQ1 trên mẫu vị thế có HF được đối chiếu, RQ4 Hawkes/Poisson hằng trên đoạn block đầu tiên liên tục đã tải đủ. Các kết quả đều là `exploratory`, không tạo audit thay thế và không có price controls của baseline RQ4 đầy đủ.
-
-Commit realtime `ae32121` dùng `--historical-results` để đọc tham số Hawkes đã huấn luyện; nó không tải thay dataset lịch sử. Thêm `-RunModels` khi chạy script thu thập để sau khi audit đạt sẽ chạy và validate riêng RQ1/RQ4. Đường dẫn kết quả cho dashboard được ghi ở `output/rq1_rq4_acquisition/historical_results.json` khi tất cả bước đã hoàn tất.
 
 ```powershell
 .\.venv\Scripts\python.exe -m defi_models all --smoke --allow-exploratory

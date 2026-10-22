@@ -1,6 +1,7 @@
 __pycache__/
 .venv/
 .env
+.streamlit/secrets.toml
 data/rpc_cache/
 data/runs/
 data/test_tmp/
@@ -8,3 +9,6 @@ results/
 output/rq1_rq4_acquisition/
 .pytest_cache/
 data/live/
+
+output/dashboard/
+output/dashboard_tests.log

@@ -1,0 +1,32 @@
+# Adapted from Streamlit's financial-dashboard theme; no external font requests.
+[server]
+address = "127.0.0.1"
+headless = true
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+base = "light"
+primaryColor = "#087F8C"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F1F5F9"
+textColor = "#142B40"
+borderColor = "#DBE4EC"
+showWidgetBorder = true
+showSidebarBorder = true
+baseRadius = "10px"
+buttonRadius = "8px"
+font = "sans-serif"
+baseFontSize = 14
+headingFontSizes = ["34px", "25px", "19px", "16px", "14px", "12px"]
+headingFontWeights = [700, 650, 600, 600, 500, 500]
+chartCategoricalColors = ["#087F8C", "#4268AE", "#D28A36", "#9672B8"]
+paddingTop = "2rem"
+
+[theme.sidebar]
+backgroundColor = "#102A3D"
+secondaryBackgroundColor = "#203E52"
+textColor = "#EDF4F8"
+primaryColor = "#73D0CC"
+borderColor = "#355266"

@@ -73,6 +73,19 @@ class AvailableTests(unittest.TestCase):
         self.assertEqual(result['status'],'exploratory');self.assertFalse(result['poisson']['price_controls_included'])
         self.assertTrue(result['hawkes']['converged']);self.assertEqual(result['events'],100)
 
+    def test_rq1_alone_runs_without_history_or_network(self):
+        self.sample()
+        def no_network(*args):raise AssertionError('RQ1 must not request RQ4 boundary headers')
+        out=self.root/'rq1_only'
+        manifest=run(self.root,self.root/'missing_history',dict(DEFAULTS),out,no_network,models=[1])
+        self.assertTrue(manifest['all_executed'])
+        self.assertFalse(manifest['full_research_ready'])
+        self.assertEqual([r['rq'] for r in manifest['models']],[1])
+        self.assertNotIn('raw_database',manifest)
+        self.assertFalse((out/'rq4').exists())
+        self.assertEqual(len(manifest['source_files']),4)
+        self.assertIn('# RQ1 từ dữ liệu hiện có',(out/'RUN_REPORT.md').read_text(encoding='utf8'))
+
     def test_both_reports_complete_with_real_summary_schema_and_keep_scope(self):
         self.sample();c,b,header,_=self.prefix();data=self.root/'history';data.mkdir()
         disk=sqlite3.connect(data/'history.sqlite')
