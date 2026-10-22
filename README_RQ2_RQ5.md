@@ -37,7 +37,6 @@ Dữ liệu được lưu ở `data/runs/recovery_20261020/`, bảng đã chuẩ
 
 - `history.sqlite`, `block_range.json`, `history_coverage.csv`, `history_gaps.csv` — dữ liệu gốc và coverage.
 - `processed/liquidations_model_table.csv`, `processed/concentration_full_period_event_counts.csv`, `processed/liquidation_valuation_coverage.csv` — đầu vào/bảng RQ2.
-- `full_snapshot_21762264/positions.csv`, `validation.csv`, `scope.json` — snapshot RQ1.
 - `audit_1_structure.json`, `audit_2_onchain.json`, `audit_3_research.json`, `freeze_manifest.json` — bằng chứng audit/freeze.
 
 Khi collector báo `completed`, có thể chạy thủ công:
