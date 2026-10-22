@@ -1,9 +1,3 @@
-# Bàn giao Người 4 — chỉ RQ2 và RQ5
-
-**Phạm vi thời gian:** `[2023-01-27T00:00:00Z, 2026-10-01T00:00:00Z)` — bao gồm từ 27/01/2023 UTC và loại trừ toàn bộ ngày 01/10/2026 trở đi.
-
-> **Trạng thái trung thực:** ZIP mã nguồn này không chứa dataset on-chain đã crawl cho toàn kỳ. Trong môi trường tạo gói, kết nối RPC không hoạt động nên chưa thể xác nhận crawl hoàn tất. Đây là gói mã nguồn/hướng dẫn, không phải dữ liệu nghiên cứu đã thu thập. Không có số liệu nào được bịa để lấp chỗ trống.
-
 ## 1. RQ2 — mức độ tập trung thanh lý
 
 ### Dữ liệu cần
@@ -22,10 +16,6 @@ Tính Top-k và HHI theo số sự kiện cho borrower, liquidator, debt token v
 Cần snapshot số dư vị thế **được định giá và đồng bộ tại cùng block** cho wallet–protocol–asset, gồm debt/collateral, token, giá, decimals và bằng chứng kiểm tra on-chain. Cần các bảng market/configuration cho Morpho và Compound, cùng cohort/vị thế Aave.
 
 **Quan trọng:** lịch sử sự kiện không phải snapshot exposure. Mã RQ5 hiện dùng một exposure sample kiểm định, không phải toàn bộ thị trường; kết quả chỉ là exploratory shared-wallet exposure screen. Không thể kết luận nhân quả lan truyền contagion hoặc khẳng định hai ví cùng chủ sở hữu chỉ vì chúng tương tác với cùng giao thức.
-
-### Tiền điều kiện còn thiếu trong ZIP
-
-Luồng `defi_data.recovery exposures` phụ thuộc các file đầu vào cũ dưới `data/runs/expansion_20260930/processed/`, gồm `cross_protocol_position_sample.csv`, `morpho_market_configs.csv`, `compound_asset_configs.csv` và `positions_point_in_time_sample.csv`. Các file này **không có trong ZIP được giao**. Vì vậy RQ5 chưa thể hoàn tất chỉ bằng cách chạy lịch sử liquidation mới; cần cung cấp/thu thập và audit cohort vị thế đó trước khi tạo `exposures_valued_sample.csv`.
 
 ## 3. Chạy crawl lịch sử
 
@@ -70,8 +60,6 @@ Repository có cổng audit dùng chung và phần audit RQ5 chưa được tác
 - `results/` — kết quả mô hình chỉ khi gate đầu vào được thông qua
 - `output/rq2_rq5_full_period/` — stdout/stderr theo từng bước
 
-RQ5 cần thêm `processed/exposures_valued_sample.csv`, `processed/exposure_network_edges.csv`, `processed/morpho_accrual_validation.csv` và `exposure_errors.json`. Các file này chỉ được coi là hợp lệ sau khi được dựng từ cohort nguồn, kiểm tra block đồng bộ và audit.
-
 ## 6. Chạy mô hình thủ công sau khi đủ dữ liệu
 
 ```powershell
@@ -79,7 +67,6 @@ RQ5 cần thêm `processed/exposures_valued_sample.csv`, `processed/exposure_net
 .\.venv\Scripts\python.exe -m defi_models rq2 --data-run data/runs/recovery_20261020 --config configs/models.example.json
 ```
 
-RQ5 chỉ chạy sau khi exposure sample đã có và đã được xác minh:
 
 ```powershell
 .\.venv\Scripts\python.exe -m defi_models check --data-run data/runs/recovery_20261020 --check-models 5 --config configs/models.example.json
@@ -99,4 +86,3 @@ Không chỉ dựa vào thông báo cuối cùng. Kiểm tra:
 - audit JSON và `manifest.json` ghi nhận đúng đầu vào, hash và trạng thái;
 - `summary.json` mô hình nêu rõ coverage định giá, cảnh báo và giới hạn diễn giải.
 
-Chạy được chương trình không tự chứng minh dữ liệu đủ coverage, audit độc lập hoặc quan hệ nhân quả.
