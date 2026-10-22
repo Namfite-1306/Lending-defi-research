@@ -4,22 +4,60 @@ Code trong `defi_models/` đọc dữ liệu local, không crawl lại, không g
 
 ## 1. Cài đặt và kiểm tra
 
-Mở PowerShell trong thư mục `defi-research`:
+Các lệnh bên dưới chạy trong thư mục `Lending-defi-research`. Nếu PowerShell đang ở thư mục cha `D:\Học tập with MC\New folder`, chuyển vào dự án trước:
 
 ```powershell
-python -m venv .venv
+Set-Location -LiteralPath 'D:\Học tập with MC\New folder\Lending-defi-research'
+```
+
+Đường dẫn `.\.venv\Scripts\python.exe` được tính từ thư mục hiện tại. Nếu chạy từ `New folder`, PowerShell sẽ báo `CommandNotFoundException` dù môi trường trong dự án đã tồn tại. Không cần tạo lại `.venv` để sửa lỗi sai thư mục.
+
+Chỉ tạo môi trường nếu chưa có, sau đó cài thư viện và kiểm tra:
+
+```powershell
+if (-not (Test-Path -LiteralPath '.\.venv\Scripts\python.exe' -PathType Leaf)) {
+    python -m venv .venv
+}
 .\.venv\Scripts\python.exe -m pip install -r requirements-models.txt
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
 .\.venv\Scripts\python.exe -m defi_models check
+```
+
+Nếu `python` là phiên bản cũ, thay lệnh đầu bằng `py -3.12 -m venv .venv` hoặc đường dẫn Python >= 3.11. Không cần activate môi trường. Nếu đã có `.venv`, dùng Python trong đó; tránh chạy lại `python -m venv .venv` bằng phiên bản Python khác vì có thể giữ lại thư viện biên dịch không tương thích.
+
+Có thể dùng `scripts/setup_models.ps1 -Python 'duong-dan-python.exe'`. Script tạo môi trường nếu chưa có, cài thư viện, kiểm tra import NumPy/SciPy và kiểm tra data. Tham số `-Python` chỉ dùng khi tạo môi trường mới. Thêm `-SkipDataCheck` nếu chỉ cài thư viện để chạy test, chưa có dataset. Nếu PowerShell chặn script, dùng trực tiếp các lệnh Python bên trên.
+
+Nếu test báo `cannot import name '_ccallback_c'` hoặc SciPy `extension modules cannot be imported`, kiểm tra Python đang dùng và cài lại wheel tương thích trong `.venv`:
+
+```powershell
+.\.venv\Scripts\python.exe --version
+.\.venv\Scripts\python.exe -m pip install --force-reinstall --no-cache-dir --only-binary=:all: -r requirements-models.txt
+.\.venv\Scripts\python.exe -c 'import numpy, scipy; from scipy.optimize import minimize; print(numpy.__version__, scipy.__version__)'
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-Nếu `python` là phiên bản cũ, thay lệnh đầu bằng `py -3.12 -m venv .venv` hoặc đường dẫn Python >= 3.11. Không cần activate môi trường. Đã có `.venv` đã kiểm tra trên máy hiện tại.
-
-Có thể dùng `scripts/setup_models.ps1 -Python 'duong-dan-python.exe'`. Script tạo môi trường, cài thư viện và kiểm tra data. Nếu PowerShell chặn script, dùng trực tiếp các lệnh Python bên trên.
+Lệnh script tương đương cho bước sửa thư viện: `.\scripts\setup_models.ps1 -Repair -SkipDataCheck`. `pip install` thông thường có thể báo đã cài đủ do metadata cũ, dù file `.pyd` còn thuộc Python khác (ví dụ `cp312` trong môi trường Python 3.14). Các unit test dùng fixture tổng hợp và không yêu cầu dataset nghiên cứu; `defi_models check` kiểm tra dataset riêng sau đó.
 
 Dataset mặc định: `data/runs/recovery_20261020/`. Folder này không nằm trên GitHub. Máy khác phải lấy dữ liệu riêng, giữ cấu trúc và các file audit/freeze manifest. Dùng `--data-run 'D:/du-lieu/recovery_20261020'` khi dữ liệu ở nơi khác.
 
+Nếu chưa biết dataset ở đâu, tìm bản đã xuất trên máy chạy recovery hoặc hỏi người đã tạo bộ dữ liệu. Repo không kèm đường dẫn tải bộ recovery; toàn bộ `data/runs/` nằm trong `.gitignore`, vì vậy `git pull` không khôi phục dataset. Nếu không có bản sao, cần chạy quy trình thu thập recovery, xuất các bảng đầu vào và hoàn thành ba vòng audit; các lệnh mô hình không tự tải dữ liệu. Không đổi tên bộ pilot/expansion thành recovery để thay cho bước này.
+
+Đường dẫn thư mục ở trên không phải lệnh PowerShell. Từ thư mục gốc dự án, dùng các lệnh sau để kiểm tra:
+
+```powershell
+Test-Path -LiteralPath '.\data\runs\recovery_20261020' -PathType Container
+Get-ChildItem -LiteralPath '.\data\runs' -Directory
+```
+
+`Test-Path` trả `False` nghĩa là chưa có thư mục dataset tại vị trí mặc định. Cần sao chép bộ dữ liệu đầy đủ vào đó hoặc truyền `--data-run` tới nơi đã có dataset; tạo thư mục rỗng không giải quyết lỗi thiếu audit/manifest. Khi thư mục đã tồn tại, xem nội dung bằng `Get-ChildItem -LiteralPath '.\data\runs\recovery_20261020'`. Chạy các lệnh mô hình bên dưới từ thư mục gốc dự án.
+
 ## 2. Chạy thử toàn bộ
+
+Nếu chưa có dataset cho RQ1/RQ4, xem [quy trình thu thập và theo dõi](DATA_COLLECTION_RQ1_RQ4.md). Script `scripts/collect_rq1_rq4.ps1` tải lịch sử, xuất bảng và chạy audit riêng cho hai RQ. Kiểm tra bộ dữ liệu này bằng `python -m defi_models check --check-models 1 4`; audit giới hạn RQ1/RQ4 không chứng nhận toàn bộ bảy mô hình.
+
+Để tận dụng dữ liệu hiện có trong lúc lịch sử toàn kỳ còn đang tải, chạy `python -m defi_models.available_rq14 --config configs/models.example.json`. Runner xuất kết quả riêng trong `results/rq14_available_.../`: RQ1 trên mẫu vị thế có HF được đối chiếu, RQ4 Hawkes/Poisson hằng trên đoạn block đầu tiên liên tục đã tải đủ. Các kết quả đều là `exploratory`, không tạo audit thay thế và không có price controls của baseline RQ4 đầy đủ.
+
+Commit realtime `ae32121` dùng `--historical-results` để đọc tham số Hawkes đã huấn luyện; nó không tải thay dataset lịch sử. Thêm `-RunModels` khi chạy script thu thập để sau khi audit đạt sẽ chạy và validate riêng RQ1/RQ4. Đường dẫn kết quả cho dashboard được ghi ở `output/rq1_rq4_acquisition/historical_results.json` khi tất cả bước đã hoàn tất.
 
 ```powershell
 .\.venv\Scripts\python.exe -m defi_models all --smoke --allow-exploratory

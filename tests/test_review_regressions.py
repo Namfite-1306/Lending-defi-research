@@ -68,7 +68,10 @@ class PriceTests(TempTests):
                              ('aave_v3',100,txidx,idx,'tx'+str(idx),'hash',1000,'LiquidationCall',
                               'borrower',weth,'market',json.dumps(decoded),b''))
             conn.commit();conn.close()
-            save_json(self.root/'block_range.json',{'start_block':99,'end_block':100})
+            conn=recovery.database()
+            conn.execute('INSERT INTO events VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',('compound_v3_usdc',100,9,9,'foreign','hash',1000,'AbsorbDebt','other','token','market',json.dumps({'borrower':'other','absorber':'liquidator','basePaidOut':1}),b''))
+            conn.commit();conn.close()
+            save_json(self.root/'block_range.json',{'start_block':99,'end_block':100,'protocols':['aave_v3']})
             csv_write(out/'history_coverage.csv',[{'download_complete':True}])
             csv_write(out/'chainlink_price_updates.csv',[
                 price_row(80,99,0,0,900),price_row(100,100,4,4),price_row(90,100,5,5)])
@@ -88,14 +91,17 @@ class PriceTests(TempTests):
                 recovery_features.main()
         rows=expansion.read_csv(out/'liquidations_model_table.csv')
         self.assertEqual([r['reported_event_amount_market_usd'] for r in rows],['80','90'])
+        self.assertEqual({r['protocol'] for r in expansion.read_csv(out/'liquidations_hourly_full_period.csv')},{'aave_v3'})
+        self.assertEqual({r['protocol'] for r in expansion.read_csv(out/'event_counts_by_year.csv')},{'aave_v3'})
+        self.assertEqual({r['protocol'] for r in expansion.read_csv(out/'wallet_protocol_activity.csv')},{'aave_v3'})
 
     def test_phase_export_does_not_refresh_an_old_quote(self):
         start=ts('2023-01-27T00:00:00Z');activation=start+3600
-        old=self.root/'old';old.mkdir()
-        save_json(old/'block_range.json',{'start_block':100,'end_block':200})
+        save_json(self.root/'block_range.json',{'start_block':100,'end_block':200})
         out=self.root/'processed'
 
         class PriceRpc(Rpc):
+            def logs(self,address,topics,lo,hi):return []
             def one(self,*args,**kwargs):return '0x'+b'ETH / USD'.hex().ljust(64,'0')
             def block(self,b):return {'timestamp':hex(start-1 if b==99 else activation)}
             def many(self,calls,**kwargs):return ['0x'+encode_arg('0x'+'1'*40) for _ in calls]
@@ -111,10 +117,10 @@ class PriceTests(TempTests):
 
         def short_ts(value):
             return start+7200 if value=='2026-10-01T00:00:00Z' else ts(value)
-        with patch.object(recovery_prices,'ROOT',self.root),patch.object(recovery_prices,'OLD',old), \
+        with patch.object(recovery_prices,'ROOT',self.root), \
              patch.object(recovery_prices,'RUN',self.root),patch.object(recovery_prices,'OUT',out), \
              patch.object(recovery_prices,'Rpc',PriceRpc),patch.object(recovery_prices,'call',side_effect=fake_call), \
-             patch.object(recovery_prices,'http',return_value=[]),patch.object(recovery_prices,'FEEDS',{'ETH/USD':'proxy'}), \
+             patch.object(recovery_prices,'FEEDS',{'ETH/USD':'proxy'}), \
              patch.object(recovery_prices,'ts',short_ts),redirect_stdout(io.StringIO()):
             recovery_prices.main()
         rows=expansion.read_csv(out/'market_prices_hourly_full_period.csv')

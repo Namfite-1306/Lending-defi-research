@@ -47,12 +47,14 @@ def config(path):
     return cfg
 
 def preflight(run,cfg=None,selected=None):
+    selected=selected or list(MODELS)
     errors=[];checks=[]
     for n,suffix in [(1,'structure'),(2,'onchain'),(3,'research')]:
         path=run/f'audit_{n}_{suffix}.json'
         if not path.exists():errors.append(f'Missing {path.name}');continue
         obj=json.loads(path.read_text(encoding='utf8'));checks.append({'audit':n,'integrity_passed':obj.get('all_integrity_passed')})
         if not obj.get('all_integrity_passed'):errors.append(f'Audit {n} integrity did not pass')
+        if not set(selected).issubset(obj.get('models',range(1,8))):errors.append(f'Audit {n} does not cover selected models')
     cfg=cfg or dict(DEFAULTS);selected=selected or list(MODELS)
     needs={1:[],2:['liquidations_model_table.csv'],3:['liquidations_model_table.csv','recursive_candidates_full_history.csv' if cfg['recursive_label']=='temporal' else 'recursive_receipt_verification.csv'],4:['liquidations_model_table.csv','liquidations_hourly_full_period.csv','market_prices_hourly_full_period.csv'],5:['exposures_valued_sample.csv'],6:[],7:[]}
     try:
@@ -72,9 +74,12 @@ def main(argv=None):
     parser.add_argument('model',choices=['check','all']+[f'rq{i}' for i in range(1,8)])
     parser.add_argument('--data-run',type=Path,default=DEFAULT_RUN);parser.add_argument('--config',type=Path)
     parser.add_argument('--out',type=Path);parser.add_argument('--allow-exploratory',action='store_true')
+    parser.add_argument('--check-models',nargs='+',type=int,choices=range(1,8),help='Limit check to these RQs; only valid with check')
     parser.add_argument('--smoke',action='store_true',help='Small scenario grid; full historical RQ2/3/4 data still used')
     args=parser.parse_args(argv);cfg=config(args.config)
+    require(args.check_models is None or args.model=='check','--check-models requires check')
     selected=list(MODELS) if args.model in ('all','check') else [int(args.model[2:])]
+    if args.check_models:selected=args.check_models
     gate=preflight(args.data_run,cfg,selected)
     if args.model=='check':print(json.dumps(gate,ensure_ascii=False,indent=2));return 0 if gate['passed'] else 2
     require(gate['passed'],'Source integrity gate failed: '+ '; '.join(gate['errors']))

@@ -11,7 +11,7 @@ from .rpc import Rpc
 BLOCK=21762264
 def main():
     folder=RUN/'full_snapshot_21762264';folder.mkdir(parents=True,exist_ok=True)
-    rpc=Rpc(ROOT/'data/rpc_cache',urls=['https://eth.drpc.org','https://eth-mainnet.public.blastapi.io'],batch_size=200,multicall=True,cache_individual=False)
+    rpc=Rpc(ROOT/'data/rpc_cache',batch_size=200,multicall=True,cache_individual=False)
     c=database();bounds=json.loads((RUN/'block_range.json').read_text(encoding='utf8'))
     covered=merge_ranges(list(c.execute("SELECT lo,hi FROM ranges WHERE protocol='aave_v3'")))
     if not any(a<=bounds['start_block'] and b>=BLOCK for a,b in covered):raise ValueError('Complete Aave borrower history up to snapshot required')

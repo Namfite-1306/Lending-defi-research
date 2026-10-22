@@ -1,7 +1,7 @@
 """Historical Chainlink market controls, proxy phases and backward-only hourly alignment."""
-import json,time
+import argparse,json
 from decimal import Decimal as D
-from .recovery import RUN,OUT,OLD,http
+from .recovery import RUN,OUT
 from .pipeline import ROOT,call,call_request,csv_write,save_json,ts,utc
 from .evm import topic,words,uint,addr,decode_string
 from .rpc import Rpc
@@ -9,35 +9,35 @@ from .price_history import PRICE_SCHEMA_VERSION,BLOCK_END,build_price_index,pric
 FEEDS={'ETH/USD':'0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419','BTC/USD':'0xf4030086522a5beea4988f8ca5b36dbc97bee88c',
        'USDC/USD':'0x8fffffd4afb6115b954bd326cbe7b4ba576818f6','USDT/USD':'0x3e7d1eab13ad0104d2750b8863b489d65364e32d',
        'DAI/USD':'0xaed0c38402a5d19df6e4c03f4e2dced6e29c1ee9'}
-def main():
+def fetch_logs(rpc,address,topic0,lo,hi,chunk_size=10000):
+    """Bound price queries even when the provider reports oversized work as a timeout."""
+    if chunk_size<1:raise ValueError('Price log chunk size must be positive')
+    result=[]
+    for start in range(lo,hi+1,chunk_size):
+        end=min(start+chunk_size-1,hi)
+        # Failed chunks propagate; missing history must never become an empty range.
+        data=rpc.logs(address,[topic0],start,end)
+        if len(data)>=9500 and end>start:
+            mid=(start+end)//2
+            data=fetch_logs(rpc,address,topic0,start,mid,chunk_size)+fetch_logs(rpc,address,topic0,mid+1,end,chunk_size)
+        result.extend(data)
+        if (start-lo)//chunk_size%25==0 or end==hi:
+            print(f'PRICE logs through block {end}/{hi}: {len(result)} updates',flush=True)
+    return result
+
+def main(feeds=None):
     OUT.mkdir(parents=True,exist_ok=True);rpc=Rpc(ROOT/'data/rpc_cache',batch_size=20,multicall=True)
-    bounds=json.loads((OLD/'block_range.json').read_text(encoding='utf8'));start,end=bounds['start_block'],bounds['end_block']
-    answer=topic('AnswerUpdated(int256,uint256,uint256)');confirm=topic('AggregatorConfirmed(address,address)')
-    def logs(address,topic0,lo,hi):
-        params=[{'address':address,'topics':[topic0],'fromBlock':hex(lo),'toBlock':hex(hi)}]
-        path=rpc._path('eth_getLogs',params)
-        if path.exists():return json.loads(path.read_text(encoding='utf8'))
-        for attempt in range(5):
-            try:
-                data=http('https://rpc.mevblocker.io','eth_getLogs',params)
-                if len(data)>=9500 and hi>lo:
-                    mid=(lo+hi)//2;data=logs(address,topic0,lo,mid)+logs(address,topic0,mid+1,hi)
-                path.write_text(json.dumps(data),encoding='utf8');return data
-            except Exception as e:
-                if hi-lo>10000 and any(x in str(e).lower() for x in ('range','size','limit','temporarily unavailable','timed out')):
-                    mid=(lo+hi)//2;return logs(address,topic0,lo,mid)+logs(address,topic0,mid+1,hi)
-                if attempt==4:raise
-                time.sleep(2**attempt)
+    bounds=json.loads((RUN/'block_range.json').read_text(encoding='utf8'));start,end=bounds['start_block'],bounds['end_block']
+    answer=topic('AnswerUpdated(int256,uint256,uint256)')
     updates=[];phases=[];hourly=[];metadata=[];block_times={}
     for name,proxy in FEEDS.items():
+        if feeds is not None and name not in feeds:continue
         desc=decode_string(rpc.one(*call_request(proxy,'description()',[],start)))
         decimals=uint(call(rpc,proxy,'decimals()',[],start)[0])
         if desc.replace(' ','')!=name:raise ValueError(f'Unexpected feed description {desc}')
-        initial=addr(call(rpc,proxy,'aggregator()',[],start)[0])
-        transitions=sorted(logs(proxy,confirm,start,end),key=lambda l:(int(l['blockNumber'],16),int(l['logIndex'],16)))
         first_phase=uint(call(rpc,proxy,'phaseId()',[],start)[0]);last_phase=uint(call(rpc,proxy,'phaseId()',[],end)[0])
-        # Derive transitions from monotone historical state as well as event logs.
-        # Some proxy generations use a different confirmation event ABI.
+        # Derive transitions from monotone historical state. Confirmation event
+        # ABIs vary across proxy generations and are not used to select segments.
         boundaries=[start]
         for phase in range(first_phase+1,last_phase+1):
             left,right=boundaries[-1],end
@@ -63,7 +63,7 @@ def main():
                     'available_stamp':available,'transaction_index':BLOCK_END,'log_index':BLOCK_END,'schema_version':PRICE_SCHEMA_VERSION,
                     'price_usd':str(D(uint(seed[1]))/10**decimals),'round_id':str(uint(seed[0])),
                     'source':'new phase initial quote; available from activation block, not earlier'})
-            raw=logs(agg,answer,a,b);phases.append({'feed':name,'proxy':proxy,'aggregator':agg,'from_block':a,'to_block':b,'events':len(raw)})
+            raw=fetch_logs(rpc,agg,answer,a,b);phases.append({'feed':name,'proxy':proxy,'aggregator':agg,'from_block':a,'to_block':b,'events':len(raw)})
             missing=sorted({int(l['blockNumber'],16) for l in raw if not l.get('blockTimestamp')}-block_times.keys())
             headers=rpc.many([('eth_getBlockByNumber',[hex(bn),False]) for bn in missing])
             for bn,header in zip(missing,headers):block_times[bn]=int(header['timestamp'],16)
@@ -90,4 +90,7 @@ def main():
         print(f'D price feed {name}: {len(feed_updates)} observations',flush=True)
         csv_write(OUT/'chainlink_price_updates.csv',updates);csv_write(OUT/'market_prices_hourly_full_period.csv',hourly)
         csv_write(OUT/'chainlink_phase_segments.csv',phases);save_json(RUN/'chainlink_feed_metadata.json',metadata)
-if __name__=='__main__':main()
+if __name__=='__main__':
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--feeds',nargs='+',choices=list(FEEDS),help='Default: all configured feeds')
+    main(parser.parse_args().feeds)

@@ -4,7 +4,7 @@
 
 **Kiểm tra nguồn và sửa lỗi crawl RPC:** xem [README_CRAWL.md](README_CRAWL.md). Lệnh chẩn đoán: `python -m defi_data.rpc_check --require-state --test-logs`.
 
-**Chạy mô hình RQ1–RQ7:** xem [README_MODELS.md](README_MODELS.md), mã trong `defi_models/`, cấu hình trong `configs/`. Phần bên dưới mô tả crawler/pilot gốc; các giới hạn của pilot không phải trạng thái dữ liệu recovery mới. Dữ liệu đầy kỳ và báo cáo ba vòng audit nằm trong `data/runs/recovery_20261020/` (không đưa lên GitHub).
+**Chạy mô hình RQ1–RQ7:** xem [README_MODELS.md](README_MODELS.md), mã trong `defi_models/`, cấu hình trong `configs/`. Phần bên dưới mô tả crawler/pilot gốc. Mô hình mặc định tìm dataset tại `data/runs/recovery_20261020/`; đường dẫn này không xác nhận dataset đã tồn tại hoặc đã qua kiểm định trên máy. Toàn bộ `data/runs/` bị loại khỏi Git, nên clone/pull repo không tải dữ liệu và báo cáo audit. Cần lấy bộ dữ liệu riêng cùng ba báo cáo audit và freeze manifest, hoặc hoàn thành quy trình recovery trước khi chạy mô hình.
 
 Pipeline chỉ đọc Ethereum mainnet, không ký hoặc gửi giao dịch. Python >= 3.11, không cần cài thư viện ngoài.
 
