@@ -388,6 +388,7 @@ def main():
         if end<start: raise ValueError('Empty block range')
         manifest.update(start_block=start,end_block=end,start_hash=rpc.block(start)['hash'],end_hash=rpc.block(end)['hash'])
         print(f'Fixed finalized range: {start}-{end}',flush=True)
+        rpc.preflight(start,end,run/'rpc_preflight.json',require_state=True)
         with closing(connect(run/'raw.sqlite')) as conn:
             crawl(rpc,conn,start,end,args.chunk)
             events,liqs=normalize(rpc,conn,start,end,run/'processed',ts(args.start),ts(args.end))
@@ -421,4 +422,6 @@ def main():
         save_json(run/'manifest.json',manifest)
         print(f'Run {args.run_id}: {manifest["status"]}',flush=True)
 
-if __name__=='__main__': main()
+if __name__=='__main__':
+    try:main()
+    except RpcError as exc:raise SystemExit(f'CRAWL STOPPED [{exc.kind}]: {exc}')

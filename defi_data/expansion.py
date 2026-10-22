@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
 from decimal import Decimal as D
-from .rpc import Rpc
+from .rpc import Rpc,RpcError
 from .evm import addr, uint, words, topic, parse_events, decode_event, address_array
 from .pipeline import ROOT, CONTRACTS, PROVIDER, ZERO, ts, utc, save_json, csv_write, connect, call, call_request, registry, metadata, base_row
 
@@ -28,6 +28,7 @@ def history(workers=3,minutes=20,chunk=50000):
         save_json(bounds,{'start_block':start,'end_block':end,'start_utc':START,'end_exclusive_utc':END,
                          'start_hash':rpc.block(start)['hash'],'end_hash':rpc.block(end)['hash']})
     b=json.loads(bounds.read_text()); start,end=b['start_block'],b['end_block']
+    rpc.preflight(start,end,RUN/'rpc_preflight_history.json')
     conn=connect(RUN/'raw.sqlite'); conn.execute('PRAGMA journal_mode=WAL')
     # Protocol-specific histories; empty predeployment ranges remain evidence of absence, never exposures.
     specs={}; jobs=[]
@@ -40,10 +41,10 @@ def history(workers=3,minutes=20,chunk=50000):
                 jobs.append((p,a,lo,hi))
     # Interleave protocols chronologically; a failure must not hide the other protocols.
     jobs.sort(key=lambda j:(j[2],j[0])); deadline=time.monotonic()+minutes*60
-    failures=[]; completed=0
+    failures=[]; completed=0;consecutive_failures=0;halt=False
     def fetch(job):
         p,a,lo,hi=job
-        r=Rpc(ROOT/'data/rpc_cache')
+        r=Rpc(ROOT/'data/rpc_cache',urls=rpc.urls)
         logs=r.logs(a,list(specs[p]),lo,hi)
         values=[]
         for log in logs:
@@ -66,16 +67,20 @@ def history(workers=3,minutes=20,chunk=50000):
                     conn.executemany('INSERT OR REPLACE INTO logs VALUES (?,?,?,?,?,?,?,?,?)',values)
                     conn.execute('INSERT OR REPLACE INTO coverage VALUES (?,?,?,?,?)',(p,lo,hi,lh,hh))
                 completed+=1
+                consecutive_failures=0
                 print(f'HISTORY {p} {lo}-{hi}: {len(values)} logs; {completed}/{len(jobs)} remaining chunks',flush=True)
             except Exception as e:
+                consecutive_failures+=1
+                halt=halt or getattr(e,'kind',None) in ('history_unavailable','authorization','invalid_response') or consecutive_failures>=3
                 failures.append({'protocol':job[0],'start':job[2],'end':job[3],'error':str(e)[:500]})
                 print(f'HISTORY failed {job[0]} {job[2]}: {str(e)[:180]}',flush=True)
-            if time.monotonic()<deadline:
+            if not halt and time.monotonic()<deadline:
                 job=next(it,None)
                 if job: pending[pool.submit(fetch,job)]=job
     save_json(RUN/'history_attempt.json',{'at_utc':utc(int(time.time())),'new_chunks':completed,'failures':failures,
               'requested_minutes':minutes,'complete':False})
     conn.close(); export_history()
+    if failures:raise RpcError(f'{len(failures)} history chunks failed; checkpoints retained, history remains unverified.',kind='partial_history')
 
 def export_history():
     b=json.loads((RUN/'block_range.json').read_text()); lo,hi=b['start_block'],b['end_block']
@@ -123,17 +128,22 @@ def risk_debt_raw(stable,scaled_variable,index,revision):
     return stable+(scaled_variable*index+(ray-1 if revision>=9 else ray//2))//ray
 
 def extended_window():
+    OUT.mkdir(parents=True,exist_ok=True)
+    save_json(OUT/'extended_window_gate.json',{'passed':False,'status':'not_completed; requires successful crawl and sentinel validation'})
+    pilot_events=read_csv(PILOT/'events.csv')
+    expected={(e['tx_hash'],int(e['log_index'])) for e in pilot_events
+              if e['protocol']=='aave_v3' and e['event_type'] in ('Borrow','Supply')}
+    if not expected:raise RpcError('Missing validated pilot Borrow/Supply sentinel. Supply stress_20250203_smoke/processed/events.csv before expansion window; an empty sentinel must not pass validation.',kind='missing_input')
     rpc=Rpc(ROOT/'data/rpc_cache');pool=CONTRACTS['aave_v3'][0]
     specs=parse_events((ROOT/'data/sources/IPool.sol').read_text());bytopic={specs[n]['topic']:(n,specs[n]) for n in ('Borrow','Supply')}
     head=int(rpc.one('eth_blockNumber',[],cache=False),16)-64
     begin=rpc.block_at(ts('2025-02-01T00:00:00Z'),head);end=rpc.block_at(ts('2025-02-06T00:00:00Z'),head)-1
+    rpc.preflight(begin,end,RUN/'rpc_preflight_window.json')
     logs=[]
     for lo in range(begin,end+1,1000):
         data=rpc.logs(pool,list(bytopic),lo,min(lo+999,end));logs+=data
         print(f'C extended {lo}: {len(data)} logs',flush=True)
     # Sentinel: this query must contain every Borrow/Supply in the already validated pilot.
-    expected={(e['tx_hash'],int(e['log_index'])) for e in read_csv(PILOT/'events.csv')
-              if e['protocol']=='aave_v3' and e['event_type'] in ('Borrow','Supply')}
     actual={(l['transactionHash'],int(l['logIndex'],16)) for l in logs}
     if not expected.issubset(actual):
         save_json(OUT/'extended_window_gate.json',{'passed':False,'expected_pilot_keys':len(expected),'missing_pilot_keys':len(expected-actual),
@@ -174,6 +184,7 @@ def enrich():
     events=read_csv(PILOT/'events.csv')
     # Independent pre-event lookback discovers borrowers without using future liquidations.
     cutoff=21762264; begin=cutoff-7200
+    rpc.preflight(begin,cutoff,RUN/'rpc_preflight_enrich.json',require_state=True)
     pool=CONTRACTS['aave_v3'][0]; spec=parse_events((ROOT/'data/sources/IPool.sol').read_text())['Borrow']
     prior=rpc.logs(pool,[spec['topic']],begin,cutoff)
     wallets=sorted({decode_event(l,spec)['onBehalfOf'] for l in prior})
@@ -194,6 +205,7 @@ def versions(rpc):
     # EIP-1967 implementation slot; hashes distinguish upgrades even under one proxy address.
     slot='0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc'
     bounds=json.loads((RUN/'block_range.json').read_text())
+    rpc.preflight(bounds['start_block'],bounds['end_block'],RUN/'rpc_preflight_versions.json',require_state=True)
     points=sorted(set([bounds['start_block'],17000000,19000000,21762264,24000000,bounds['end_block']]))
     rows=[]
     for b in points:
@@ -410,4 +422,8 @@ def main():
     elif a.phase=='versions':versions(Rpc(ROOT/'data/rpc_cache'))
     elif a.phase=='flows':flows_and_windows(Rpc(ROOT/'data/rpc_cache'),read_csv(PILOT/'events.csv'))
     else:export_history()
-if __name__=='__main__':main()
+if __name__=='__main__':
+    try:main()
+    except RpcError as exc:
+        save_json(RUN/'crawl_failure.json',{'status':'failed','kind':exc.kind,'error':str(exc),'at_utc':utc(int(time.time()))})
+        raise SystemExit(f'CRAWL STOPPED [{exc.kind}]: {exc}')

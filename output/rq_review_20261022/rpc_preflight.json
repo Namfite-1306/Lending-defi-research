@@ -1,0 +1,43 @@
+{
+  "start_block": 21762265,
+  "end_block": 21762300,
+  "require_state": true,
+  "passed": true,
+  "providers": [
+    {
+      "provider_id": 1,
+      "passed": true,
+      "probes": [
+        {
+          "block": 21526851,
+          "known_log_and_receipt_match": true
+        }
+      ],
+      "historical_state_probe": true
+    },
+    {
+      "provider_id": 2,
+      "passed": true,
+      "probes": [
+        {
+          "block": 21526851,
+          "known_log_and_receipt_match": true
+        }
+      ],
+      "historical_state_probe": true
+    },
+    {
+      "provider_id": 3,
+      "passed": false,
+      "probes": [],
+      "failure_kind": "rate_limit"
+    }
+  ],
+  "scope": "positive sample probes only; full coverage still requires crawl and independent audit",
+  "bounded_log_test": {
+    "records": 79,
+    "start": 21762265,
+    "end": 21762300,
+    "creates_coverage": false
+  }
+}

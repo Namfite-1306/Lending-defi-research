@@ -9,7 +9,7 @@ from collections import Counter,defaultdict
 from decimal import Decimal as D
 from .pipeline import ROOT,CONTRACTS,PROVIDER,call,call_request,registry,metadata,csv_write,save_json,utc
 from .expansion import read_csv,signed,window_candidates
-from .rpc import Rpc,RpcError
+from .rpc import Rpc,RpcError,error_kind
 from .evm import parse_events,decode_event,words,uint,addr,topic,calldata,keccak
 
 RUN=ROOT/'data/runs/recovery_20261020';OUT=RUN/'processed';OLD=ROOT/'data/runs/expansion_20260930'
@@ -77,9 +77,22 @@ def database():
 
 def full_history(workers=4,chunk=50000):
     OUT.mkdir(parents=True,exist_ok=True)
-    b=json.loads((OLD/'block_range.json').read_text(encoding='utf8'));start,end=b['start_block'],b['end_block']
+    controller=Rpc(ROOT/'data/rpc_cache')
+    bound_path=RUN/'block_range.json'
+    if bound_path.exists():b=json.loads(bound_path.read_text(encoding='utf8'))
+    elif (OLD/'block_range.json').exists():b=json.loads((OLD/'block_range.json').read_text(encoding='utf8'))
+    else:
+        from .pipeline import ts
+        head=int(controller.one('eth_blockNumber',[],cache=False),16)-64
+        start=controller.block_at(ts('2023-01-27T00:00:00Z'),head);end=controller.block_at(ts('2026-10-01T00:00:00Z'),head)-1
+        b={'start_block':start,'end_block':end,'start_utc':'2023-01-27T00:00:00Z','end_exclusive_utc':'2026-10-01T00:00:00Z','start_hash':controller.block(start)['hash'],'end_hash':controller.block(end)['hash']}
+    start,end=b['start_block'],b['end_block']
+    controller.preflight(start,end,RUN/'rpc_preflight_history.json')
     save_json(RUN/'block_range.json',b)
-    c=database();specs={};jobs=[];url='https://rpc.mevblocker.io'
+    c=database();specs={};jobs=[];local=threading.local()
+    def client():
+        if not hasattr(local,'rpc'):local.rpc=Rpc(ROOT/'data/rpc_cache',urls=controller.urls)
+        return local.rpc
     for p,(a,source,names) in CONTRACTS.items():
         s=parse_events((ROOT/'data/sources'/source).read_text(encoding='utf8'));specs[p]={s[n]['topic']:(n,s[n]) for n in names}
         existing=merge_ranges(list(c.execute('SELECT lo,hi FROM ranges WHERE protocol=?',(p,))))
@@ -99,18 +112,20 @@ def full_history(workers=4,chunk=50000):
                 wait=max(0,next_request[0]-time.monotonic());next_request[0]=max(time.monotonic(),next_request[0])+.65
             if wait:time.sleep(wait)
             try:
-                result=http(url,'eth_getLogs',[{'address':a,'topics':[list(specs[p])],'fromBlock':hex(lo),'toBlock':hex(hi)}])
+                result=client().one('eth_getLogs',[{'address':a,'topics':[list(specs[p])],'fromBlock':hex(lo),'toBlock':hex(hi)}],cache=False)
+                if not isinstance(result,list):raise RpcError('Invalid eth_getLogs response',kind='invalid_response')
                 # Guard silent result caps as well as explicit size errors.
-                if len(result) in (1000,2000,5000,10000,20000,32768,50000,65536,100000) and hi>lo:
+                if len(result) in (1000,2000,5000,10000,20000,32768,50000,65536,100000):
+                    if hi==lo:raise RpcError('Possible single-block truncation; use another RPC',kind='invalid_response')
                     mid=(lo+hi)//2;return getlogs(p,a,lo,mid)+getlogs(p,a,mid+1,hi)
                 return result
             except Exception as e:
                 msg=str(e).lower()
-                if (any(x in msg for x in ('range','too many','limit exceeded','response size')) or
-                    (any(x in msg for x in ('temporarily unavailable','timed out')) and hi-lo>500)) and hi>lo:
+                kind=getattr(e,'kind',error_kind(e))
+                if kind=='range_limit' and hi>lo:
                     mid=(lo+hi)//2;return getlogs(p,a,lo,mid)+getlogs(p,a,mid+1,hi)
-                if any(x in msg for x in ('pruned','personal token')):raise
-                if '429' in msg:
+                if kind not in ('rate_limit','network'):raise
+                if kind=='rate_limit':
                     with throttle:next_request[0]=max(next_request[0],time.monotonic()+30)
                 if attempt==4:raise
                 time.sleep(min(8,2**attempt))
@@ -125,7 +140,7 @@ def full_history(workers=4,chunk=50000):
             if key in keys:raise ValueError('Duplicate RPC log')
             keys.add(key);name,s=specs[p][l['topics'][0]];d=decode_event(l,s)
             account=d.get('onBehalfOf',d.get('onBehalf',d.get('borrower',d.get('user',d.get('dst',d.get('src',''))))))
-            stamp=int(l['blockTimestamp'],16) if l.get('blockTimestamp') else int(http(url,'eth_getBlockByNumber',[hex(bn),False])['timestamp'],16)
+            stamp=int(l['blockTimestamp'],16) if l.get('blockTimestamp') else int(client().block(bn)['timestamp'],16)
             rows.append((p,bn,int(l['transactionIndex'],16),key[1],key[0],l['blockHash'],stamp,name,account,d.get('reserve',d.get('asset','')),d.get('id',a),json.dumps(d,separators=(',',':')),
                          zlib.compress(json.dumps(l,separators=(',',':')).encode(),3)))
         # Hashes of first/last emitted logs; target boundaries are pinned separately.
@@ -133,7 +148,7 @@ def full_history(workers=4,chunk=50000):
         lh=logs[0]['blockHash'] if logs else '';hh=logs[-1]['blockHash'] if logs else ''
         digest=hashlib.sha256(json.dumps(sorted(keys)).encode()).hexdigest()
         return rows,digest,lh,hh
-    completed=0;failures=0;total=len(ordered)
+    completed=0;failures=0;total=len(ordered);consecutive_failures=0;halt=False
     with ThreadPoolExecutor(max_workers=workers) as ex:
         it=iter(ordered);pending={}
         for _ in range(workers):
@@ -147,15 +162,19 @@ def full_history(workers=4,chunk=50000):
                     c.executemany('INSERT OR IGNORE INTO events VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',rows)
                     c.execute('INSERT OR REPLACE INTO ranges VALUES (?,?,?,?,?,?,?)',(p,lo,hi,len(rows),digest,lh,hh))
                 completed+=1
+                consecutive_failures=0
                 if completed%10==0 or completed<5:print(f'HISTORY {completed}/{total}; {p} {lo}-{hi}: {len(rows)} records; failures={failures}',flush=True)
             except Exception as e:
                 failures+=1
+                consecutive_failures+=1
+                halt=halt or getattr(e,'kind',error_kind(e)) in ('history_unavailable','authorization','invalid_response') or consecutive_failures>=3
                 with c:c.execute('INSERT INTO failures VALUES (?,?,?,?,?)',(p,lo,hi,str(e)[:500],utc(int(time.time()))))
                 print(f'HISTORY failure {p} {lo}: {str(e)[:150]}',flush=True)
             save_json(RUN/'progress.json',{'completed_this_run':completed,'jobs_this_run':total,'failures_this_run':failures,'at_utc':utc(int(time.time()))})
-            j=next(it,None)
+            j=next(it,None) if not halt else None
             if j:pending[ex.submit(fetch,j)]=j
     c.close();export()
+    if failures:raise RpcError(f'{failures} history chunks failed; checkpoints retained. Retry after fixing RPC; do not treat partial coverage as complete.',kind='partial_history')
 
 def merge_ranges(ranges):
     merged=[]
@@ -352,4 +371,6 @@ def main():
     elif a.phase=='configs':configuration_history()
     elif a.phase=='snapshots':snapshots_by_version()
     else:export()
-if __name__=='__main__':main()
+if __name__=='__main__':
+    try:main()
+    except RpcError as exc:raise SystemExit(f'CRAWL STOPPED [{exc.kind}]: {exc}')

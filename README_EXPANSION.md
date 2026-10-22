@@ -1,5 +1,7 @@
 # Triển khai A–E: kỳ mục tiêu đến 30/09/2026
 
+**Lưu ý:** đây là luồng expansion cũ, không phải lệnh chạy mô hình. Bản sửa crawl/RPC: [README_CRAWL.md](README_CRAWL.md). Chạy RQ bằng dữ liệu recovery: [README_MODELS.md](README_MODELS.md). Không cần crawl lại để chạy mô hình offline.
+
 ## Phạm vi và nơi lưu
 
 - Dữ liệu mục tiêu: Ethereum mainnet, UTC `[2023-01-27, 2026-10-01)`.
@@ -10,7 +12,7 @@
 
 ## Chạy và tái lập
 
-Dùng Python >=3.9. Chỉ đọc RPC, không có thao tác ký hoặc gửi giao dịch.
+Dùng Python >=3.11. Chỉ đọc RPC, không có thao tác ký hoặc gửi giao dịch.
 
 ```
 python -m unittest discover -s tests -v
