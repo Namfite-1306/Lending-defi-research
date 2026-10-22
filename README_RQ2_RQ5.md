@@ -60,8 +60,7 @@ Repository có cổng audit dùng chung và phần audit RQ5 chưa được tác
 - `results/` — kết quả mô hình chỉ khi gate đầu vào được thông qua
 - `output/rq2_rq5_full_period/` — stdout/stderr theo từng bước
 
-## 6. Chạy mô hình thủ công sau khi đủ dữ liệu
-
+## 6. Chạy mô hình thủ công 
 ```powershell
 .\.venv\Scripts\python.exe -m defi_models check --data-run data/runs/recovery_20261020 --check-models 2 --config configs/models.example.json
 .\.venv\Scripts\python.exe -m defi_models rq2 --data-run data/runs/recovery_20261020 --config configs/models.example.json
