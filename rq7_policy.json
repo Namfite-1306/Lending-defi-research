@@ -1,0 +1,15 @@
+{
+  "snapshot": "full_snapshot_21762264",
+  "cascade_shocks": [0.1, 0.2, 0.3],
+  "policy_close_factors": [0.25, 0.5, 1.0],
+  "policy_bonuses": [0.03, 0.05, 0.08],
+  "policy_lt_shifts": [-0.03, 0.0, 0.03],
+  "liquidity_depth_usd": 100000000,
+  "impact_coefficient": 0.05,
+  "impact_cap": 0.8,
+  "oracle_pass_through": 1.0,
+  "gas_usd": 20,
+  "dex_fee_fraction": 0.003,
+  "max_rounds": 25,
+  "sell_fraction": 1.0
+}
