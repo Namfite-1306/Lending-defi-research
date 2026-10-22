@@ -1,5 +1,5 @@
 """Model tables from complete events; explicit units and no imputation of missing prices."""
-import argparse,bisect,csv,json,calendar
+import argparse,csv,json,calendar
 from collections import defaultdict,Counter
 from decimal import Decimal as D
 from .recovery import RUN,OUT,OLD,database
@@ -7,12 +7,15 @@ from .pipeline import ROOT,CONTRACTS,call,call_request,metadata,csv_write,save_j
 from .expansion import read_csv
 from .evm import words,uint,addr
 from .rpc import Rpc
+from .price_history import build_price_index,price_before_event
 
 def main():
     OUT.mkdir(parents=True,exist_ok=True);c=database();rpc=Rpc(ROOT/'data/rpc_cache',urls=['https://eth.drpc.org','https://eth-mainnet.public.blastapi.io'],batch_size=40,multicall=True)
     bounds=json.loads((RUN/'block_range.json').read_text(encoding='utf8'));end=bounds['end_block']
     coverage=read_csv(OUT/'history_coverage.csv')
     if not coverage or not all(r['download_complete']=='True' for r in coverage):raise ValueError('Complete verified extraction required before model tables')
+    # Reject legacy price files before expensive RPC enrichment or CSV rewrites.
+    feed=build_price_index(read_csv(OUT/'chainlink_price_updates.csv'))
     # Immutable Morpho market identity may be read at the end; do not treat markets
     # as existing before their first event / creation. Debt accrual still uses each snapshot.
     mids=[r[0] for r in c.execute("SELECT DISTINCT market FROM events WHERE protocol='morpho_blue'")]
@@ -71,10 +74,6 @@ def main():
             except Exception as e:errors.append({'token':t,'error':str(e)})
         else:errors.append({'token':t,'error':'Metadata call failed; no default decimals'})
     csv_write(OUT/'token_registry.csv',list(meta.values()))
-    feed={};times={}
-    for r in read_csv(OUT/'chainlink_price_updates.csv'):
-        feed.setdefault(r['feed'],[]).append((int(r['stamp']),D(r['price_usd'])))
-    for f in feed:feed[f].sort();times[f]=[r[0] for r in feed[f]]
     mapped={'0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2':'ETH/USD','0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':'USDC/USD',
             '0xdac17f958d2ee523a2206206994597c13d831ec7':'USDT/USD','0x6b175474e89094c44da98b954eedeac495271d0f':'DAI/USD'}
     groups=defaultdict(Counter);valued=Counter();missing=Counter();n=0
@@ -82,7 +81,7 @@ def main():
             'reported_event_amount_market_usd','valuation_status','price_age_seconds','measurement','economic_meaning']
     with (OUT/'liquidations_model_table.csv').open('w',encoding='utf-8-sig',newline='') as f:
         writer=csv.DictWriter(f,fieldnames=fields);writer.writeheader()
-        for p,b,stamp,tx,idx,mid,d in c.execute("SELECT protocol,block,stamp,tx,idx,market,decoded FROM events WHERE name IN ('LiquidationCall','AbsorbDebt','Liquidate') ORDER BY block,txidx,idx"):
+        for p,b,stamp,tx,txidx,idx,mid,d in c.execute("SELECT protocol,block,stamp,tx,txidx,idx,market,decoded FROM events WHERE name IN ('LiquidationCall','AbsorbDebt','Liquidate') ORDER BY block,txidx,idx"):
             d=json.loads(d);n+=1
             if p=='aave_v3':borrower=d['user'];liquidator=d['liquidator'];debt=d['debtAsset'];coll=d['collateralAsset'];raw=d['debtToCover']
             elif p=='morpho_blue':
@@ -90,10 +89,10 @@ def main():
             else:borrower=d['borrower'];liquidator=d['absorber'];debt='0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';coll='';raw=d['basePaidOut']
             amount=D(raw)/10**meta[debt]['decimals'] if debt in meta else None;pricefeed=mapped.get(debt);value=None;age=''
             if amount is not None and pricefeed in feed:
-                i=bisect.bisect_right(times[pricefeed],stamp)-1
-                if i>=0:
-                    age=stamp-feed[pricefeed][i][0];threshold=7200 if pricefeed=='ETH/USD' else 90000
-                    if age<=threshold:value=amount*feed[pricefeed][i][1]
+                quote=price_before_event(feed[pricefeed],b,txidx,idx,stamp)
+                if quote is not None:
+                    age=stamp-quote['stamp'];threshold=7200 if pricefeed=='ETH/USD' else 90000
+                    if age<=threshold:value=amount*D(quote['price_usd'])
             status='market_price_last_known' if value is not None else 'unpriced_or_stale; not zero'
             valued[p]+=value is not None;missing[p]+=value is None
             meaning='basePaidOut = debt absorbed plus possible positive base credit; not comparable to repaidAssets' if p=='compound_v3_usdc' else 'debt amount repaid in this liquidation event'

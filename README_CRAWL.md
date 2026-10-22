@@ -8,6 +8,7 @@ Luồng này dùng khi cần tải dữ liệu Ethereum. Chạy mô hình bằng
 - Trước crawl, kiểm tra chain 1, header hai biên, log lịch sử có thật và receipt tương ứng. Luồng cần đọc trạng thái còn kiểm tra `POOL_REVISION()` tại block mục tiêu. Chỉ giữ nguồn đã qua kiểm tra.
 - Các probe có block/tx/log index được lưu trong `data/sources/rpc_history_probes.json`, lấy từ bộ lịch sử đã audit. Probe là kiểm tra mẫu, không thay coverage toàn kỳ và đối chiếu độc lập.
 - Không dùng lại cache cũ: cache mới ở `data/rpc_cache/transport_v2/`; `eth_getLogs` trong crawler được truy vấn mới, resume dựa trên checkpoint đã commit.
+- Audit số học offline có thể đọc bằng chứng oracle từ cache pilot cũ nếu chưa có bản `transport_v2`; đó là kiểm tra dữ liệu đã thu thập. Các probe `audit_qa --live` luôn bỏ qua cả hai cache và dùng RPC client chung.
 - Chỉ chia đôi truy vấn khi có lỗi giới hạn khoảng block/kích thước kết quả. Lỗi 4444/pruned, authorization, rate limit hoặc lỗi không phân loại được không tạo cây truy vấn vô hạn.
 - Lỗi từng phần trong batch được thử lại riêng qua nguồn dự phòng. Truy vấn thiếu result hoặc lỗi không được cache thành dữ liệu rỗng.
 - Log sai địa chỉ/block/topic, bị removed hoặc trùng bị từ chối. Nghi ngờ response cap thì chia nhỏ; nếu một block vẫn chạm cap thì dừng để đổi nguồn.

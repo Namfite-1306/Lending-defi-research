@@ -18,6 +18,17 @@ def read_csv(path):
     if not path.exists(): return []
     with path.open(encoding='utf-8-sig',newline='') as f: return list(csv.DictReader(f))
 
+
+def clipped_coverage(ranges,lo,hi):
+    """Union inclusive checkpoints, clipped to the requested target."""
+    merged=[]
+    for start,end in sorted((max(a,lo),min(b,hi)) for a,b in ranges if a<=hi and b>=lo):
+        if start>end:continue
+        if merged and start<=merged[-1][1]+1:
+            merged[-1][1]=max(merged[-1][1],end)
+        else:merged.append([start,end])
+    return merged
+
 def history(workers=3,minutes=20,chunk=50000):
     RUN.mkdir(parents=True,exist_ok=True); OUT.mkdir(exist_ok=True)
     rpc=Rpc(ROOT/'data/rpc_cache')
@@ -86,7 +97,7 @@ def export_history():
     b=json.loads((RUN/'block_range.json').read_text()); lo,hi=b['start_block'],b['end_block']
     conn=connect(RUN/'raw.sqlite'); summaries=[]; borrowers={}; coverage=[]
     for p in CONTRACTS:
-        ranges=list(conn.execute('SELECT start,end FROM coverage WHERE protocol=? ORDER BY start',(p,)))
+        ranges=clipped_coverage(conn.execute('SELECT start,end FROM coverage WHERE protocol=? ORDER BY start',(p,)),lo,hi)
         blocks=sum(y-x+1 for x,y in ranges)
         counts=dict(conn.execute('SELECT name,count(*) FROM logs WHERE protocol=? GROUP BY name',(p,)))
         coverage.append({'protocol':p,'target_start_block':lo,'target_end_block':hi,'covered_blocks':blocks,
@@ -128,12 +139,23 @@ def risk_debt_raw(stable,scaled_variable,index,revision):
     return stable+(scaled_variable*index+(ray-1 if revision>=9 else ray//2))//ray
 
 def extended_window():
-    OUT.mkdir(parents=True,exist_ok=True)
-    save_json(OUT/'extended_window_gate.json',{'passed':False,'status':'not_completed; requires successful crawl and sentinel validation'})
-    pilot_events=read_csv(PILOT/'events.csv')
-    expected={(e['tx_hash'],int(e['log_index'])) for e in pilot_events
-              if e['protocol']=='aave_v3' and e['event_type'] in ('Borrow','Supply')}
-    if not expected:raise RpcError('Missing validated pilot Borrow/Supply sentinel. Supply stress_20250203_smoke/processed/events.csv before expansion window; an empty sentinel must not pass validation.',kind='missing_input')
+    from .validate_run import validate
+    # Invalidate any earlier success before checking dependencies or making RPC calls.
+    gate_path=OUT/'extended_window_gate.json'
+    save_json(gate_path,{'passed':False,'status':'pending pilot validation and extended-window reconciliation'})
+    try:
+        pilot_run=PILOT.parent
+        manifest=json.loads((pilot_run/'manifest.json').read_text(encoding='utf8'))
+        if 'processed/events.csv' not in manifest.get('outputs',{}):
+            raise ValueError('Pilot manifest must hash processed/events.csv')
+        validate(pilot_run,write_report=False)
+        expected={(e['tx_hash'],int(e['log_index'])) for e in read_csv(PILOT/'events.csv')
+                  if e['protocol']=='aave_v3' and e['event_type'] in ('Borrow','Supply')}
+        if not expected:raise ValueError('Validated pilot has no Borrow/Supply sentinel keys')
+    except (OSError,ValueError,KeyError,sqlite3.Error) as exc:
+        save_json(gate_path,{'passed':False,'status':'missing or invalid pilot; extended window not verified',
+                            'error':str(exc)[:300]})
+        raise RpcError('Missing or invalid validated pilot Borrow/Supply sentinel: '+str(exc),kind='missing_input') from exc
     rpc=Rpc(ROOT/'data/rpc_cache');pool=CONTRACTS['aave_v3'][0]
     specs=parse_events((ROOT/'data/sources/IPool.sol').read_text());bytopic={specs[n]['topic']:(n,specs[n]) for n in ('Borrow','Supply')}
     head=int(rpc.one('eth_blockNumber',[],cache=False),16)-64
@@ -180,26 +202,47 @@ def extended_window():
               'header_checks':len(headers),'unique_blocks':len(blocks)})
 
 def enrich():
-    OUT.mkdir(parents=True,exist_ok=True); rpc=Rpc(ROOT/'data/rpc_cache')
-    events=read_csv(PILOT/'events.csv')
-    # Independent pre-event lookback discovers borrowers without using future liquidations.
-    cutoff=21762264; begin=cutoff-7200
-    rpc.preflight(begin,cutoff,RUN/'rpc_preflight_enrich.json',require_state=True)
-    pool=CONTRACTS['aave_v3'][0]; spec=parse_events((ROOT/'data/sources/IPool.sol').read_text())['Borrow']
-    prior=rpc.logs(pool,[spec['topic']],begin,cutoff)
-    wallets=sorted({decode_event(l,spec)['onBehalfOf'] for l in prior})
-    csv_write(OUT/'pre_snapshot_borrower_cohort.csv',[{'account':a,'discovered_from_block':begin,'information_cutoff_block':cutoff,
-                'selection':'prior Borrow events only','full_universe':False} for a in wallets])
-    # Validate a deterministic sample including E-mode, independent of subsequent liquidation outcome.
-    modes=rpc.many([call_request(pool,'getUserEMode(address)',[a],cutoff) for a in wallets])
-    pairs=list(zip(wallets,[uint(words(x)[0]) for x in modes]))
-    selected=[x for x in pairs if x[1]][:6]+[x for x in pairs if not x[1]][:6]
-    aave_positions(rpc,cutoff,selected)
-    flows_and_windows(rpc,events)
-    cross_protocol(rpc,events,cutoff)
-    versions(rpc)
-    save_json(RUN/'enrichment_status.json',{'finished_utc':utc(int(time.time())),'source_window':'pilot + 7200-block prior Borrow lookback',
-              'borrowers_in_prior_window':len(wallets),'snapshots_selected':len(selected),'full_history_ready':False})
+    OUT.mkdir(parents=True,exist_ok=True)
+    cutoff=21762264;begin=cutoff-7200;pool=CONTRACTS['aave_v3'][0]
+    status={'status':'running','phase':'historical_rpc_check','snapshot_block':cutoff,
+            'started_utc':utc(int(time.time())),'full_history_ready':False}
+    target=RUN/'enrichment_status.json'
+    def phase(name):
+        status['phase']=name;save_json(target,status)
+    phase('historical_rpc_check')
+    try:
+        rpc=Rpc(ROOT/'data/rpc_cache')
+        if int(rpc.one('eth_chainId',[],cache=False),16)!=1:raise ValueError('Expected Ethereum mainnet chain ID 1')
+        # Use a fresh historical call before the expensive wallet scan; never
+        # substitute latest state or mode=0 when a provider rejects eth_call.
+        probe=rpc.one(*call_request(pool,'getUserEMode(address)',[ZERO],cutoff),cache=False)
+        if len(words(probe))!=1:raise ValueError('Historical getUserEMode returned an invalid ABI word')
+        events=read_csv(PILOT/'events.csv')
+        rpc.preflight(begin,cutoff,RUN/'rpc_preflight_enrich.json',require_state=True)
+        phase('borrower_discovery')
+        spec=parse_events((ROOT/'data/sources/IPool.sol').read_text())['Borrow']
+        prior=rpc.logs(pool,[spec['topic']],begin,cutoff)
+        wallets=sorted({decode_event(l,spec)['onBehalfOf'] for l in prior})
+        csv_write(OUT/'pre_snapshot_borrower_cohort.csv',[{'account':a,'discovered_from_block':begin,'information_cutoff_block':cutoff,
+                    'selection':'prior Borrow events only','full_universe':False} for a in wallets])
+        phase('wallet_emodes')
+        modes=rpc.many([call_request(pool,'getUserEMode(address)',[a],cutoff) for a in wallets])
+        pairs=list(zip(wallets,[uint(words(x)[0]) for x in modes]))
+        selected=[x for x in pairs if x[1]][:6]+[x for x in pairs if not x[1]][:6]
+        status.update(borrowers_in_prior_window=len(wallets),snapshots_selected=len(selected))
+        phase('aave_positions');aave_positions(rpc,cutoff,selected)
+        phase('flows_and_windows');flows_and_windows(rpc,events)
+        phase('cross_protocol');cross_protocol(rpc,events,cutoff)
+        phase('versions');versions(rpc)
+    except (RpcError,ValueError,OSError) as exc:
+        status.update(status='failed',finished_utc=utc(int(time.time())),error=str(exc))
+        save_json(target,status)
+        if isinstance(exc,RpcError):
+            raise RpcError(f"expansion enrich [{status['phase']}]: {exc}",exc.failures,kind=exc.kind) from exc
+        raise
+    status.update(status='completed',phase='completed',finished_utc=utc(int(time.time())),
+                  source_window='pilot + 7200-block prior Borrow lookback')
+    save_json(target,status)
 
 def versions(rpc):
     # EIP-1967 implementation slot; hashes distinguish upgrades even under one proxy address.
@@ -316,7 +359,7 @@ def flows_and_windows(rpc,events):
     candidates=[]
     for h in (6,24,48):candidates+=window_candidates(events,h,ts('2025-02-03T03:00:00Z'))
     gate_path=OUT/'extended_window_gate.json'
-    extended_ready=gate_path.exists() and json.loads(gate_path.read_text()).get('passed',False)
+    extended_ready=gate_path.exists() and json.loads(gate_path.read_text(encoding='utf8')).get('passed',False)
     if not extended_ready:
         csv_write(OUT/'recursive_window_candidates.csv',candidates)
         csv_write(OUT/'recursive_window_sensitivity.csv',[{'window_hours':h,'candidate_motifs':sum(r['window_hours']==h for r in candidates),
@@ -416,14 +459,14 @@ def cross_protocol(rpc,events,b):
 def main():
     p=argparse.ArgumentParser();p.add_argument('phase',choices=['history','enrich','export','window','versions','flows']);p.add_argument('--minutes',type=int,default=20)
     p.add_argument('--workers',type=int,default=3);p.add_argument('--chunk',type=int,default=50000);a=p.parse_args()
-    if a.phase=='history':history(a.workers,a.minutes,a.chunk)
-    elif a.phase=='enrich':enrich()
-    elif a.phase=='window':extended_window()
-    elif a.phase=='versions':versions(Rpc(ROOT/'data/rpc_cache'))
-    elif a.phase=='flows':flows_and_windows(Rpc(ROOT/'data/rpc_cache'),read_csv(PILOT/'events.csv'))
-    else:export_history()
-if __name__=='__main__':
-    try:main()
+    try:
+        if a.phase=='history':history(a.workers,a.minutes,a.chunk)
+        elif a.phase=='enrich':enrich()
+        elif a.phase=='window':extended_window()
+        elif a.phase=='versions':versions(Rpc(ROOT/'data/rpc_cache'))
+        elif a.phase=='flows':flows_and_windows(Rpc(ROOT/'data/rpc_cache'),read_csv(PILOT/'events.csv'))
+        else:export_history()
     except RpcError as exc:
         save_json(RUN/'crawl_failure.json',{'status':'failed','kind':exc.kind,'error':str(exc),'at_utc':utc(int(time.time()))})
-        raise SystemExit(f'CRAWL STOPPED [{exc.kind}]: {exc}')
+        p.exit(1,f'RPC error: {exc}\n')
+if __name__=='__main__':main()

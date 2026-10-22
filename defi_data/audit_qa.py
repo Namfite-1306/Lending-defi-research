@@ -4,14 +4,14 @@ import csv
 import hashlib
 import json
 import sqlite3
-import urllib.request
 from collections import Counter,defaultdict
 from contextlib import closing
-from datetime import datetime,timezone
-from decimal import Decimal,getcontext
+from datetime import datetime,timezone,timedelta
+from decimal import Decimal,InvalidOperation,getcontext
 from pathlib import Path
 from .pipeline import ROOT,CONTRACTS,ts
 from .evm import addr,words,uint,calldata,parse_events,decode_event
+from .rpc import Rpc,RpcError
 
 getcontext().prec=70
 D=Decimal
@@ -21,24 +21,97 @@ def read(path):
 
 def cached(method,params):
     key=json.dumps([method,params],sort_keys=True,separators=(',',':')).encode()
-    return json.loads((ROOT/'data/rpc_cache'/(hashlib.sha256(key).hexdigest()+'.json')).read_text())
+    name=hashlib.sha256(key).hexdigest()+'.json'
+    base=ROOT/'data/rpc_cache'
+    # Offline arithmetic can refer to a pilot collected before transport_v2.
+    # This compatibility read is never used by fresh --live probes.
+    for folder in (base/'transport_v2',base):
+        path=folder/name
+        if path.exists():return json.loads(path.read_text(encoding='utf8'))
+    raise FileNotFoundError('Oracle evidence missing from collection cache; regenerate the valuation inputs')
 
-def live(method,params):
-    errors=[]
-    for url in ('https://rpc.flashbots.net','https://eth-mainnet.public.blastapi.io'):
+def live(method,params,rpc=None):
+    client=rpc if rpc is not None else Rpc(ROOT/'data/rpc_cache')
+    # Audit evidence must come from a new request, never from collection cache.
+    return client.one(method,params,cache=False)
+
+
+def live_checks(rpc,manifest,scope,events,validations,specs):
+    """Three fresh-data checks; keep unavailable probes as explicit failures."""
+    checks=[]
+    def collect(name,probe):
         try:
-            req=urllib.request.Request(url,json.dumps({'jsonrpc':'2.0','id':1,'method':method,'params':params}).encode(),
-                {'Content-Type':'application/json','User-Agent':'DeFiResearchAudit/1.0'})
-            with urllib.request.urlopen(req,timeout=35) as f:r=json.load(f)
-            if 'error' in r or r.get('result') is None:
-                errors.append('RPC error or missing historical result');continue
-            return r['result']
-        except Exception as exc:errors.append(type(exc).__name__)
-    raise RuntimeError('Fresh RPC unavailable: '+','.join(errors))
+            passed,detail=probe()
+            checks.append({'check':name,'passed':bool(passed),'detail':detail})
+        except RpcError as exc:
+            checks.append({'check':name,'passed':False,'detail':{
+                'status':'rpc_unavailable','error':str(exc),'endpoint_failures':exc.failures}})
+        except (ValueError,KeyError,TypeError,IndexError,InvalidOperation) as exc:
+            checks.append({'check':name,'passed':False,'detail':{
+                'status':'invalid_response_or_input','error':str(exc)}})
+
+    try:
+        chain=int(live('eth_chainId',[],rpc),16)
+        if chain!=1:raise ValueError(f'Expected Ethereum mainnet chain ID 1; received {chain}')
+    except (RpcError,ValueError) as exc:
+        for name in ('fresh_rpc_receipts','fresh_rpc_window_boundaries','fresh_rpc_snapshot_hf'):
+            checks.append({'check':name,'passed':False,'detail':{'status':'chain_check_failed','error':str(exc)}})
+        return checks
+
+    def receipts():
+        probes=[];skipped=[]
+        units={'aave_v3':'LiquidationCall','compound_v3_usdc':'AbsorbDebt','morpho_blue':'Liquidate'}
+        for protocol in CONTRACTS:
+            selected=[e for e in events if e['protocol']==protocol and e['event_type']==units[protocol]]
+            if not selected:skipped.append(protocol);continue
+            samples=[selected[0]] if len(selected)==1 else [selected[0],selected[-1]]
+            for event in samples:
+                receipt=live('eth_getTransactionReceipt',[event['tx_hash']],rpc)
+                matches=[log for log in receipt['logs'] if int(log['logIndex'],16)==int(event['log_index'])]
+                ok=(len(matches)==1 and matches[0]['blockHash']==event['block_hash']
+                    and matches[0]['address'].lower()==event['contract_address'])
+                if ok:ok=decode_event(matches[0],specs[protocol][event['event_type']])==json.loads(event['decoded_json'])
+                probes.append({'protocol':protocol,'tx_hash':event['tx_hash'],'log_index':event['log_index'],'matched':ok})
+        # Preserve the existing list-shaped detail for a full pilot audit.
+        detail=probes if not skipped else {'probes':probes,'protocols_without_liquidations':skipped}
+        return bool(probes) and all(row['matched'] for row in probes),detail
+
+    def boundaries():
+        rows=[]
+        for n in (manifest['start_block']-1,manifest['start_block'],manifest['end_block'],manifest['end_block']+1):
+            block=live('eth_getBlockByNumber',[hex(n),False],rpc)
+            rows.append({'block':n,'timestamp':int(block['timestamp'],16),'hash':block['hash']})
+        ok=(rows[0]['timestamp']<ts(manifest['settings']['start'])<=rows[1]['timestamp']
+            and rows[2]['timestamp']<ts(manifest['settings']['end'])<=rows[3]['timestamp'])
+        return ok,rows
+
+    def health_factors():
+        users=[]
+        for validation in validations:
+            value=live('eth_call',[{'to':scope['registry']['pool'],
+                       'data':calldata('getUserAccountData(address)',validation['account'])},hex(scope['block_number'])],rpc)
+            w=words(value)
+            if len(w)!=6:raise ValueError('getUserAccountData must return six ABI words')
+            if not validation['hf_reported']:
+                # HF is undefined at zero debt; check the debt instead of parsing ''.
+                ok=D(validation['debt_reported_usd'])==0 and uint(w[1])==0
+                fresh='undefined_zero_debt'
+            else:
+                fresh=str(D(uint(w[5]))/(D(10)**18))
+                ok=abs(D(fresh)-D(validation['hf_reported']))<D('1e-15')
+            users.append({'account':validation['account'],'hf_fresh':fresh,'matched':ok})
+        return bool(users) and all(row['matched'] for row in users),users
+
+    collect('fresh_rpc_receipts',receipts)
+    collect('fresh_rpc_window_boundaries',boundaries)
+    collect('fresh_rpc_snapshot_hf',health_factors)
+    return checks
 
 def run_audit(run_id,online=False):
     run=ROOT/'data/runs'/run_id; p=run/'processed'
-    manifest=json.loads((run/'manifest.json').read_text()); scope=json.loads((p/'snapshot_scope.json').read_text())
+    manifest=json.loads((run/'manifest.json').read_text(encoding='utf8'))
+    if manifest['status']!='completed':raise ValueError('Run did not complete; finish pipeline before audit')
+    scope=json.loads((p/'snapshot_scope.json').read_text(encoding='utf8'))
     files={f.name:read(f) for f in p.glob('*.csv')}
     events=files['events.csv']; liqs=files['liquidations.csv']; valued=files['aave_liquidations_valued.csv']; pos=files['positions.csv']
     results={}; checks=[]
@@ -118,7 +191,8 @@ def run_audit(run_id,online=False):
         b=sum(r['protocol']==protocol and r['event_type']==event for r in events)
         panels.append({'protocol':protocol,'panel_count':a,'event_count':b,'matched':a==b})
     check('hourly_count_reconciliation',all(x['matched'] for x in panels),panels)
-    results.update(audit_date_local='18/10/2026',run_id=run_id,window=manifest['settings'],
+    results.update(audit_date_local=datetime.now(timezone(timedelta(hours=7))).strftime('%d/%m/%Y'),
+        audit_mode='live' if online else 'offline',run_id=run_id,window=manifest['settings'],
         blocks=[manifest['start_block'],manifest['end_block']],total_events=len(events),
         protocol_counts=dict(Counter(e['protocol'] for e in events)),event_counts=dict(Counter(e['protocol']+':'+e['event_type'] for e in events)),
         file_inventory=[{'file':name,'rows':len(rows),'columns':len(rows[0]) if rows else 0,'bytes':(p/name).stat().st_size} for name,rows in files.items()],
@@ -131,29 +205,9 @@ def run_audit(run_id,online=False):
         checks=checks)
     results['hourly_rows']=hourly
     if online:
-        probes=[]
-        for protocol in CONTRACTS:
-            selected=[e for e in events if e['protocol']==protocol and e['event_type']==units[protocol]]
-            for e in [selected[0],selected[-1]]:
-                receipt=live('eth_getTransactionReceipt',[e['tx_hash']])
-                matches=[log for log in receipt['logs'] if int(log['logIndex'],16)==int(e['log_index'])]
-                ok=len(matches)==1 and matches[0]['blockHash']==e['block_hash'] and matches[0]['address'].lower()==e['contract_address']
-                if ok:ok=decode_event(matches[0],specs[protocol][e['event_type']])==json.loads(e['decoded_json'])
-                probes.append({'protocol':protocol,'tx_hash':e['tx_hash'],'log_index':e['log_index'],'matched':ok})
-        check('fresh_rpc_receipts',all(x['matched'] for x in probes),probes)
-        boundary=[]
-        for n in [manifest['start_block']-1,manifest['start_block'],manifest['end_block'],manifest['end_block']+1]:
-            b=live('eth_getBlockByNumber',[hex(n),False]); boundary.append({'block':n,'timestamp':int(b['timestamp'],16),'hash':b['hash']})
-        check('fresh_rpc_window_boundaries',boundary[0]['timestamp']<ts(manifest['settings']['start'])<=boundary[1]['timestamp'] and
-            boundary[2]['timestamp']<ts(manifest['settings']['end'])<=boundary[3]['timestamp'],boundary)
-        users=[]
-        for v in results['validation']:
-            value=live('eth_call',[{'to':scope['registry']['pool'],'data':calldata('getUserAccountData(address)',v['account'])},hex(scope['block_number'])])
-            w=words(value);hf=D(uint(w[5]))/(D(10)**18)
-            ok=abs(hf-D(v['hf_reported']))<D('1e-15')
-            users.append({'account':v['account'],'hf_fresh':str(hf),'matched':ok})
-        check('fresh_rpc_snapshot_hf',all(x['matched'] for x in users),users)
-        results['live_endpoints']=['https://rpc.flashbots.net','https://eth-mainnet.public.blastapi.io']
+        rpc=Rpc(ROOT/'data/rpc_cache')
+        checks.extend(live_checks(rpc,manifest,scope,events,results['validation'],specs))
+        results['live_rpc']={'configured_endpoints':len(rpc.urls),'http_requests':rpc.requests,'cache_bypassed':True}
     results['all_executed_checks_passed']=all(c['passed'] for c in checks)
     results['checked_at_utc']=datetime.now(timezone.utc).isoformat()
     target=run/'audit';target.mkdir(exist_ok=True)
@@ -162,6 +216,14 @@ def run_audit(run_id,online=False):
         'files':len(files),'live':online,'all_checks_passed':results['all_executed_checks_passed']}))
     return results
 
-if __name__=='__main__':
+def main(argv=None):
     parser=argparse.ArgumentParser();parser.add_argument('--live',action='store_true');parser.add_argument('--run-id',default='stress_20250203_smoke')
-    a=parser.parse_args();run_audit(a.run_id,a.live)
+    a=parser.parse_args(argv)
+    try:
+        results=run_audit(a.run_id,a.live)
+    except (RpcError,OSError,ValueError,KeyError,sqlite3.Error) as exc:
+        parser.exit(1,f'Audit could not finish: {exc}\n')
+    return 0 if results['all_executed_checks_passed'] else 1
+
+
+if __name__=='__main__':raise SystemExit(main())

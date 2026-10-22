@@ -1,11 +1,15 @@
 import hashlib
 import json
 import os
+import re
 import time
 import urllib.request
 import urllib.error
 import uuid
 from pathlib import Path
+
+DEFAULT_RPC_URLS=('https://eth-mainnet.public.blastapi.io','https://eth.drpc.org','https://rpc.mevblocker.io')
+
 
 def error_kind(error):
     text=str(error).lower()
@@ -13,24 +17,51 @@ def error_kind(error):
     if any(x in text for x in ('429','rate limit','compute units','too many requests')):return 'rate_limit'
     if any(x in text for x in ('401','403','unauthorized','personal token','api key','access denied')):return 'authorization'
     if any(x in text for x in ('block range','blocks range','range limit','maximum block','too many results','response size','query returned more','range too large')):return 'range_limit'
-    if any(x in text for x in ('method not found','method_not','-32601','not support batch')):return 'unsupported_method'
+    if any(x in text for x in ('method not found','method_not','-32601','not support batch','not whitelisted')):return 'unsupported_method'
     if any(x in text for x in ('network','timeout','timed out','temporarily unavailable','502','503','504')):return 'network'
     return 'rpc_error'
 
 class RpcError(RuntimeError):
-    def __init__(self,message,kind=None):
-        super().__init__(message);self.kind=kind or error_kind(message)
+    def __init__(self,message,failures=None,kind=None):
+        super().__init__(message)
+        if isinstance(failures,str) and kind is None:kind=failures;failures=None
+        self.failures=failures or []
+        self.kind=kind or error_kind(message)
 
 class Rpc:
     def __init__(self, cache, urls=None, batch_size=20, multicall=False, cache_individual=True,timeout=35,retry_attempts=3):
-        self.urls=[u.strip() for u in (urls or os.getenv('ETH_RPC_URLS','https://rpc.mevblocker.io,https://eth.drpc.org,https://eth-mainnet.public.blastapi.io').split(',')) if u.strip()]
-        if not self.urls:raise RpcError('No RPC configured. Set ETH_RPC_URLS.',kind='configuration')
-        # Isolate old caches that may contain misleading empty historical results.
+        configured=urls if urls is not None else os.getenv('ETH_RPC_URLS',','.join(DEFAULT_RPC_URLS))
+        if isinstance(configured,str):configured=configured.split(',')
+        self.urls=list(dict.fromkeys(url.strip() for url in configured if url.strip()))
+        if not self.urls:raise RpcError('ETH_RPC_URLS must contain at least one HTTP(S) RPC endpoint',kind='configuration')
+        if batch_size<1:raise ValueError('RPC batch_size must be positive')
         self.cache=Path(cache)/'transport_v2'; self.cache.mkdir(parents=True,exist_ok=True)
         self.batch_size=batch_size; self.requests=0; self.hits=0
         self.multicall=multicall
         self.cache_individual=cache_individual
         self.timeout=timeout;self.retry_attempts=retry_attempts
+        if timeout<=0 or retry_attempts<1:raise ValueError('RPC timeout and retry_attempts must be positive')
+        self._unsupported_methods={}
+
+    def _safe_message(self,message):
+        message=str(message)
+        for url in self.urls:message=message.replace(url,'[endpoint]')
+        return re.sub(r'https?://[^\s\"\'<>]+','[endpoint]',message)[:240]
+
+    @staticmethod
+    def _method_denied(error):
+        message=str(error.get('message','')).lower()
+        return error.get('code')==-32601 or 'not whitelisted' in message or 'method not found' in message
+
+    @staticmethod
+    def _rate_limited(error):
+        message=str(error.get('message','')).lower()
+        return error.get('code')==429 or any(word in message for word in ('rate limit','compute units','too many requests'))
+
+    @staticmethod
+    def _failure_summary(failures):
+        latest={row['endpoint']:row for row in failures}
+        return '; '.join(f"endpoint #{i}: {row['code']} {row['message']}" for i,row in latest.items())
 
     def _path(self,method,params):
         key=json.dumps([method,params],sort_keys=True,separators=(',',':')).encode()
@@ -38,53 +69,66 @@ class Rpc:
 
     def _post(self,payload):
         # Endpoints/keys are never written to manifests or error messages.
-        last=''; semantic_error=None;range_error=None
+        semantic_error=None;range_error=None;failures=[]
+        method=payload.get('method') if isinstance(payload,dict) else None
+        label=method or 'batch'
+
+        def failed(endpoint,error,attempt):
+            nonlocal semantic_error,range_error
+            if error_kind(error)=='range_limit':range_error={'error':error}
+            semantic_error={'error':error}
+            failures.append({'endpoint':endpoint,'code':error.get('code','RPC'),
+                             'message':self._safe_message(error.get('message','RPC error')),'attempt':attempt+1})
+
         for attempt in range(self.retry_attempts):
             transient=False
-            for url in self.urls:
+            for endpoint,url in enumerate(self.urls,1):
+                if method and (url,method) in self._unsupported_methods:
+                    failed(endpoint,self._unsupported_methods[url,method],attempt)
+                    continue
                 try:
                     req=urllib.request.Request(url,json.dumps(payload).encode(),
                         {'Content-Type':'application/json','User-Agent':'DeFiResearch/1.0'})
+                    self.requests+=1
                     with urllib.request.urlopen(req,timeout=self.timeout) as response:
                         result=json.load(response)
-                    self.requests+=1
                     if self.requests % 25 == 0:
                         print(f'RPC progress: {self.requests} HTTP requests, {self.hits} cache hits',flush=True)
                     time.sleep(.08)
                     if not isinstance(result,(dict,list)) or (isinstance(result,list) and not isinstance(payload,list)):
-                        semantic_error={'error':{'message':'Malformed RPC response'}};continue
+                        failed(endpoint,{'message':'Malformed RPC response'},attempt);continue
                     if isinstance(result,dict) and 'error' in result:
-                        semantic_error=result
-                        if error_kind(result['error'])=='range_limit':range_error=result
-                        msg=str(result['error']).lower()
-                        transient=transient or any(x in msg for x in ('429','rate limit','compute units','too many requests'))
+                        error=result['error'];failed(endpoint,error,attempt)
+                        if method and self._method_denied(error):self._unsupported_methods[url,method]=error
+                        transient=transient or self._rate_limited(error)
                         continue
                     if isinstance(result,dict) and result.get('result') is None:
-                        semantic_error={'error':{'message':'Missing RPC result'}};continue
+                        failed(endpoint,{'message':'Missing RPC result'},attempt);continue
                     return result
                 except urllib.error.HTTPError as exc:
                     # A JSON-RPC error can arrive with HTTP 400/403/429. Preserve it;
                     # hiding it caused oversized queries to fall through to pruned providers.
+                    parsed=False
                     try:
                         error=json.loads(exc.read())
                         if isinstance(error,dict) and 'error' in error:
-                            semantic_error=error
-                            if error_kind(error['error'])=='range_limit':range_error=error
-                            transient=transient or exc.code==429
+                            error=error['error'];failed(endpoint,error,attempt);parsed=True
+                            if method and self._method_denied(error):self._unsupported_methods[url,method]=error
+                            transient=transient or self._rate_limited(error)
                     except (ValueError,UnicodeError):pass
-                    last=f'HTTP {exc.code}'
-                    if exc.code in (401,403,429):
-                        semantic_error=semantic_error or {'error':{'code':exc.code,'message':last}}
-                        transient=transient or exc.code==429
-                except Exception as exc: last=type(exc).__name__
-            if semantic_error is not None:
-                err=semantic_error.get('error',{})
-                message=str(err.get('message','')).lower()
-                if not transient and err.get('code') not in (429,) and not any(x in message for x in ('rate limit','compute units','too many requests')):
-                    return range_error or semantic_error
+                    if not parsed:
+                        failures.append({'endpoint':endpoint,'code':exc.code,'message':'HTTP request rejected','attempt':attempt+1})
+                    transient=transient or exc.code==429 or exc.code>=500
+                except Exception as exc:
+                    failures.append({'endpoint':endpoint,'code':'network','message':type(exc).__name__,'attempt':attempt+1})
+                    transient=True
+            # Keep retries for any recoverable provider failure even if the final
+            # provider rejects the method. A final whitelist error is not the cause
+            # of earlier timeouts or rate limits.
+            if not transient:break
             if attempt+1<self.retry_attempts:time.sleep(.5*(2**attempt))
-        if semantic_error is not None:return range_error or semantic_error
-        raise RpcError(f'RPC network request failed ({last}); check ETH_RPC_URLS')
+        if semantic_error is not None:return {**(range_error or semantic_error),'_rpc_failures':failures}
+        raise RpcError(f'RPC network request failed for {label}: {self._failure_summary(failures)}; check ETH_RPC_URLS',failures)
 
     def many(self,calls,allow_errors=False):
         output=[None]*len(calls); missing=[]
@@ -132,22 +176,19 @@ class Rpc:
                 continue
             payload=[{'jsonrpc':'2.0','id':i,'method':calls[i][0],'params':calls[i][1]} for i in indexes]
             response=self._post(payload)
-            if not isinstance(response,list):
-                response=[{'id':i,'error':response.get('error',{'message':'Batch response missing'})} for i in indexes]
-            mapping={item['id']:item for item in response if isinstance(item,dict) and 'id' in item}
+            # A provider can reject batches or fail only some historical calls.
+            # Retry failed items singly so _post can try every configured endpoint.
+            mapping={item['id']:item for item in response if isinstance(item,dict) and 'id' in item} if isinstance(response,list) else {}
             for i in indexes:
                 item=mapping.get(i,{})
                 if 'error' in item or 'result' not in item or item.get('result') is None:
-                    # Batch endpoints can return per-item rate limits even when HTTP succeeds.
-                    # Retry independently through the configured fallback, never cache the error.
-                    if error_kind(item.get('error',{}))=='rate_limit':time.sleep(1)
+                    if item.get('error',{}).get('code') in (429,-32005,-32016):
+                        time.sleep(1)
                     try:
-                        output[i]=self.one(*calls[i]); continue
-                    except RpcError as retry_error:
-                        item={'error':{'message':str(retry_error)}}
-                    error={'rpc_error':item.get('error',{'message':'Missing result'})}
-                    if not allow_errors: raise RpcError(str(error))
-                    output[i]=error
+                        output[i]=self.one(*calls[i],cache=self.cache_individual)
+                    except RpcError as exc:
+                        if not allow_errors: raise
+                        output[i]={'rpc_error':{'message':str(exc)}}
                 else:
                     output[i]=item['result']
                     path=self._path(*calls[i]); tmp=path.with_suffix('.'+uuid.uuid4().hex+'.tmp')
@@ -160,7 +201,10 @@ class Rpc:
             self.hits+=1
             return json.loads(path.read_text())
         result=self._post({'jsonrpc':'2.0','id':1,'method':method,'params':params})
-        if 'error' in result: raise RpcError(str(result['error']))
+        if 'error' in result:
+            failures=result.get('_rpc_failures',[])
+            detail=self._failure_summary(failures) if failures else self._safe_message(result['error'])
+            raise RpcError(f'{method} failed: {detail}. Check ETH_RPC_URLS: endpoints must allow this method and historical state at the requested block.',failures,kind=error_kind(result['error']))
         if result.get('result') is None: raise RpcError('Missing RPC result')
         if cache:
             tmp=path.with_suffix('.'+uuid.uuid4().hex+'.tmp'); tmp.write_text(json.dumps(result['result']),encoding='utf-8'); tmp.replace(path)
