@@ -22,7 +22,7 @@ class RpcError(RuntimeError):
         super().__init__(message);self.kind=kind or error_kind(message)
 
 class Rpc:
-    def __init__(self, cache, urls=None, batch_size=20, multicall=False, cache_individual=True,timeout=35,retry_attempts=3):
+    def __init__(self, cache, urls=None, batch_size=20, multicall=False, cache_individual=True,timeout=35,retry_attempts=3,use_cache=True):
         self.urls=[u.strip() for u in (urls or os.getenv('ETH_RPC_URLS','https://rpc.mevblocker.io,https://eth.drpc.org,https://eth-mainnet.public.blastapi.io').split(',')) if u.strip()]
         if not self.urls:raise RpcError('No RPC configured. Set ETH_RPC_URLS.',kind='configuration')
         # Isolate old caches that may contain misleading empty historical results.
@@ -31,6 +31,7 @@ class Rpc:
         self.multicall=multicall
         self.cache_individual=cache_individual
         self.timeout=timeout;self.retry_attempts=retry_attempts
+        self.use_cache=use_cache
 
     def _path(self,method,params):
         key=json.dumps([method,params],sort_keys=True,separators=(',',':')).encode()
@@ -90,7 +91,7 @@ class Rpc:
         output=[None]*len(calls); missing=[]
         for i,(method,params) in enumerate(calls):
             path=self._path(method,params)
-            if path.exists():
+            if self.use_cache and path.exists():
                 output[i]=json.loads(path.read_text()); self.hits+=1
             else: missing.append(i)
         for start in range(0,len(missing),self.batch_size):
@@ -126,7 +127,7 @@ class Rpc:
                         else:output[i]={'rpc_error':{'message':'Multicall subcall reverted'}}
                     else:
                         output[i]=value
-                        if self.cache_individual:
+                        if self.use_cache and self.cache_individual:
                             path=self._path(*calls[i]);tmp=path.with_suffix('.'+uuid.uuid4().hex+'.tmp')
                             tmp.write_text(json.dumps(value),encoding='utf-8');tmp.replace(path)
                 continue
@@ -150,11 +151,13 @@ class Rpc:
                     output[i]=error
                 else:
                     output[i]=item['result']
-                    path=self._path(*calls[i]); tmp=path.with_suffix('.'+uuid.uuid4().hex+'.tmp')
-                    tmp.write_text(json.dumps(output[i]),encoding='utf-8'); tmp.replace(path)
+                    if self.use_cache and self.cache_individual:
+                        path=self._path(*calls[i]); tmp=path.with_suffix('.'+uuid.uuid4().hex+'.tmp')
+                        tmp.write_text(json.dumps(output[i]),encoding='utf-8'); tmp.replace(path)
         return output
 
     def one(self,method,params,cache=True):
+        cache=cache and self.use_cache
         path=self._path(method,params)
         if cache and path.exists():
             self.hits+=1

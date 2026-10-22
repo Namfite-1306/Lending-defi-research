@@ -217,7 +217,8 @@ def versions(rpc):
                      'coverage':'selected checkpoints, not complete upgrade/configuration timeline'})
     csv_write(OUT/'protocol_versions_sample.csv',rows)
 
-def aave_positions(rpc,b,selected):
+def aave_positions(rpc,b,selected,out=None):
+    out=OUT if out is None else out
     pool,oracle,provider=registry(rpc,b)
     revision=uint(call(rpc,pool,'POOL_REVISION()',[],b)[0])
     if not 1<=revision<=11:raise ValueError('Unreviewed Pool revision; add explicit adapter')
@@ -268,6 +269,8 @@ def aave_positions(rpc,b,selected):
                           'collateral_usd':str(cv),'debt_usd':str(dv),'price_usd':str(m['price']),
                           'selection':'pre_snapshot_borrow_history_sample','pool_revision':revision,
                           'repayable_debt_raw':str(repay),'hf_debt_raw':str(d)})
+            local[-1]['repayable_debt_usd']=str(D(repay)/unit*m['price'])
+            local[-1]['decimals']=m['decimals']
         account=call(rpc,pool,'getUserAccountData(address)',[a],b)
         c=D(uint(account[0]))/base;d=D(uint(account[1]))/base
         hf=D(uint(account[5]))/10**18 if d else None; calc=protocol_hf(total_c,weighted,total_d,base,revision)
@@ -279,12 +282,14 @@ def aave_positions(rpc,b,selected):
         for r in local:r['validation_passed']=ok
         rows+=local
         print(f'B snapshot mode={mode} pass={ok} tokens={len(local)}',flush=True)
-    csv_write(OUT/'historical_reserve_config_sample.csv',configs)
-    csv_write(OUT/'emode_categories_sample.csv',categories)
-    csv_write(OUT/'positions_point_in_time_sample.csv',rows);csv_write(OUT/'position_checks.csv',checks)
-    save_json(OUT/'position_scope.json',{'block':b,'pool':pool,'oracle':oracle,'provider':provider,'full_universe':False,
+    csv_write(out/'historical_reserve_config_sample.csv',configs)
+    csv_write(out/'emode_categories_sample.csv',categories)
+    csv_write(out/'positions_point_in_time_sample.csv',rows);csv_write(out/'position_checks.csv',checks)
+    scope={'block':b,'pool':pool,'oracle':oracle,'provider':provider,'full_universe':False,
               'supported_abi':'version-aware Pool revisions 1–11; each snapshot requires HF reconciliation; later revisions fail closed',
-              'snapshots_are':'block-end state; not pre-transaction state for intra-block events'})
+              'snapshots_are':'block-end state; not pre-transaction state for intra-block events'}
+    save_json(out/'position_scope.json',scope)
+    return {'positions':rows,'checks':checks,'scope':scope,'reserves':configs}
 
 def window_candidates(events,hours,end_stamp):
     grouped=defaultdict(list);out=[]

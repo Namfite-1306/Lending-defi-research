@@ -1,5 +1,7 @@
 # DeFi research data pipeline
 
+**Dashboard realtime local:** [README_REALTIME.md](README_REALTIME.md). Chạy `.venv\Scripts\python.exe -m defi_live`, mở http://127.0.0.1:8787. Collector 15 giây; snapshot/mô hình theo chu kỳ riêng, có nhãn scope/stale/error.
+
 **Kiểm tra nguồn và sửa lỗi crawl RPC:** xem [README_CRAWL.md](README_CRAWL.md). Lệnh chẩn đoán: `python -m defi_data.rpc_check --require-state --test-logs`.
 
 **Chạy mô hình RQ1–RQ7:** xem [README_MODELS.md](README_MODELS.md), mã trong `defi_models/`, cấu hình trong `configs/`. Phần bên dưới mô tả crawler/pilot gốc; các giới hạn của pilot không phải trạng thái dữ liệu recovery mới. Dữ liệu đầy kỳ và báo cáo ba vòng audit nằm trong `data/runs/recovery_20261020/` (không đưa lên GitHub).

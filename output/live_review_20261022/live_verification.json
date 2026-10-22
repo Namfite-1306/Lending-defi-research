@@ -1,0 +1,11 @@
+{
+  "first_cursor": 26247259,
+  "second_cursor": 26247306,
+  "cursor_advanced": true,
+  "state": "fresh",
+  "model_block": 26247286,
+  "live_hf_validated": true,
+  "feeds": 5,
+  "events_returned": 30,
+  "clock_offset_seconds": 84.2
+}

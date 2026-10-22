@@ -1,0 +1,42 @@
+{
+  "now": 1792661262.9581733,
+  "state": "fresh",
+  "head": {
+    "number": 26247261,
+    "target": 26247259,
+    "stamp": 1792661339,
+    "observed_at": 1792661258.2538748
+  },
+  "cursor": 26247259,
+  "block_timestamp": 1792661315,
+  "block_hash": "0xbe590c5e414ca37842526a5696622f131102684d0836b8ab60e4266ab3834006",
+  "event_age_seconds": 28.7,
+  "collector": {
+    "state": "ok",
+    "last_success_at": 1792661261.7798405,
+    "cursor": 26247259,
+    "remaining_blocks": 0
+  },
+  "poll_seconds": 15,
+  "snapshot_seconds": 30.0,
+  "confirmations": 2,
+  "start_block": 26247178,
+  "last_reorg": null,
+  "prices": {
+    "state": "fresh",
+    "source_age_seconds": 28.7,
+    "calculation_age_seconds": 0.5
+  },
+  "models": {
+    "state": "fresh",
+    "source_age_seconds": 88.7,
+    "calculation_age_seconds": 34.1
+  },
+  "clock_offset_seconds": 80.7,
+  "price_error": null,
+  "model_job": {
+    "state": "running",
+    "started_at": 1792661258.8830447
+  },
+  "scope": "selected Ethereum contracts, live tail only; not stitched to historical dataset"
+}

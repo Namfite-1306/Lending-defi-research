@@ -6,3 +6,4 @@ data/runs/
 data/test_tmp/
 results/
 .pytest_cache/
+data/live/
