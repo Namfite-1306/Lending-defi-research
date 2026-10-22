@@ -1,76 +1,102 @@
+# Bàn giao Người 4 — chỉ RQ2 và RQ5
 
-## 1. Phạm vi và dữ liệu phải thu
+**Phạm vi thời gian:** `[2023-01-27T00:00:00Z, 2026-10-01T00:00:00Z)` — bao gồm từ 27/01/2023 UTC và loại trừ toàn bộ ngày 01/10/2026 trở đi.
 
-### RQ2 — tập trung thanh lý
+> **Trạng thái trung thực:** ZIP mã nguồn này không chứa dataset on-chain đã crawl cho toàn kỳ. Trong môi trường tạo gói, kết nối RPC không hoạt động nên chưa thể xác nhận crawl hoàn tất. Đây là gói mã nguồn/hướng dẫn, không phải dữ liệu nghiên cứu đã thu thập. Không có số liệu nào được bịa để lấp chỗ trống.
 
-Cần event thanh lý và metadata để đo **Top-k/HHI theo số sự kiện**, cùng Top-k/HHI theo giá trị USD chỉ trên tập được định giá hợp lệ:
+## 1. RQ2 — mức độ tập trung thanh lý
 
-- **Aave V3 Ethereum:** `LiquidationCall`: borrower, liquidator, debt asset, collateral asset, debtToCover, collateral amount, block/tx/log index, block timestamp.
-- **Compound III USDC Ethereum:** `AbsorbDebt` và các event liên quan. `basePaidOut` không tự động đồng nghĩa với “debt repaid”; giữ nhãn economic meaning riêng.
-- **Morpho Blue Ethereum:** `Liquidate`, market ID và `repaidAssets`; ánh xạ market ID sang loan/collateral token.
-- **Định giá:** token decimals/symbol và lịch sử Chainlink ETH/USD, BTC/USD theo logic hiện có; không có feed hợp lệ thì giữ unpriced/NA, không đổi thành 0.
-- **Kiểm tra coverage:** coverage block liên tục, giờ thiếu dữ liệu không được coi là giờ có 0 thanh lý; xác minh nguồn và các vòng audit trước khi freeze.
+### Dữ liệu cần
 
-### RQ5 — mạng exposure và lan truyền
+- Ethereum mainnet logs từ ba protocol được hỗ trợ trong code: Aave V3 (`LiquidationCall`), Compound III USDC (`AbsorbDebt`) và Morpho Blue (`Liquidate`).
+- Protocol, block, timestamp, transaction hash, log index; borrower/liquidator; debt/collateral token hoặc market; raw event amounts.
+- Token decimals/symbol, lịch sử giá oracle phù hợp với thời điểm event, trạng thái định giá và tuổi giá.
+- Coverage theo protocol/block, gaps, log lỗi, kiểm tra uniqueness và audit. Khoảng block phải khớp chính xác với khoảng UTC nêu trên.
 
-Lịch sử event chỉ cho biết **hoạt động**, không phải số dư vị thế. Cần thêm snapshot vị thế đồng bộ theo block cho borrower–protocol–asset, giá USD và validation on-chain. Mã hiện có xuất mạng mẫu và common-wallet overlap; nó **không** xác định được quan hệ chủ sở hữu giữa các ví, khoản nợ trực tiếp giữa hai giao thức hay cơ chế truyền nhiễm nhân quả. Không được gọi exposure mẫu là mạng toàn thị trường.
+### Chỉ số
 
-## 2. Chạy thu thập dữ liệu trên Windows
+Tính Top-k và HHI theo số sự kiện cho borrower, liquidator, debt token và collateral token. Chỉ tính concentration theo USD trên các event định giá hợp lệ, đồng thời báo cáo số event được định giá/không định giá và coverage. Không gộp `basePaidOut` của Compound với debt repaid của protocol khác như thể cùng một đại lượng kinh tế.
 
-Yêu cầu Python 3.11+ và PowerShell. Giải nén ZIP, mở PowerShell tại thư mục `Lending-defi-research-main`, rồi chạy:
+## 2. RQ5 — mạng exposure liên giao thức
+
+Cần snapshot số dư vị thế **được định giá và đồng bộ tại cùng block** cho wallet–protocol–asset, gồm debt/collateral, token, giá, decimals và bằng chứng kiểm tra on-chain. Cần các bảng market/configuration cho Morpho và Compound, cùng cohort/vị thế Aave.
+
+**Quan trọng:** lịch sử sự kiện không phải snapshot exposure. Mã RQ5 hiện dùng một exposure sample kiểm định, không phải toàn bộ thị trường; kết quả chỉ là exploratory shared-wallet exposure screen. Không thể kết luận nhân quả lan truyền contagion hoặc khẳng định hai ví cùng chủ sở hữu chỉ vì chúng tương tác với cùng giao thức.
+
+### Tiền điều kiện còn thiếu trong ZIP
+
+Luồng `defi_data.recovery exposures` phụ thuộc các file đầu vào cũ dưới `data/runs/expansion_20260930/processed/`, gồm `cross_protocol_position_sample.csv`, `morpho_market_configs.csv`, `compound_asset_configs.csv` và `positions_point_in_time_sample.csv`. Các file này **không có trong ZIP được giao**. Vì vậy RQ5 chưa thể hoàn tất chỉ bằng cách chạy lịch sử liquidation mới; cần cung cấp/thu thập và audit cohort vị thế đó trước khi tạo `exposures_valued_sample.csv`.
+
+## 3. Chạy crawl lịch sử
+
+Yêu cầu Python 3.11+ và RPC Ethereum có khả năng đọc lịch sử. Trên Windows PowerShell, tại thư mục dự án:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-models.txt
-.\scripts\collect_rq1_rq2_full_period.ps1
+.\scripts\collect_rq2_rq5_full_period.ps1
 ```
 
-Script chạy tuần tự: full history cho ba giao thức → Chainlink prices → feature/model tables → snapshot Aave → audit 1/2/3 dành cho RQ1/RQ2 → preflight → mô hình RQ1/RQ2. Crawl dài có checkpoint; nếu RPC lỗi, script dừng ở bước lỗi và không ghi nhận chunk thất bại là coverage rỗng. Có thể chạy lại sau khi xử lý nguồn RPC. Không chạy hai collector đồng thời.
-
-### RPC
-
-README_CRAWL.md mô tả endpoint công khai và preflight. Endpoint công khai có thể bị rate-limit, prune hoặc không hỗ trợ state lịch sử. Nếu preflight thất bại, hãy thiết lập các endpoint archive/historical RPC mà bạn có quyền dùng trong `ETH_RPC_URLS`; không đưa URL chứa API key lên GitHub. Không chạy full crawl trước khi preflight đạt.
-
-## 3. Đầu ra và chạy lại mô hình
-
-Dữ liệu được lưu ở `data/runs/recovery_20261020/`, bảng đã chuẩn hóa ở `data/runs/recovery_20261020/processed/`, kết quả mô hình ở `results/`. Các đầu ra quan trọng:
-
-- `history.sqlite`, `block_range.json`, `history_coverage.csv`, `history_gaps.csv` — dữ liệu gốc và coverage.
-- `processed/liquidations_model_table.csv`, `processed/concentration_full_period_event_counts.csv`, `processed/liquidation_valuation_coverage.csv` — đầu vào/bảng RQ2.
-- `audit_1_structure.json`, `audit_2_onchain.json`, `audit_3_research.json`, `freeze_manifest.json` — bằng chứng audit/freeze.
-
-Khi collector báo `completed`, có thể chạy thủ công:
+Trước khi chạy full crawl, làm theo mục **Kiểm tra nguồn trước** trong `README_CRAWL.md`:
 
 ```powershell
-.\.venv\Scripts\python.exe -m defi_models check --data-run data/runs/recovery_20261020 --check-models 1 2 --config configs/models.example.json
-.\.venv\Scripts\python.exe -m defi_models rq1 --data-run data/runs/recovery_20261020 --config configs/models.example.json
+.\.venv\Scripts\python.exe -m defi_data.rpc_check --require-state --test-logs
+```
+
+Nếu preflight thất bại, đừng chạy full crawl. Cấu hình endpoint archive/historical RPC có quyền sử dụng qua biến môi trường `ETH_RPC_URLS`; không commit URL chứa API key. Script sẽ dừng khi bước bắt buộc thất bại và lưu log ở `output/rq2_rq5_full_period/`.
+
+## 4. Script và các giai đoạn
+
+` scripts/collect_rq2_rq5_full_period.ps1 ` thực hiện:
+
+1. Crawl lịch sử event cho Aave V3, Compound III USDC và Morpho Blue trong cửa sổ ngày đã yêu cầu.
+2. Tải lịch sử giá Chainlink ETH/USD và BTC/USD theo pipeline có sẵn.
+3. Tạo bảng feature/liquidation, bao gồm coverage và trạng thái định giá.
+4. Chạy audit cấu trúc và audit on-chain, sau đó chạy research audit ở phạm vi RQ2 בלבד.
+5. Chạy kiểm tra đầu vào và mô hình RQ2 khi các audit bắt buộc đạt.
+6. Kiểm tra các file tiền điều kiện RQ5; chỉ chạy dựng exposure nếu cohort nguồn cần thiết đã có. Nếu thiếu, script ghi cảnh báo rõ ràng thay vì tạo file giả. Bộ code hiện tại chưa hỗ trợ scoped research audit riêng cho RQ5, nên không được xem RQ5 là đã qua gate chỉ từ các audit RQ2.
+
+Repository có cổng audit dùng chung và phần audit RQ5 chưa được tách riêng. Nếu RQ2 gate lỗi, hãy đọc đúng log và JSON audit để xác định bước thất bại. Không chỉnh audit JSON thủ công để ép mô hình chạy. RQ5 cần bổ sung audit theo phạm vi RQ5 và dữ liệu cohort đã kiểm định trước khi có thể được coi là chạy chính thức.
+
+## 5. Các đầu ra cần giữ
+
+- `data/runs/recovery_20261020/history.sqlite`
+- `data/runs/recovery_20261020/block_range.json`
+- `data/runs/recovery_20261020/processed/history_coverage.csv`
+- `data/runs/recovery_20261020/processed/history_gaps.csv`
+- `data/runs/recovery_20261020/processed/liquidations_model_table.csv`
+- `data/runs/recovery_20261020/processed/liquidation_valuation_coverage.csv`
+- `data/runs/recovery_20261020/audit_1_structure.json`, `audit_2_onchain.json`, `audit_3_research.json`
+- `results/` — kết quả mô hình chỉ khi gate đầu vào được thông qua
+- `output/rq2_rq5_full_period/` — stdout/stderr theo từng bước
+
+RQ5 cần thêm `processed/exposures_valued_sample.csv`, `processed/exposure_network_edges.csv`, `processed/morpho_accrual_validation.csv` và `exposure_errors.json`. Các file này chỉ được coi là hợp lệ sau khi được dựng từ cohort nguồn, kiểm tra block đồng bộ và audit.
+
+## 6. Chạy mô hình thủ công sau khi đủ dữ liệu
+
+```powershell
+.\.venv\Scripts\python.exe -m defi_models check --data-run data/runs/recovery_20261020 --check-models 2 --config configs/models.example.json
 .\.venv\Scripts\python.exe -m defi_models rq2 --data-run data/runs/recovery_20261020 --config configs/models.example.json
 ```
 
-Mỗi lần chạy sinh thư mục kết quả mới. Không sửa cờ audit bằng tay, không tự tạo file rỗng để vượt preflight.
-
-## 4. RQ5 — chạy có điều kiện, không được phóng đại kết quả
-
-Mô hình RQ5 đọc `processed/exposures_valued_sample.csv` và yêu cầu file này nằm trong freeze manifest. Sau khi dữ liệu exposure đã được dựng và kiểm định theo hướng dẫn trong `README_MODELS.md`/`defi_data/recovery.py`, chạy:
+RQ5 chỉ chạy sau khi exposure sample đã có và đã được xác minh:
 
 ```powershell
 .\.venv\Scripts\python.exe -m defi_models check --data-run data/runs/recovery_20261020 --check-models 5 --config configs/models.example.json
 .\.venv\Scripts\python.exe -m defi_models rq5 --data-run data/runs/recovery_20261020 --config configs/models.example.json --allow-exploratory
 ```
 
-Nếu thiếu `exposures_valued_sample.csv`, snapshot không đồng bộ block, không có exposure đã định giá hoặc audit không chứng nhận RQ5, **dừng và sửa dữ liệu**. Không dùng hoạt động ví theo lịch sử làm proxy cho exposure. Kết quả RQ5 hiện chỉ là exploratory shared-wallet exposure screen; chưa đủ để tuyên bố causal contagion.
+Nếu `check` báo thiếu file, audit không phủ model 5, snapshot không đồng bộ block hoặc exposure không được freeze trong manifest, hãy dừng để xử lý đầu vào. `--allow-exploratory` không bỏ qua các điều kiện dữ liệu; nó chỉ cho phép chạy mô hình có cảnh báo exploratory.
 
-## 5. Cách diễn giải kết quả RQ2
+## 7. Cách xác nhận crawl thành công
 
-- `event_count`: số event; có thể tính Top-1/Top-10/Top-20 và HHI trên borrower, liquidator, debt token, collateral token.
-- `reported_amount_market_usd_priced_subset`: chỉ tổng trên event được định giá và qua điều kiện độ mới của giá. Báo cáo đồng thời `priced_events`, `unpriced_events`, coverage ratio.
-- Không so sánh hoặc cộng thẳng giá trị `basePaidOut` Compound với debt repaid của Aave/Morpho.
-- Kết quả chạy được không đồng nghĩa dữ liệu đã được audit hoặc nhận diện nhân quả. Đọc `summary.json`, `manifest.json`, coverage, gaps và audit JSON trước khi viết kết luận.
+Không chỉ dựa vào thông báo cuối cùng. Kiểm tra:
 
-## 6. Kiểm thử
+- `block_range.json` có đúng `start_utc` và `end_exclusive_utc`;
+- mọi protocol được chọn có `download_complete=True` và không có khoảng trống ngoài dự kiến;
+- `history_gaps.csv` rỗng đối với coverage được tuyên bố đầy đủ;
+- bảng liquidation có event keys duy nhất và timestamp nằm trong khoảng nghiên cứu;
+- audit JSON và `manifest.json` ghi nhận đúng đầu vào, hash và trạng thái;
+- `summary.json` mô hình nêu rõ coverage định giá, cảnh báo và giới hạn diễn giải.
 
-```powershell
-.\.venv\Scripts\python.exe -m unittest discover -s tests -v
-```
-
-Bộ test trong mã nguồn dùng fixture tổng hợp và không thay cho crawl. Khi giải nén ZIP không có thư mục `.git`, hai test của `available_rq14.py` hiện có thể lỗi tại `git rev-parse HEAD`; điều đó không phải bằng chứng dữ liệu đã crawl thành công hay thất bại. Cần chạy test lại trong bản clone Git đầy đủ để xác nhận toàn bộ test.
+Chạy được chương trình không tự chứng minh dữ liệu đủ coverage, audit độc lập hoặc quan hệ nhân quả.
