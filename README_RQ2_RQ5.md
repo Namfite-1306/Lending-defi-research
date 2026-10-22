@@ -1,8 +1,3 @@
-# Bàn giao Người 4 — RQ2 và RQ5 (kèm đường chạy RQ1/RQ2)
-
-**Khoảng thời gian yêu cầu:** `[2023-01-27 00:00:00 UTC, 2026-10-01 00:00:00 UTC)` trên Ethereum mainnet. Mốc kết thúc là exclusive: không lấy dữ liệu từ 01/10/2026 trở đi.
-
-> **Trạng thái gói này:** mã nguồn và hướng dẫn đã được bổ sung; dữ liệu lịch sử chưa được crawl trong môi trường tạo gói vì môi trường này không phân giải được DNS/kết nối RPC. Không có CSV lịch sử hay kết quả nghiên cứu mới nào được giả làm dữ liệu thật. Chạy collector trên máy có mạng và RPC lịch sử mới tạo dataset. `unittest` có 2 lỗi do thư mục ZIP không có metadata Git (`git rev-parse HEAD`), không phải lỗi phân tích RQ2/RQ5; xem phần kiểm thử.
 
 ## 1. Phạm vi và dữ liệu phải thu
 
