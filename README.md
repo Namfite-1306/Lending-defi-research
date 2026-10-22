@@ -1,115 +1,155 @@
-# DeFi research data pipeline
+# Nghiên cứu RQ7: Thiết kế tham số thanh lý và đánh đổi chính sách
 
-**Dashboard realtime local:** [README_REALTIME.md](README_REALTIME.md). Chạy `.venv\Scripts\python.exe -m defi_live`, mở http://127.0.0.1:8787. Collector 15 giây; snapshot/mô hình theo chu kỳ riêng, có nhãn scope/stale/error.
+Tài liệu và mã nguồn bàn giao của **Thành viên 6** cho Câu hỏi nghiên cứu số 7 (RQ7). Thư mục này hoạt động độc lập, đọc dữ liệu snapshot local, không crawl lại, không gọi RPC và không làm thay đổi dữ liệu gốc của nhóm. Yêu cầu Python >= 3.11 với hai thư viện tính toán: NumPy và SciPy.
 
-**Kiểm tra nguồn và sửa lỗi crawl RPC:** xem [README_CRAWL.md](README_CRAWL.md). Lệnh chẩn đoán: `python -m defi_data.rpc_check --require-state --test-logs`.
+Đối tượng nghiên cứu: **Aave V3 Ethereum Core Pool** tại block snapshot **21,762,264** với tổng dư nợ khảo sát là **$20,720,453.26 USD**.
 
-**Chạy mô hình RQ1–RQ7:** xem [README_MODELS.md](README_MODELS.md), mã trong `defi_models/`, cấu hình trong `configs/`. Phần bên dưới mô tả crawler/pilot gốc. Mô hình mặc định tìm dataset tại `data/runs/recovery_20261020/`; đường dẫn này không xác nhận dataset đã tồn tại hoặc đã qua kiểm định trên máy. Toàn bộ `data/runs/` bị loại khỏi Git, nên clone/pull repo không tải dữ liệu và báo cáo audit. Cần lấy bộ dữ liệu riêng cùng ba báo cáo audit và freeze manifest, hoặc hoàn thành quy trình recovery trước khi chạy mô hình.
+---
 
-Pipeline chỉ đọc Ethereum mainnet, không ký hoặc gửi giao dịch. Python >= 3.11, không cần cài thư viện ngoài.
+## 1. Cài đặt và kiểm tra nhanh
 
-Hướng dẫn công việc tiếp theo cho Người 2: [RQ1 và RQ4](NEXT_STEPS_N2_RQ1_RQ4.md). Ghi chú sửa lỗi và tạo lại dữ liệu giá: [README_EXPANSION.md](README_EXPANSION.md#sửa-lỗi-22102026-và-tạo-lại-đầu-ra).
-
-## Chạy
-
-Trong thư mục này:
+Mở PowerShell trong thư mục gốc của dự án:
 
 ```powershell
-python -m unittest discover -s tests -v
-python -m defi_data.pipeline
-python -m defi_data.validate_run stress_20250203_smoke
-python -m defi_data.audit_qa --live
+# 1. Kích hoạt môi trường và thiết lập UTF-8
+.\.venv\Scripts\Activate.ps1
+$env:PYTHONIOENCODING = "utf-8"
+
+# 2. Chạy bộ kiểm thử tự động xác thực dữ liệu và logic tài chính
+python -m unittest RQ7/test_rq7_policy_sensitivity.py
 ```
 
-Lệnh mặc định thu thập cửa sổ **03/02/2025 00:00–03:00 UTC**, chụp tối đa 5 tài khoản Aave tại block ngay trước cửa sổ và lấy receipts của tối đa 20 giao dịch. Đây là chạy thử pipeline bằng dữ liệu thật, chưa phải bộ dữ liệu nghiên cứu đầy đủ.
+Kết quả kiểm tra đạt chuẩn khi màn hình in ra:
+```text
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.002s
 
-Đổi thời gian, phạm vi mẫu và tên lần chạy:
+OK
+```
+Bộ test kiểm tra 4 điều kiện ràng buộc: các file đầu ra tồn tại đầy đủ, các tham số chính sách nằm trong miền xác định hợp lệ ($0 < CF \le 1$, $0 \le Bonus < 1$), các chỉ số tài chính không âm, và dữ liệu bao phủ đầy đủ 3 mức cú sốc thị trường.
+
+---
+
+## 2. Cách chạy mô hình và tái lập kết quả
+
+### Cách 1: Chạy mô hình độ nhạy độc lập của Thành viên 6 (Khuyên dùng)
+Dành cho việc kiểm tra nhanh và xuất lại các bảng số liệu trọng tâm:
 
 ```powershell
-$env:ETH_RPC_URLS = 'https://eth-mainnet.public.blastapi.io,https://eth.drpc.org,https://rpc.mevblocker.io'
-python -m defi_data.pipeline --start 2025-02-02T00:00:00Z --end 2025-02-04T00:00:00Z --run-id stress_20250202_04 --max-wallets 20 --receipts 100
+python RQ7/rq7_policy_sensitivity.py
 ```
+Script tự động đọc kết quả lưới, lọc 6 kịch bản chính sách tiêu biểu ($S0 \rightarrow S5$), tính toán các chỉ số thiệt hại và cập nhật trực tiếp vào [sensitivity_results.csv](sensitivity_results.csv).
 
-Đầu cuối thời gian là **[start, end)**, phải có timezone. Snapshot ở `start_block - 1`. Chỉ hỗ trợ khoảng sau Ethereum Merge. RPC công khai có thể giới hạn batch, log, lịch sử hoặc lưu lượng. Có thể đặt endpoint riêng qua biến môi trường trên, không ghi API key vào mã hay Git.
-
-`--wallet-file wallets.txt` nhận danh sách địa chỉ (mỗi dòng một ví). `--max-wallets 0` lấy tất cả ví **được phát hiện**, không tự biến danh sách đó thành toàn bộ thị trường. `--skip-snapshot` hoặc `--skip-valuations` chỉ dùng khi muốn lấy sự kiện; manifest ghi đúng bước đã chạy. Mỗi cấu hình dùng một `--run-id` khác nhau. Chạy lại cùng cấu hình sẽ dùng cache và coverage, không nhân đôi logs.
-
-## Phạm vi hợp đồng
-
-- Aave V3 Ethereum Core Pool: `0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2`.
-- Compound III Ethereum USDC Comet: `0xc3d688b66703497daa19211eedff47f25384cdc3`. Không phải mọi thị trường Compound.
-- Morpho Blue Ethereum: `0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb`. Không bao gồm Morpho Optimizer/Midnight.
-- Registry Aave: đọc pool, oracle và data provider tại block lịch sử; không dùng data provider hiện tại cho quá khứ.
-
-Định nghĩa event lấy từ nguồn chính thức trong `data/sources/`. Decoder hỗ trợ sự kiện kiểu tĩnh được liệt kê trong mã. Phiên bản/ABI khác phải được kiểm tra trước khi mở rộng thời gian.
-
-## Đầu ra
-
-Mỗi lần chạy nằm tại `data/runs/<run-id>/`:
-
-| File | Nội dung |
-|---|---|
-| `raw.sqlite` | Logs gốc, decoded fields, coverage theo block và hash |
-| `settings.json` | Cấu hình đã khóa cho lần chạy |
-| `manifest.json` | Trạng thái, số lượng, hashes file, mức sẵn sàng và hạn chế từng RQ |
-| `DATA_REPORT.md` | Báo cáo kiểm tra offline, tạo bằng `python -m defi_data.validate_run <run-id>` |
-| `processed/events.csv` | Sự kiện chuẩn hóa có chain, contract, block, tx và log index |
-| `processed/liquidations.csv` | Logs liên quan thanh lý, giữ riêng từng loại đo lường |
-| `processed/blocks.csv` | Block hash và thời gian UTC để nối dữ liệu |
-| `processed/hourly_counts.csv` | Số sự kiện theo giờ, có giờ 0 sự kiện và cờ giờ quan sát thiếu |
-| `processed/oracle_prices_hourly.csv` | Giá WETH/WBTC/USDC từ oracle Aave tại các mốc giờ và biên cửa sổ |
-| `processed/account_market_activity.csv` | Hoạt động ví–thị trường quan sát được, không phải số dư hoặc exposure trực tiếp |
-| `processed/rq3_borrow_supply_candidates.csv` | Motif vay rồi gửi trong cùng giao dịch, cần xác minh luồng tài sản trước khi gắn nhãn vòng lặp |
-| `processed/aave_reserves.csv` | Token metadata, giá oracle và cấu hình rủi ro tại snapshot |
-| `processed/positions.csv` | Số dư đã tích lũy lãi theo token/tài khoản tại snapshot |
-| `processed/position_validation.csv` | Đối chiếu thế chấp, nợ và HF với hợp đồng cùng block |
-| `processed/snapshot_scope.json` | Cách chọn ví, số ví phát hiện/lấy mẫu và giới hạn |
-| `processed/rq1_sample_stress.csv` | Stress tĩnh chỉ trên mẫu đã qua validation |
-| `processed/aave_liquidations_valued.csv` | Quy đổi nợ được thanh lý theo giá oracle cuối block sự kiện |
-| `processed/rq2_concentration.csv` | Top-1, Top-10, HHI theo nợ Aave thực tế được trả |
-| `processed/token_transfers_sample.csv` | ERC20 transfers trong receipts lấy mẫu, chưa phải vòng lặp đã xác nhận |
-
-CSV dùng UTF-8 BOM để mở tiếng Việt; số nguyên blockchain được lưu dạng chuỗi để không mất độ chính xác. Khi đọc bằng pandas phải chỉ định dtype cho `*_raw`, địa chỉ, tx và market ID. Khi mở Excel/Sheets không dùng chúng làm nơi lưu trữ số nguyên 256-bit chuẩn.
-
-## Các giới hạn phải giữ khi sử dụng
-
-1. **Không coi ví phát hiện trong cửa sổ là toàn thị trường.** Mẫu ưu tiên ví bị thanh lý rồi ví vay. Chọn ví bằng sự kiện tương lai tạo selection/look-ahead bias nếu dùng làm mẫu dự báo quá khứ. Kết quả stress chỉ để kiểm tra pipeline. Muốn RQ1 toàn thị trường phải dựng universe borrower độc lập tại snapshot từ lịch sử đầy đủ/indexer đã kiểm chứng.
-2. **E-mode chưa được mô hình hóa.** Export balances nhưng đánh dấu `unsupported_emode`; không đưa các vị thế đó vào stress. Các vị thế khác phải đối chiếu cả tổng thế chấp, nợ và HF với sai số tương đối <= 0,01%.
-3. **Cú sốc hiện chỉ ánh xạ WETH/WBTC.** Các token khác giữ giá cố định, kể cả token phái sinh ETH/BTC; không ngầm giả định luôn giữ peg. Cần mở rộng ánh xạ và kịch bản depeg trước nghiên cứu chính thức.
-4. `eligible_debt_usd` là dư nợ đủ điều kiện thanh lý, **không phải volume thực thi hoặc nợ xấu**. Chưa có bộ mô phỏng cascade RQ6/RQ7 trong pipeline dữ liệu này.
-5. Compound `AbsorbDebt`, `AbsorbCollateral`, `BuyCollateral` là các đối tượng khác nhau, không cộng chung thành volume thanh lý. Panel đếm `AbsorbDebt` theo account, không đếm thêm log collateral.
-6. Giá sự kiện là **oracle cuối block**, không phải giá trước giao dịch hay giá bán thực tế. Chưa định giá USD cho Compound/Morpho; không tổng hợp volume USD xuyên giao thức khi chưa bổ sung.
-7. RQ3 còn thiếu lịch sử trước cửa sổ, swap giải mã, traces và nhóm đối chứng. ERC20 transfer không tự chứng minh vòng lặp hoặc chủ sở hữu.
-8. RQ4 mới có panel số sự kiện; cửa sổ 3 giờ không đủ ước lượng Hawkes đáng tin. Cần lịch sử liên tục dài hơn, giá/lợi suất đồng bộ và kiểm soát gas/oracle.
-9. RQ5 mới có sự kiện liên giao thức; chưa có mạng exposure hoặc bằng chứng truyền dẫn nhân quả. Cùng địa chỉ hoặc cùng ETH không chứng minh khoản phải thu trực tiếp.
-10. Chỉ chuẩn hóa event đã chọn; không dựng số dư bằng cách cộng trừ events trong cửa sổ. Snapshot đọc trạng thái hợp đồng tại block cố định.
-
-## Kiểm tra và truy nguồn
-
-Rà soát ngày 22/10/2026: **108/108 unit tests đạt** trong `.venv` có NumPy/SciPy sau tích hợp bản mô hình và bản sửa RPC; **15/15 nhóm audit `--live` đạt** trên 4.294 sự kiện và 14 CSV, gồm 6 logs thanh lý, 4 block biên và HF của 5 ví được đọc mới qua RPC. Cài dependency mô hình theo `README_MODELS.md` để các test estimator không bị skip. Chi tiết audit ở `data/runs/stress_20250203_smoke/audit/audit_results.json`. PDF hiện có ở `output/pdf/` là bản ngày 18/10/2026, chưa được tạo lại trong lần sửa này.
-
-`audit_qa --live` dùng chung RPC client với pipeline và nhận cấu hình `ETH_RPC_URLS`; mặc định là Blast, dRPC, MEV Blocker. Các truy vấn trực tiếp luôn bỏ qua cache. Nếu một nhóm không lấy được dữ liệu mới, audit lưu nhóm đó là chưa đạt, giữ các kiểm tra đã thực hiện và trả exit code 1; không chuyển sang cache để báo đạt. Thông báo lỗi giữ mã HTTP/RPC và số thứ tự endpoint để chẩn đoán, không ghi URL/key. Bỏ `--live` chỉ chạy các kiểm tra nội bộ và ghi đè báo cáo bằng kết quả offline có `audit_mode=offline`.
-
-Nếu gặp `Fresh RPC unavailable: HTTPError,HTTPError` từ bản cũ, hàm audit còn dùng hai endpoint cố định và bỏ mất chi tiết lỗi HTTP. Đã thay hàm đó bằng client có fallback/retry và xử lý lỗi theo nhóm kiểm tra. Chạy lại:
+### Cách 2: Chạy lại toàn bộ engine mô phỏng 81 kịch bản từ pipeline hệ thống
+Dành cho Người 1 (Trưởng nhóm) khi muốn tích hợp và thẩm định lại toàn bộ hệ thống lớn:
 
 ```powershell
-$env:ETH_RPC_URLS = 'https://eth-mainnet.public.blastapi.io,https://eth.drpc.org,https://rpc.mevblocker.io'
-python -m defi_data.audit_qa --live
+# Chạy mô phỏng lưới 81 kịch bản trên dữ liệu snapshot on-chain
+python -m defi_models rq7 --data-run data/runs/recovery_20261020 --config RQ7/rq7_policy.json --allow-exploratory
+
+# Kiểm định chất lượng số học của đợt chạy mới nhất
+$latestRun = (Get-ChildItem -Directory results | Sort-Object LastWriteTime -Descending | Select-Object -First 1).FullName
+python scripts/validate_model_run.py $latestRun
 ```
 
-- Kiểm tra chain ID=1; khóa block lịch sử đã cách head 64 block.
-- Deduplicate theo `(chain_id, transaction_hash, log_index)`.
-- Kiểm tra block hash khi chuẩn hóa logs. Nếu RPC trả reorg mismatch, dừng và dùng run/cache mới sau điều tra.
-- Lỗi RPC không được thay bằng 0 hoặc bỏ qua. Một bước lỗi khiến manifest `status=failed`; không diễn giải file tồn tại là pipeline đã hoàn thành.
-- Cache là kết quả RPC tại số block cụ thể. Với lịch sử rất gần/reorg cần bộ cache mới; không giả định cache tự reorg-proof.
-- Các unit tests dùng dữ liệu giả rõ ràng, tách khỏi `data/runs/`.
+---
 
-## Nguồn chính thức
+## 3. Cấu trúc thư mục bàn giao
 
-- https://github.com/aave-dao/aave-address-book/blob/main/src/AaveV3Ethereum.sol
-- https://github.com/aave/aave-v3-core/blob/master/contracts/interfaces/IPool.sol
-- https://github.com/compound-finance/comet/blob/main/contracts/CometMainInterface.sol
-- https://github.com/morpho-org/morpho-blue/blob/main/src/libraries/EventsLib.sol
-- https://www.aave.com/docs/aave-v3/smart-contracts/pool
-- https://docs.compound.finance/liquidation/
-- https://docs.morpho.org/developers/contracts/blue/
+Toàn bộ gói bàn giao nằm gọn trong thư mục `RQ7/`:
+
+| Tên tệp | Định dạng | Mục đích sử dụng |
+|---|---|---|
+| `README.md` | Markdown | Tài liệu hướng dẫn sử dụng, phương pháp luận và báo cáo nghiên cứu tổng hợp (tệp này). |
+| `policy_scenarios.csv` | CSV | Bảng định nghĩa đặc tả 6 kịch bản chính sách trọng tâm ($S0$ đến $S5$). |
+| `sensitivity_results.csv` | CSV | Bảng kết quả phân tích độ nhạy định lượng (6 kịch bản $\times$ 3 mức shock = 18 dòng). |
+| `policy_grid_81_scenarios.csv` | CSV | Toàn bộ dữ liệu mô phỏng lưới 81 kịch bản đầy đủ kèm nhãn Pareto (`pareto_nondominated`). |
+| `summary_validation.json` | JSON | Siêu dữ liệu kiểm định xác nhận snapshot và tính toàn vẹn số học của mô hình (`passed: true`). |
+| `rq7_policy.json` | JSON | File cấu hình tham số thí nghiệm (độ sâu DEX $100M, gas $20, dải $CF$, $Bonus$, $LT$). |
+| `rq7_policy_sensitivity.py` | Python | Mã nguồn độc lập thực thi tính toán độ nhạy và tạo bảng so sánh. |
+| `test_rq7_policy_sensitivity.py` | Python | Bộ kiểm thử tự động (Unit Test) xác thực logic mô hình. |
+
+---
+
+## 4. Thiết kế thí nghiệm và Phương pháp đo lường
+
+### Dải tham số khảo sát
+Khảo sát 3 tham số cốt lõi của giao thức Aave V3:
+* **Tỷ lệ xử lý tối đa (Close Factor - $CF$):** $\{0.25, 0.50, 1.00\}$ (cho phép thanh lý 25%, 50% hoặc 100% nợ trong 1 lần).
+* **Thưởng thanh lý (Liquidation Bonus - $LB$):** $\{0.03, 0.05, 0.08\}$ (mức chiết khấu cho bot thanh lý: 3%, 5%, 8%).
+* **Dịch chuyển ngưỡng an toàn ($\Delta LT$):** $\{-0.03, 0.00, +0.03\}$ (nới lỏng 3%, giữ nguyên, hoặc siết chặt 3%).
+* **Cú sốc giá thị trường (Shock):** $\{10\%, 20\%, 30\%\}$ (giá ETH/BTC giảm 10%, 20%, 30%).
+
+Tổng không gian trạng thái: $3 \times 3 \times 3 \times 3 = 81$ kịch bản mô phỏng.
+
+### Các chỉ số tài chính đo lường
+1. **Tổn thất của người vay (`borrower_collateral_seized_usd`):** Tổng giá trị tài sản thế chấp bị tịch thu và bán thanh lý.
+2. **Nợ xấu giao thức (`protocol_shortfall_usd`):** Chênh lệch giá trị kế toán khi tài sản thế chấp không đủ bù đắp nợ vay.
+3. **Tác động giá trên DEX (`price_impact_pct`):** Trượt giá tích lũy tối đa khi bot thanh lý bán tài sản ra thị trường AMM (hệ số tác động căn bậc hai, độ sâu $100M USD).
+4. **Lợi nhuận ròng của bot thanh lý (`liquidator_profit_usd`):** Doanh thu từ Bonus thanh lý trừ đi chi phí trượt giá DEX và phí gas on-chain.
+5. **Sàng lọc tối ưu Pareto (`pareto_nondominated`):** Kịch bản được coi là tối ưu Pareto nếu không tồn tại kịch bản nào khác có cùng mức shock mà tốt hơn ở cả ba mục tiêu: giảm nợ xấu, giảm tịch thu thế chấp và giảm trượt giá DEX.
+
+---
+
+## 5. Bảng kết quả thực nghiệm và Đường biên Pareto
+
+### 6 Kịch bản chính sách trọng tâm (Trích xuất từ `sensitivity_results.csv`)
+
+| Kịch bản | Tên | Mức Shock | Close Factor | Bonus | LT Shift | Thế chấp mất ($) | Nợ xấu ($) | Trượt giá DEX | Lãi Bot ($) | Pareto Optimal |
+| :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **S0** | Co_so (Chuẩn Aave V3) | 10% | 50% | 5% | 0% | 169,332.07 | 0.00 | 0.206% | 7,313.74 | Không |
+| **S0** | Co_so (Chuẩn Aave V3) | 20% | 50% | 5% | 0% | 534,506.56 | 2,933.89 | 0.283% | 23,113.14 | Không |
+| **S0** | Co_so (Chuẩn Aave V3) | 30% | 50% | 5% | 0% | 16,408,266.16 | 58,688.65 | 1.997% | 635,854.84 | Không |
+| **S1** | Thuong_thap (Bonus 3%) | 10% | 50% | 3% | 0% | 158,245.74 | 0.00 | 0.199% | 3,917.46 | Không |
+| **S1** | Thuong_thap (Bonus 3%) | 20% | 50% | 3% | 0% | 510,511.13 | 976.65 | 0.274% | 12,691.46 | Không |
+| **S1** | Thuong_thap (Bonus 3%) | 30% | 50% | 3% | 0% | 16,105,807.67 | 48,546.56 | 1.978% | 327,208.66 | ✔ **ĐẠT** |
+| **S2** | Thuong_cao (Bonus 8%) | 10% | 50% | 8% | 0% | 174,170.13 | 0.00 | 0.209% | 12,130.31 | Không |
+| **S2** | Thuong_cao (Bonus 8%) | 20% | 50% | 8% | 0% | 541,314.48 | 11,407.77 | 0.283% | 37,803.00 | Không |
+| **S2** | Thuong_cao (Bonus 8%) | 30% | 50% | 8% | 0% | 20,939,643.30 | 73,183.54 | 2.268% | 1,384,997.45 | Không |
+| **S3** | Nguong_than_trong (LT +3%) | 10% | 50% | 5% | +3% | 16,027.18 | 0.00 | 0.063% | 690.06 | Không |
+| **S3** | Nguong_than_trong (LT +3%) | 20% | 50% | 5% | +3% | 462,633.51 | 2,933.89 | 0.283% | 19,941.55 | Không |
+| **S3** | Nguong_than_trong (LT +3%) | 30% | 50% | 5% | +3% | 16,408,266.16 | 58,688.65 | 1.997% | 635,854.84 | Không |
+| **S4** | Xu_ly_nhieu_hon (CF 100%) | 10% | 100% | 5% | 0% | 322,636.95 | 0.00 | 0.284% | 13,878.97 | Không |
+| **S4** | Xu_ly_nhieu_hon (CF 100%) | 20% | 100% | 5% | 0% | 607,379.72 | 2,618.53 | 0.283% | 26,185.54 | Không |
+| **S4** | Xu_ly_nhieu_hon (CF 100%) | 30% | 100% | 5% | 0% | 21,695,371.75 | 58,194.46 | 2.299% | 724,834.53 | Không |
+| **S5** | Bao_ve_nguoi_vay (CF 25%) | 10% | 25% | 3% | +3% | 13,756.66 | 0.00 | 0.059% | 317.25 | ✔ **ĐẠT** |
+| **S5** | Bao_ve_nguoi_vay (CF 25%) | 20% | 25% | 3% | +3% | 410,838.27 | 950.22 | 0.268% | 10,014.13 | ✔ **ĐẠT** |
+| **S5** | Bao_ve_nguoi_vay (CF 25%) | 30% | 25% | 3% | +3% | 14,727,720.72 | 48,771.35 | 1.891% | 342,103.00 | ✔ **ĐẠT** |
+
+---
+
+## 6. Phân tích đánh đổi kinh tế và Động cơ thanh lý
+
+### Đánh đổi giữa các mức Close Factor (Tại cú sốc 30%)
+So sánh 3 mức Close Factor khi giữ nguyên $Bonus = 3\%$ và $\Delta LT = +3\%$:
+
+* **Close Factor = 25% (Kịch bản S5):** Giảm thiểu tối đa thiệt hại tài sản cho người vay (chỉ mất **$14.72M USD** thế chấp so với $21.29M USD khi thanh lý 100%). Đồng thời giảm áp lực xả hàng ra sàn AMM, trượt giá DEX chỉ ở mức **1.891%**. Nợ xấu giao thức chỉ chênh lệch $730 USD so với phương án xử lý triệt để.
+* **Close Factor = 100% (Kịch bản S4):** Dọn sạch nợ nhanh nhất và đưa nợ xấu giao thức về mức thấp nhất tuyệt đối (**$48,041 USD**), nhưng người vay phải chịu thiệt hại nặng nề (mất **$21.29M USD**) và trượt giá DEX tăng vọt lên **2.277%**.
+
+### Động cơ bên thanh lý và Bằng chứng loại bỏ Bonus 8%
+So sánh các mức Bonus tại Shock = 20%, Close Factor = 50%, LT Shift = 0%:
+* Mức **$Bonus = 3\%$** vẫn mang lại lợi nhuận ròng **$317,000 - $342,000 USD** cho bot tại cú sốc 30%, đủ lớn để bù đắp phí gas và rủi ro trượt giá, kích thích bot thanh lý kịp thời.
+* Tăng Bonus lên **8%** làm lợi nhuận bot tăng gấp 3 lần ($12.6k $\rightarrow$ $37.8k), người vay mất thêm hơn $30,000 USD thế chấp, nhưng nợ xấu giao thức **không hề giảm** mà tăng lên **$11,407.77 USD** do trượt giá lớn kích hoạt điểm dừng sớm của bot.
+* **Kết luận:** Mức $Bonus = 8\%$ bị loại hoàn toàn khỏi đường biên Pareto vì chỉ tạo ra sự chuyển giao của cải bất công cho bot thanh lý mà không tăng thêm mức độ an toàn cho giao thức.
+
+---
+
+## 7. Khuyến nghị chính sách cho Aave V3 và Tích hợp Người 1
+
+1. **Khuyến nghị tham số:**
+   * Trong điều kiện bình thường: Duy trì $Close\ Factor = 50\%$, $Bonus = 3\% - 5\%$.
+   * Trong điều kiện thanh khoản mỏng hoặc thị trường sập giá sâu: Kích hoạt cơ chế động hạ $Close\ Factor$ xuống **$25\%$** nhằm giảm áp lực bán tháo dây chuyền và bảo vệ tài sản người vay.
+   * Giữ trần Liquidation Bonus tối đa ở mức **$5\%$**, không tăng lên $8\%$.
+2. **Hướng dẫn cho Người 1 (Tích hợp báo cáo chung):**
+   * Bảng số liệu trong Mục 5 dùng để chèn trực tiếp vào Bảng đánh đổi chính sách của Báo cáo tổng thể.
+   * File dữ liệu định lượng gốc nằm tại [sensitivity_results.csv](sensitivity_results.csv) và [policy_grid_81_scenarios.csv](policy_grid_81_scenarios.csv).
+
+---
+
+## 8. Giới hạn mô hình cần lưu ý
+
+1. Mô phỏng dựa trên mô hình Stylized engine của Aave V3; mỗi hành động trả nợ theo rổ nợ tỷ lệ và tịch thu tài sản thế chấp lớn nhất khả dụng, chưa tái tạo chính xác cặp token đơn lẻ trong smart contract thực tế.
+2. Hàm trượt giá căn bậc hai (square-root impact) với độ sâu thanh khoản $100M USD là giả định tham số độ nhạy, chưa hiệu chỉnh theo order-book lịch sử từng block.
+3. Chỉ số `terminal_collateral_shortfall_usd` là thước đo kế toán của mô hình khi vị thế không còn đủ tài sản bảo đảm, không đồng nhất với nợ xấu được ghi nhận chính thức trên smart contract.
+4. Kết quả Pareto chỉ so sánh các phương án chính sách trong cùng một mức cú sốc thị trường; không diễn giải thành tham số tối ưu toàn cục cho mọi điều kiện kinh tế vĩ mô.

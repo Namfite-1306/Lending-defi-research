@@ -1,0 +1,35 @@
+{
+  "status": "exploratory",
+  "description": "Policy grid and Pareto screen conditional on the stylized engine",
+  "limitations": [
+    "Stylized simulator, not historical Aave execution or a validated full-system model",
+    "Each wallet action repays a proportional debt basket and seizes the largest available enabled collateral; real Aave requires a chosen debt/collateral pair",
+    "Generic uniform liquidity depth and square-root impact are user assumptions, not calibrated historical liquidity",
+    "No cross-DEX routing, intra-block ordering, flash-loan constraints or exact GHO risk/repayment conversion",
+    "Synchronous batch profitability uses tentative all-eligible sales; exclusions can make this a conservative execution screen",
+    "Terminal collateral shortfall is a model accounting measure, not recorded on-chain bad debt",
+    "No-policy-shock LT comparisons hold original balances fixed; they omit borrower responses",
+    "Pareto objectives minimize shortfall, seized collateral and price impact; no globally optimal protocol parameter recommendation",
+    "Read residual eligibility and round-limit flags before interpreting low-liquidation candidates"
+  ],
+  "snapshot": {
+    "block": 21762264,
+    "historical_borrowers": 5,
+    "wallets_scanned": 5,
+    "active_debt_wallets": 5,
+    "passed": 5,
+    "reported_debt_usd": "20720453.26443677",
+    "failed_debt_usd": "0",
+    "borrower_history_complete": true,
+    "full_snapshot_complete": true,
+    "timing": "pilot_snapshot"
+  },
+  "objective_names": [
+    "terminal_collateral_shortfall_usd",
+    "seized_usd",
+    "max_cumulative_price_impact"
+  ],
+  "scenarios": 81,
+  "historical_policy_replay": false,
+  "warnings": []
+}
