@@ -82,6 +82,16 @@ class LiveTests(unittest.TestCase):
             with urllib.request.urlopen(base+'/api/status') as r:s=json.load(r)
             self.assertEqual(s['state'],'starting')
             with urllib.request.urlopen(base) as r:self.assertIn(b'DeFi Observatory',r.read())
+            with urllib.request.urlopen(base+'/research') as r:self.assertIn(b'research.js',r.read())
+            with urllib.request.urlopen(base+'/guide') as r:self.assertIn('H3'.encode('utf8'),r.read())
+            model.research_results=Path(self.tmp.name)/'no-results'
+            model.research_data=Path(self.tmp.name)/'no-data'
+            with urllib.request.urlopen(base+'/api/research') as r:research=json.load(r)
+            self.assertEqual(research['snapshots'],[])
+            self.assertEqual(research['manifest']['status'],'research_worker_starting')
+            self.assertEqual(research['repair']['concentration'],[])
+            self.assertEqual(research['repair']['manifest'],{})
+            self.assertEqual(research['source_stage']['manifest'],{})
         finally:server.shutdown();server.server_close()
     def test_source_failure_does_not_relabel_old_product_fresh(self):
         self.seed();self.store.publish('prices',3,'h3',h(3)['stamp'],{'prices':[]})

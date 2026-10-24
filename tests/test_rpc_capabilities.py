@@ -80,11 +80,12 @@ class RpcCapabilityTests(unittest.TestCase):
         self.assertFalse(rpc._path('eth_call',[{},'0x10']).exists())
 
     def test_http_error_body_can_disable_only_the_denied_method(self):
-        requests=[]
+        requests=[];bodies=[]
         def respond(request,**kwargs):
             requests.append(request.full_url)
             if request.full_url.endswith('/restricted'):
                 body=io.BytesIO(json.dumps({'error':{'code':-32601,'message':'rpc method is not whitelisted'}}).encode())
+                bodies.append(body)
                 raise urllib.error.HTTPError(request.full_url,400,'Bad Request',{},body)
             return io.BytesIO(json.dumps({'result':'0x01'}).encode())
         rpc=Rpc(self.root/'cache',urls=['https://offline.test/restricted','https://offline.test/archive'])
@@ -93,6 +94,15 @@ class RpcCapabilityTests(unittest.TestCase):
             rpc.one('eth_call',[{},'0x11'],cache=False)
         self.assertEqual(requests.count('https://offline.test/restricted'),1)
         self.assertEqual(rpc.requests,3)
+        self.assertTrue(all(body.closed for body in bodies))
+
+    def test_non_json_http_error_body_is_closed_before_provider_fallback(self):
+        body=io.BytesIO(b'<html>Forbidden</html>')
+        error=urllib.error.HTTPError('https://offline.test/restricted',403,'Forbidden',{},body)
+        rpc=Rpc(self.root/'cache',urls=['https://offline.test/restricted','https://offline.test/archive'])
+        with patch('urllib.request.urlopen',side_effect=[error,io.BytesIO(b'{"result":"0x01"}')]):
+            self.assertEqual(rpc.one('eth_call',[{},'0x10'],cache=False),'0x01')
+        self.assertTrue(body.closed)
 
     def test_rejected_log_method_does_not_trigger_recursive_block_splitting(self):
         body={'error':{'code':-32601,'message':'rpc method is not whitelisted'}}

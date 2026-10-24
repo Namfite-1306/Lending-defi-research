@@ -1,0 +1,150 @@
+{
+  "target": "E:\\OneDrive\\Documents\\GitHub\\Clone\\Lending-defi-research",
+  "files": [
+    {
+      "file": "README_STRESS_LOCAL.md",
+      "before_sha256": null,
+      "after_sha256": "a2786c3ac0ca83ef811593fc32a64e127d638695c72a645c6dfda0b8b53b4526"
+    },
+    {
+      "file": "defi_live/__main__.py",
+      "before_sha256": "c0941d3b0afe86806ce04a6506a580e451bb53542c9d7fed584a5d99c087ec36",
+      "after_sha256": "0e559a5214bc31e1b300d0a82c03bb5bfb8c6a54a1b77eba302e0641d7c848ca"
+    },
+    {
+      "file": "defi_live/models.py",
+      "before_sha256": "742a65bafe32d22764a83ee825cc661be91c1e134d7087dbddd78fe85654ffd9",
+      "after_sha256": "b51e8c1c8e25f777eab000cec7986334c8aba1384059c8462f133f9a720a06e7"
+    },
+    {
+      "file": "defi_live/server.py",
+      "before_sha256": "ca38af3280ae81a2b677f25f193a46e8bc148d67aef9d1ede84b14b2941febf2",
+      "after_sha256": "c21507a51f3cd0328039ac193a0164fe71fb2656d0e39ccdeeb4dbd0fc765d4d"
+    },
+    {
+      "file": "defi_live/universe.py",
+      "before_sha256": null,
+      "after_sha256": "b0d6ec4ecb2e1524bddf4a9640b5e16181490fb2cae051f4aadd0e580a0a8d22"
+    },
+    {
+      "file": "defi_live/liquidity.py",
+      "before_sha256": null,
+      "after_sha256": "8f323c92cd570f2e21c748753dd897987448eb7c864cf95bb8ee95b6b6bd3188"
+    },
+    {
+      "file": "defi_live/web/index.html",
+      "before_sha256": "18c964055ec7568cfe789e06af3dbd810180bbb330d5c97f314436e3fc9af379",
+      "after_sha256": "6de07ca6fa7c0643dc13480ed1293b020b969acb9c3996cd5b9708e9921c9984"
+    },
+    {
+      "file": "defi_live/web/lab.html",
+      "before_sha256": "14f06017cab186f2cc57eecfad8f0c69f08a21130afa4f64c15001e12b48d418",
+      "after_sha256": "ca26cd2d32fa8a47e76ea3c9a4728210a7375eca14e44bdb9ab648c9a51d3f77"
+    },
+    {
+      "file": "defi_live/web/validation.html",
+      "before_sha256": null,
+      "after_sha256": "5d7a6170d680f765bc25b762027d9490a83e22803b42b684d87980197b0a862f"
+    },
+    {
+      "file": "defi_live/web/validation.js",
+      "before_sha256": null,
+      "after_sha256": "a931d1a2a8b96a28444af05fd77dc9fe46e4e2d9f9e41475c1a510fe07408a4b"
+    },
+    {
+      "file": "defi_models/pair_cascade.py",
+      "before_sha256": null,
+      "after_sha256": "1c98448bfa278674d80e8ffc48c260143065d6708391108a3a606aa4118280ed"
+    },
+    {
+      "file": "defi_models/stress_validation.py",
+      "before_sha256": null,
+      "after_sha256": "0f74a93b550cf0bf9524be29ce4b29ee4682691615060daed59b8b2e0571d741"
+    },
+    {
+      "file": "defi_data/event_snapshots.py",
+      "before_sha256": null,
+      "after_sha256": "1298d132f817409a2272e71c4c547a8a034dbf81c538bcbf80e0223aab6fef27"
+    },
+    {
+      "file": "defi_data/stress_quotes.py",
+      "before_sha256": null,
+      "after_sha256": "4ec3c0b0103652c192e9ba12e4613d537df4ea383b0a9893489ffdd1b0fc0aef"
+    },
+    {
+      "file": "defi_data/stress_risk_parameters.py",
+      "before_sha256": null,
+      "after_sha256": "243748ff631cde696fb20ac3bbed59e5f9d63061619ee824e603142826bf00cf"
+    },
+    {
+      "file": "tests/test_stress_upgrade.py",
+      "before_sha256": null,
+      "after_sha256": "0d40c935c41110b7bc0ac0d034822efb1f9c27d6d0c14a8d917c74b2f104d9cb"
+    },
+    {
+      "file": "scripts/start_stress_local.ps1",
+      "before_sha256": null,
+      "after_sha256": "1bf2d7291186f254ba60ae2626283020a2b316b281282f5cef4115b288ecb2c6"
+    },
+    {
+      "file": "scripts/build_stress_local_report.py",
+      "before_sha256": null,
+      "after_sha256": "1c15ca19e0f03c00a453b7fb5d6a2091fe18e88081263a5b515c76edb1f91844"
+    },
+    {
+      "file": "results\\stress_validation_20261024\\backtest_event_plan.csv",
+      "before_sha256": null,
+      "after_sha256": "abe54b4b0f89292109bd9e6534a5c7675d67a46a1c33c3df59392647ddc6c234"
+    },
+    {
+      "file": "results\\stress_validation_20261024\\BAO_CAO_MUC_TIEU_4_5_LOCAL_20261024.md",
+      "before_sha256": null,
+      "after_sha256": "dfd8078d155f834f66a7c71b195f0bdbd4c22ac500c970c32a1b74745317d675"
+    },
+    {
+      "file": "results\\stress_validation_20261024\\bounded_quote_curves.csv",
+      "before_sha256": null,
+      "after_sha256": "847dcf977b870ef3a07127b7a0e98b991001b1a627566e9a944b2c5827aec645"
+    },
+    {
+      "file": "results\\stress_validation_20261024\\concentration_by_period.csv",
+      "before_sha256": null,
+      "after_sha256": "739fc968f4821eddfa8801f2908ca3fa98b636f376652454b570e08f2977fc99"
+    },
+    {
+      "file": "results\\stress_validation_20261024\\evidence.json",
+      "before_sha256": null,
+      "after_sha256": "2ae1d1eb0c19ffa0cf170d291089e3a0145cd38112bc249237caa20765c64302"
+    },
+    {
+      "file": "results\\stress_validation_20261024\\pair_rounds.csv",
+      "before_sha256": null,
+      "after_sha256": "029c1599423be86acdfc7c0e5f649cd69f127237a06b665576783ba155b95d92"
+    },
+    {
+      "file": "results\\stress_validation_20261024\\pair_scenarios.csv",
+      "before_sha256": null,
+      "after_sha256": "a7f759ccb07a35ec7f3f5828c157da3775dd6d419cbef3027473ef5592e7da51"
+    },
+    {
+      "file": "results\\stress_validation_20261024\\quote_curve_validation.csv",
+      "before_sha256": null,
+      "after_sha256": "4c4746605d209035fa9991ab296bc9a98c9fa46e847a4099c46c71dedf6c2e0e"
+    },
+    {
+      "file": "results\\stress_validation_20261024\\runtime_verification.json",
+      "before_sha256": null,
+      "after_sha256": "0237e8d271b87b9285dd5dd055374b2ee57bab3d6345f96f004416a4bebb5501"
+    },
+    {
+      "file": "results\\stress_validation_20261024\\test_output.log",
+      "before_sha256": null,
+      "after_sha256": "8e3f919785e7f9055365a134cb29bf6c437438e6ea12ab904e0cc19378df79ca"
+    },
+    {
+      "file": "results\\stress_validation_20261024\\test_verification.json",
+      "before_sha256": null,
+      "after_sha256": "12b26c66a8e501bc54fccdf8c8877c6c27ea71e7b0249ad6db84e681c5496ba2"
+    }
+  ]
+}

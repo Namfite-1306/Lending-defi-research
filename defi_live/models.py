@@ -21,7 +21,10 @@ class LiveModels:
         self.store=store;self.wallet_limit=wallet_limit;self.wallet_file=wallet_file;self.historical_results=Path(historical_results) if historical_results else None
         self.rpc=Rpc(store.folder/'rpc_cache',batch_size=100,multicall=True,cache_individual=False,use_cache=False,timeout=20,retry_attempts=2)
         self.exposure_rpc=Rpc(store.folder/'rpc_cache',batch_size=100,multicall=True,cache_individual=False,use_cache=False,timeout=10,retry_attempts=1)
+        self.universe=None
     def wallet_list(self):
+        if self.universe:
+            return self.universe.selected(self.wallet_limit),'rolling_census_risk_and_rotation; coherent selected cohort, not full-market snapshot'
         if self.wallet_file:
             raw=Path(self.wallet_file).read_text(encoding='utf8').splitlines();wallets=sorted(set(a.strip().lower() for a in raw if a.strip()))
             import re
@@ -41,8 +44,12 @@ class LiveModels:
         active=[a for a,r in zip(wallets,accounts) if uint(words(r)[1])>0]
         scope={'block':block,'block_hash':h['hash'],'source_stamp':h['stamp'],'monitored_wallets':len(wallets),'active_debt_wallets':len(active),
                'selection':selection,'full_universe':False,'timing':'current confirmed block-end snapshot; not pre-transaction state'}
+        if self.universe:
+            scope['universe_coverage']=self.universe.status()
         if not active:
             _,oracle,_=registry(self.rpc,block)
+            fresh=self.rpc.one('eth_getBlockByNumber',[hex(block),False],cache=False)
+            if fresh['hash']!=h['hash']:raise ValueError('Empty snapshot invalidated by reorg')
             self.store.publish('position_rows',block,h['hash'],h['stamp'],{'wallets':wallets,'positions':[],'oracle':oracle})
             self.store.publish('models',block,h['hash'],h['stamp'],{'scope':scope,'status':'no_active_monitored_aave_debt','rq1':None,'rq6':None,'rq7':None,'positions':[]})
             return
@@ -57,7 +64,12 @@ class LiveModels:
             p=Portfolio(positions,DEFAULTS);actual,_=p.stress();reported={r['account']:Decimal(r['hf_reported']) for r in checks}
             if any(abs(Decimal(str(v))-reported[a])/max(abs(reported[a]),Decimal('1e-12'))>Decimal('.0001') for a,v in zip(p.accounts,actual)):
                 raise ValueError('Live model baseline HF does not match on-chain HF')
+            fresh=self.rpc.one('eth_getBlockByNumber',[hex(block),False],cache=False)
+            if fresh['hash']!=h['hash']:raise ValueError('Position snapshot invalidated by reorg')
             self.store.publish('position_rows',block,h['hash'],h['stamp'],{'wallets':wallets,'positions':positions,'oracle':snapshot['scope']['oracle']})
+            if self.universe:
+                ages=self.store.meta('coherent_wallet_checks',{})
+                ages.update({a:h['stamp'] for a in wallets});self.store.set_meta('coherent_wallet_checks',ages)
             cfg=dict(DEFAULTS,shock_step=.05,shock_max=.6,max_rounds=50);data=SnapshotData(p,scope);payload={'scope':scope,'status':'validated_monitored_sample','rq1':None,'rq6':None,'rq7':None}
             for name,fn,filename in [('rq1',rq1,'stress_curve.csv'),('rq6',rq6,'cascade_scenarios.csv'),('rq7',rq7,'policy_grid.csv')]:
                 dest=folder/name;dest.mkdir();result=fn(data,dest,cfg)

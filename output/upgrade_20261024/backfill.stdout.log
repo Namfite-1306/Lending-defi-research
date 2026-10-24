@@ -1,0 +1,1621 @@
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 25 HTTP requests, 439 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 50 HTTP requests, 452 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=4
+{"date": "2026-02-05", "wallets_scanned": 370, "historical_borrowers": 73358, "active_debt_wallets": 90, "passed": 90}
+RPC progress: 75 HTTP requests, 893 cache hits
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 100 HTTP requests, 905 cache hits
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 125 HTTP requests, 917 cache hits
+B snapshot mode=28 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=3
+{"date": "2026-02-05", "wallets_scanned": 470, "historical_borrowers": 73358, "active_debt_wallets": 123, "passed": 123}
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 150 HTTP requests, 1354 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 175 HTTP requests, 1368 cache hits
+B snapshot mode=2 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=1 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=1 pass=True tokens=2
+RPC progress: 200 HTTP requests, 1387 cache hits
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=4
+{"date": "2026-02-05", "wallets_scanned": 570, "historical_borrowers": 73358, "active_debt_wallets": 157, "passed": 157}
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 225 HTTP requests, 1824 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=17 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 250 HTTP requests, 1834 cache hits
+B snapshot mode=33 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+{"date": "2026-02-05", "wallets_scanned": 670, "historical_borrowers": 73358, "active_debt_wallets": 183, "passed": 183}
+RPC progress: 275 HTTP requests, 1846 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 300 HTTP requests, 2284 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 325 HTTP requests, 2295 cache hits
+B snapshot mode=21 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=7
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+{"date": "2026-02-05", "wallets_scanned": 770, "historical_borrowers": 73358, "active_debt_wallets": 214, "passed": 214}
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 350 HTTP requests, 2734 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=9
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 375 HTTP requests, 2751 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=8
+B snapshot mode=0 pass=True tokens=3
+{"date": "2026-02-05", "wallets_scanned": 870, "historical_borrowers": 73358, "active_debt_wallets": 242, "passed": 242}
+RPC progress: 400 HTTP requests, 2765 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 425 HTTP requests, 3204 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=6
+RPC progress: 450 HTTP requests, 3219 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 475 HTTP requests, 3235 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+{"date": "2026-02-05", "wallets_scanned": 970, "historical_borrowers": 73358, "active_debt_wallets": 284, "passed": 284}
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 500 HTTP requests, 3676 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=2 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 525 HTTP requests, 3691 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 550 HTTP requests, 3705 cache hits
+B snapshot mode=0 pass=True tokens=7
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+{"date": "2026-02-05", "wallets_scanned": 1070, "historical_borrowers": 73358, "active_debt_wallets": 322, "passed": 322}
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 575 HTTP requests, 4144 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 600 HTTP requests, 4157 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 625 HTTP requests, 4169 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+{"date": "2026-02-05", "wallets_scanned": 1170, "historical_borrowers": 73358, "active_debt_wallets": 359, "passed": 359}
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 650 HTTP requests, 4606 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 675 HTTP requests, 4621 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 700 HTTP requests, 4635 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=4 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+RPC progress: 725 HTTP requests, 4651 cache hits
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=2 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=2 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+{"date": "2026-02-05", "wallets_scanned": 1270, "historical_borrowers": 73358, "active_debt_wallets": 404, "passed": 404}
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 750 HTTP requests, 5092 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 775 HTTP requests, 5104 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 800 HTTP requests, 5119 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=14 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 825 HTTP requests, 5130 cache hits
+B snapshot mode=0 pass=True tokens=3
+{"date": "2026-02-05", "wallets_scanned": 1370, "historical_borrowers": 73358, "active_debt_wallets": 446, "passed": 446}
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 850 HTTP requests, 5567 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 875 HTTP requests, 5580 cache hits
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=11 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 900 HTTP requests, 5591 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=9
+{"date": "2026-02-05", "wallets_scanned": 1470, "historical_borrowers": 73358, "active_debt_wallets": 491, "passed": 491}
+RPC progress: 925 HTTP requests, 6028 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 950 HTTP requests, 6041 cache hits
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 975 HTTP requests, 6053 cache hits
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 1000 HTTP requests, 6066 cache hits
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+{"date": "2026-02-05", "wallets_scanned": 1570, "historical_borrowers": 73358, "active_debt_wallets": 534, "passed": 534}
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 1025 HTTP requests, 6503 cache hits
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 1050 HTTP requests, 6515 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 1075 HTTP requests, 6528 cache hits
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+{"date": "2026-02-05", "wallets_scanned": 1670, "historical_borrowers": 73358, "active_debt_wallets": 570, "passed": 570}
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+RPC progress: 1100 HTTP requests, 6967 cache hits
+B snapshot mode=1 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 1125 HTTP requests, 6979 cache hits
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=31 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+{"date": "2026-02-05", "wallets_scanned": 1770, "historical_borrowers": 73358, "active_debt_wallets": 600, "passed": 600}
+RPC progress: 1150 HTTP requests, 6991 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 1175 HTTP requests, 7428 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 1200 HTTP requests, 7444 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=33 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=9
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=5
+RPC progress: 1225 HTTP requests, 7461 cache hits
+B snapshot mode=0 pass=True tokens=2
+{"date": "2026-02-05", "wallets_scanned": 1870, "historical_borrowers": 73358, "active_debt_wallets": 637, "passed": 637}
+B snapshot mode=31 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=28 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+RPC progress: 1250 HTTP requests, 7902 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 1275 HTTP requests, 7914 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 1300 HTTP requests, 7929 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=8
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=3
+{"date": "2026-02-05", "wallets_scanned": 1970, "historical_borrowers": 73358, "active_debt_wallets": 679, "passed": 679}
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 1325 HTTP requests, 8368 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 1350 HTTP requests, 8384 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=7
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 1375 HTTP requests, 8397 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+{"date": "2026-02-05", "wallets_scanned": 2070, "historical_borrowers": 73358, "active_debt_wallets": 711, "passed": 711}
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 1400 HTTP requests, 8834 cache hits
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=27 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=15 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 1425 HTTP requests, 8846 cache hits
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 1450 HTTP requests, 8861 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+{"date": "2026-02-05", "wallets_scanned": 2170, "historical_borrowers": 73358, "active_debt_wallets": 749, "passed": 749}
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 1475 HTTP requests, 9298 cache hits
+B snapshot mode=0 pass=True tokens=10
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=2 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=7
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 1500 HTTP requests, 9312 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=1 pass=True tokens=4
+RPC progress: 1525 HTTP requests, 9331 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 1550 HTTP requests, 9345 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+{"date": "2026-02-05", "wallets_scanned": 2270, "historical_borrowers": 73358, "active_debt_wallets": 792, "passed": 792}
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 1575 HTTP requests, 9786 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 1600 HTTP requests, 9803 cache hits
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 1625 HTTP requests, 9815 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+{"date": "2026-02-05", "wallets_scanned": 2370, "historical_borrowers": 73358, "active_debt_wallets": 834, "passed": 834}
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 1650 HTTP requests, 10252 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 1675 HTTP requests, 10265 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 1700 HTTP requests, 10279 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=2 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=5
+{"date": "2026-02-05", "wallets_scanned": 2470, "historical_borrowers": 73358, "active_debt_wallets": 875, "passed": 875}
+RPC progress: 1725 HTTP requests, 10296 cache hits
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=5
+RPC progress: 1750 HTTP requests, 10735 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=27 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 1775 HTTP requests, 10749 cache hits
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+{"date": "2026-02-05", "wallets_scanned": 2570, "historical_borrowers": 73358, "active_debt_wallets": 911, "passed": 911}
+RPC progress: 1800 HTTP requests, 10766 cache hits
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 1825 HTTP requests, 11205 cache hits
+B snapshot mode=2 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 1850 HTTP requests, 11217 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 1875 HTTP requests, 11232 cache hits
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+{"date": "2026-02-05", "wallets_scanned": 2670, "historical_borrowers": 73358, "active_debt_wallets": 949, "passed": 949}
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+RPC progress: 1900 HTTP requests, 11671 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 1925 HTTP requests, 11685 cache hits
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+{"date": "2026-02-05", "wallets_scanned": 2770, "historical_borrowers": 73358, "active_debt_wallets": 983, "passed": 983}
+RPC progress: 1950 HTTP requests, 11698 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=24 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=3
+RPC progress: 1975 HTTP requests, 12140 cache hits
+B snapshot mode=2 pass=True tokens=6
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 2000 HTTP requests, 12154 cache hits
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2025 HTTP requests, 12173 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=11 pass=True tokens=1
+{"date": "2026-02-05", "wallets_scanned": 2870, "historical_borrowers": 73358, "active_debt_wallets": 1023, "passed": 1023}
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+RPC progress: 2050 HTTP requests, 12612 cache hits
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2075 HTTP requests, 12624 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2100 HTTP requests, 12639 cache hits
+B snapshot mode=0 pass=True tokens=2
+{"date": "2026-02-05", "wallets_scanned": 2970, "historical_borrowers": 73358, "active_debt_wallets": 1055, "passed": 1055}
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2125 HTTP requests, 13076 cache hits
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2150 HTTP requests, 13088 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=7
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2175 HTTP requests, 13101 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=3 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=4
+{"date": "2026-02-05", "wallets_scanned": 3070, "historical_borrowers": 73358, "active_debt_wallets": 1101, "passed": 1101}
+RPC progress: 2200 HTTP requests, 13112 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 2225 HTTP requests, 13551 cache hits
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2250 HTTP requests, 13564 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=1 pass=True tokens=4
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+RPC progress: 2275 HTTP requests, 13580 cache hits
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+{"date": "2026-02-05", "wallets_scanned": 3170, "historical_borrowers": 73358, "active_debt_wallets": 1144, "passed": 1144}
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2300 HTTP requests, 14017 cache hits
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=25 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 2325 HTTP requests, 14029 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=15 pass=True tokens=2
+B snapshot mode=11 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+RPC progress: 2350 HTTP requests, 14045 cache hits
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=25 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 2375 HTTP requests, 14062 cache hits
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+{"date": "2026-02-05", "wallets_scanned": 3270, "historical_borrowers": 73358, "active_debt_wallets": 1187, "passed": 1187}
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=7
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2400 HTTP requests, 14501 cache hits
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=7
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=8
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2425 HTTP requests, 14513 cache hits
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+{"date": "2026-02-05", "wallets_scanned": 3370, "historical_borrowers": 73358, "active_debt_wallets": 1219, "passed": 1219}
+RPC progress: 2450 HTTP requests, 14950 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=11 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=7
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+RPC progress: 2475 HTTP requests, 14965 cache hits
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=7
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 2500 HTTP requests, 14977 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=8
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2525 HTTP requests, 14990 cache hits
+B snapshot mode=0 pass=True tokens=1
+{"date": "2026-02-05", "wallets_scanned": 3470, "historical_borrowers": 73358, "active_debt_wallets": 1258, "passed": 1258}
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2550 HTTP requests, 15429 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=10
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 2575 HTTP requests, 15443 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=10
+B snapshot mode=11 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+{"date": "2026-02-05", "wallets_scanned": 3570, "historical_borrowers": 73358, "active_debt_wallets": 1290, "passed": 1290}
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2600 HTTP requests, 15882 cache hits
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=8
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=4
+RPC progress: 2625 HTTP requests, 15895 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 2650 HTTP requests, 15907 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+{"date": "2026-02-05", "wallets_scanned": 3670, "historical_borrowers": 73358, "active_debt_wallets": 1328, "passed": 1328}
+RPC progress: 2675 HTTP requests, 15919 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 2700 HTTP requests, 16357 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+RPC progress: 2725 HTTP requests, 16375 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=5
+RPC progress: 2750 HTTP requests, 16388 cache hits
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+{"date": "2026-02-05", "wallets_scanned": 3770, "historical_borrowers": 73358, "active_debt_wallets": 1374, "passed": 1374}
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=3
+RPC progress: 2775 HTTP requests, 16827 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=2 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2800 HTTP requests, 16841 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+RPC progress: 2825 HTTP requests, 16854 cache hits
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+{"date": "2026-02-05", "wallets_scanned": 3870, "historical_borrowers": 73358, "active_debt_wallets": 1412, "passed": 1412}
+RPC progress: 2850 HTTP requests, 17293 cache hits
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2875 HTTP requests, 17307 cache hits
+B snapshot mode=0 pass=True tokens=8
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=15 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2900 HTTP requests, 17322 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=32 pass=True tokens=2
+RPC progress: 2925 HTTP requests, 17333 cache hits
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=2 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=3
+{"date": "2026-02-05", "wallets_scanned": 3970, "historical_borrowers": 73358, "active_debt_wallets": 1453, "passed": 1453}
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2950 HTTP requests, 17772 cache hits
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 2975 HTTP requests, 17787 cache hits
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=7
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 3000 HTTP requests, 17799 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 3025 HTTP requests, 17812 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=2 pass=True tokens=5
+{"date": "2026-02-05", "wallets_scanned": 4070, "historical_borrowers": 73358, "active_debt_wallets": 1499, "passed": 1499}
+[
+  {
+    "date": "2026-02-05",
+    "block": 24387317,
+    "hash": "0x46792577bc506a6fa7b16eb0e6a7736676c2cf624626e050f10d4131b5a4153c",
+    "source_stamp": 1770254459,
+    "historical_borrowers": 73358,
+    "timing": "block end before first liquidation of selected UTC day",
+    "selection": "all seed Borrow accounts with first_borrow_block <= cutoff; not future liquidated-wallet selection",
+    "full_snapshot_complete": false,
+    "status": "time_budget_reached",
+    "borrower_history_complete": true,
+    "wallets_scanned": 4070,
+    "active_debt_wallets": 1499,
+    "passed": 1499,
+    "reported_debt_usd": "516124832.28305401",
+    "updated_at": 1792781171.2346332
+  }
+]

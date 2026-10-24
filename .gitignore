@@ -7,3 +7,9 @@ data/test_tmp/
 results/
 .pytest_cache/
 data/live/
+data/stress_backtests_*/
+data/research_h124_*/
+output/research_h124_*/
+output/research_h123_repair_*/
+output/research_h123_sources_*/
+data/research_h123_sources_*/

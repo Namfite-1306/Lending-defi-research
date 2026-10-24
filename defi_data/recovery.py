@@ -75,7 +75,7 @@ def database():
     c.execute('CREATE TABLE IF NOT EXISTS failures (protocol TEXT,lo INTEGER,hi INTEGER,error TEXT,attempt_utc TEXT)')
     return c
 
-def full_history(workers=4,chunk=50000):
+def full_history(workers=4,chunk=50000,protocols=None):
     OUT.mkdir(parents=True,exist_ok=True)
     controller=Rpc(ROOT/'data/rpc_cache')
     bound_path=RUN/'block_range.json'
@@ -87,13 +87,17 @@ def full_history(workers=4,chunk=50000):
         start=controller.block_at(ts('2023-01-27T00:00:00Z'),head);end=controller.block_at(ts('2026-10-01T00:00:00Z'),head)-1
         b={'start_block':start,'end_block':end,'start_utc':'2023-01-27T00:00:00Z','end_exclusive_utc':'2026-10-01T00:00:00Z','start_hash':controller.block(start)['hash'],'end_hash':controller.block(end)['hash']}
     start,end=b['start_block'],b['end_block']
+    selected=list(dict.fromkeys(protocols or b.get('protocols',list(CONTRACTS))))
+    if not selected or any(p not in CONTRACTS for p in selected):raise ValueError('Unknown history protocol selection')
+    b['protocols']=selected
     controller.preflight(start,end,RUN/'rpc_preflight_history.json')
     save_json(RUN/'block_range.json',b)
     c=database();specs={};jobs=[];local=threading.local()
     def client():
         if not hasattr(local,'rpc'):local.rpc=Rpc(ROOT/'data/rpc_cache',urls=controller.urls)
         return local.rpc
-    for p,(a,source,names) in CONTRACTS.items():
+    for p in selected:
+        a,source,names=CONTRACTS[p]
         s=parse_events((ROOT/'data/sources'/source).read_text(encoding='utf8'));specs[p]={s[n]['topic']:(n,s[n]) for n in names}
         existing=merge_ranges(list(c.execute('SELECT lo,hi FROM ranges WHERE protocol=?',(p,))))
         for lo in range(start,end+1,chunk):
@@ -344,7 +348,7 @@ def snapshots_by_version():
 def export():
     c=database();b=json.loads((RUN/'block_range.json').read_text(encoding='utf8'));start,end=b['start_block'],b['end_block']
     coverage=[];gaps=[]
-    for p in CONTRACTS:
+    for p in b.get('protocols',list(CONTRACTS)):
         ranges=merge_ranges(list(c.execute('SELECT lo,hi FROM ranges WHERE protocol=?',(p,))))
         covered=sum(y-x+1 for x,y in ranges);n=c.execute('SELECT count(*) FROM events WHERE protocol=?',(p,)).fetchone()[0]
         coverage.append({'protocol':p,'covered_blocks':covered,'target_blocks':end-start+1,'fraction':covered/(end-start+1),
@@ -356,17 +360,19 @@ def export():
         if cursor<=end:gaps.append({'protocol':p,'lo':cursor,'hi':end})
     csv_write(OUT/'history_coverage.csv',coverage);csv_write(OUT/'history_gaps.csv',gaps, ['protocol','lo','hi'])
     universe=[]
+    aave_complete=next((r['download_complete'] for r in coverage if r['protocol']=='aave_v3'),False)
     for a,first,last,n in c.execute("SELECT account,min(block),max(block),count(*) FROM events WHERE protocol='aave_v3' AND name='Borrow' GROUP BY account"):
-        universe.append({'account':a,'first_borrow_block':first,'last_borrow_block':last,'borrow_count':n,'history_complete':coverage[0]['download_complete']})
+        if 'aave_v3' not in b.get('protocols',list(CONTRACTS)):continue
+        universe.append({'account':a,'first_borrow_block':first,'last_borrow_block':last,'borrow_count':n,'history_complete':aave_complete})
     csv_write(OUT/'borrower_universe.csv',universe,['account','first_borrow_block','last_borrow_block','borrow_count','history_complete'])
-    csv_write(OUT/'event_counts.csv',[{'protocol':p,'event':n,'count':count} for p,n,count in c.execute('SELECT protocol,name,count(*) FROM events GROUP BY protocol,name')])
+    csv_write(OUT/'event_counts.csv',[{'protocol':p,'event':n,'count':count} for p,n,count in c.execute('SELECT protocol,name,count(*) FROM events GROUP BY protocol,name') if p in b.get('protocols',list(CONTRACTS))])
     c.close();print(json.dumps(coverage),flush=True)
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('phase',choices=['diagnose','probe','history','export','exposures','configs','snapshots']);p.add_argument('--workers',type=int,default=4);p.add_argument('--chunk',type=int,default=50000);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('phase',choices=['diagnose','probe','history','export','exposures','configs','snapshots']);p.add_argument('--workers',type=int,default=4);p.add_argument('--chunk',type=int,default=50000);p.add_argument('--protocols',nargs='+',choices=list(CONTRACTS));a=p.parse_args()
     if a.phase=='diagnose':diagnose()
     elif a.phase=='probe':scope_probe()
-    elif a.phase=='history':full_history(a.workers,a.chunk)
+    elif a.phase=='history':full_history(a.workers,a.chunk,a.protocols)
     elif a.phase=='exposures':repair_exposures()
     elif a.phase=='configs':configuration_history()
     elif a.phase=='snapshots':snapshots_by_version()

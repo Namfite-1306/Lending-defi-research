@@ -1,0 +1,65 @@
+{
+  "generated_at": "2026-10-23T18:18:52.577241+00:00",
+  "data_run": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\data\\runs\\recovery_20261020",
+  "input_hashes": {
+    "audit_1_structure.json": "5d14db16e32288ea3db0d3555a6ba03e0f7330872aef1b6f445c131f86e737b0",
+    "audit_2_onchain.json": "22a596d4a9857cd84e7d1f2d84790b7791d4338fa7032e4ff3a8d9fbcbd4493d",
+    "audit_3_research.json": "9a016c7e2af020d0962e6ebe8b449581b8acc0775e0b62cc1cd35db7ceb67793",
+    "block_range.json": "0e5371d7b5fbdd4915e5b088c90b39249429b8cf68c9540f388e62ee5aff2534",
+    "freeze_manifest.json": "408bb088c97df04aa1de12453f92d3ae4158fc91fbb3a69b20c4043c5f333ba1",
+    "processed\\liquidations_model_table.csv": "d552520e53ada66651db35ad3277fff6e7c48cca29db13266a0736559401cc29",
+    "processed\\v3_exact_impact_quotes.csv": "75256fe5a7064c5d5b22ee9641cd479080ca355ba7f1ddf68f1ed62838dbc55b",
+    "processed\\v3_swap_replay_validation.csv": "79b1235d34694f40ff18fbc843455c43944419fddf0779915e5cf028c9a8f3a0"
+  },
+  "concentration": {
+    "status": "completed_scoped",
+    "rows": 954,
+    "max_price_age_seconds": 3600,
+    "note": "Count/USD use identical priced events. Coverage is by events, not by dollars. Protocol USD meanings differ."
+  },
+  "dex": {
+    "status": "quote_grids_scoped_interpolation_gated",
+    "source_quotes": 195,
+    "usable_curves": 31,
+    "interpolation_passed_curves": 6,
+    "source_blocks": 10,
+    "swap_cases": 52,
+    "eligible_replays": 37,
+    "exact_matches": 37,
+    "excluded_replays": 15,
+    "match_rate_eligible": 1.0,
+    "note": "Existing archived Quoter/swap evidence; not a new network replay. Curves cannot be reused at other blocks or extrapolated."
+  },
+  "cascade_backtest": {
+    "status": "not_validated",
+    "event_days_selected": 5,
+    "missing": [
+      "pre-window full borrower snapshots for selected event dates",
+      "oracle update paths and time-matched DEX quotes through each window",
+      "revision-specific liquidation pair rules and execution replay",
+      "held-out event tests and uncertainty intervals"
+    ],
+    "note": "DEX replay match is not proof of a calibrated end-to-end liquidation cascade."
+  },
+  "scope": "Aave stress focus; concentration reported separately for Aave, Comet USDC, Morpho",
+  "additional_quote_input": {
+    "file": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\data\\stress_backtests_20261024\\pre_event_quotes.csv",
+    "sha256": "06060cbba862ee6a318790a973c6ea64ab96e0f533a26f70e5dac18b2283ec34",
+    "rows": 40,
+    "frozen_dataset_input": false
+  },
+  "pair_engine": {
+    "status": "experimental_completed",
+    "scenarios": 18,
+    "snapshot_block": 21762264,
+    "wallets": 17084,
+    "historically_calibrated": false,
+    "supported_protocol_revision": 6,
+    "note": "Historical reserve/E-mode bonuses and protocol liquidation fees; assumed liquidity/ordering/delay; not exact EVM or calibrated cascade.",
+    "risk_parameter_source": {
+      "file": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\data\\stress_backtests_20261024\\risk_parameters_21762264.json",
+      "sha256": "956f75ebbaf2390717ca9537bad40a3313f766df72ebf1304e39f6b5683eda7a",
+      "block": 21762264
+    }
+  }
+}

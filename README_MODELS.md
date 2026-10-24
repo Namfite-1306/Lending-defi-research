@@ -1,5 +1,26 @@
 # Chạy mô hình RQ1–RQ7
 
+## Bộ kết quả tham chiếu ngày 22/10/2026
+
+Đã chạy đầy đủ cả 7 RQ với `configs/models.full_7rq_20261022.json` (không dùng smoke).
+Cấu hình này tăng `max_rounds` từ 20 lên 200; RQ7 dùng tối đa 35 vòng và bảng kết quả
+không đổi khi thử giới hạn 400 vòng. Hai lần chạy đủ 7 RQ khớp 22 file kết quả.
+Bản tham chiếu local: `results/full_7rq_20261022_final/`, gồm báo cáo HTML/Markdown,
+CSV, manifest, kiểm tra đầu ra và kiểm tra tái lập. `results/` không nằm trên GitHub.
+
+Chạy lại và so sánh (thư mục đầu ra mới phải chưa tồn tại):
+
+```powershell
+.\.venv\Scripts\python.exe -m defi_models all --config configs/models.full_7rq_20261022.json --allow-exploratory --out results/my_7rq_comparison
+.\.venv\Scripts\python.exe scripts/validate_model_run.py results/my_7rq_comparison
+.\.venv\Scripts\python.exe scripts/compare_model_runs.py results/full_7rq_20261022_final results/my_7rq_comparison
+```
+
+Kết quả mong đợi: `passed=true`, `files_compared=22`, `difference_count=0`.
+Giữ dataset đã freeze và phiên bản môi trường ghi trong manifest; script so sánh bỏ qua
+thời gian chạy, nhưng đối chiếu cấu hình, input identities và kết quả. RQ3, RQ5–7
+vẫn là kết quả thăm dò; việc chạy xong không khắc phục các giới hạn nghiên cứu bên dưới.
+
 Code trong `defi_models/` đọc dữ liệu local, không crawl lại, không gọi RPC và không sửa dữ liệu nguồn. Python >= 3.11. Hai thư viện riêng cho mô hình: NumPy và SciPy; crawler gốc vẫn chỉ dùng standard library.
 
 ## 1. Cài đặt và kiểm tra

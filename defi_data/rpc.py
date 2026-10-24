@@ -12,13 +12,20 @@ DEFAULT_RPC_URLS=('https://eth-mainnet.public.blastapi.io','https://eth.drpc.org
 
 
 def error_kind(error):
-    text=str(error).lower()
-    if any(x in text for x in ('4444','pruned','missing trie','historical state','archive requests','history unavailable')):return 'history_unavailable'
-    if any(x in text for x in ('429','rate limit','compute units','too many requests')):return 'rate_limit'
-    if any(x in text for x in ('401','403','unauthorized','personal token','api key','access denied')):return 'authorization'
+    known=getattr(error,'kind',None)
+    if known:return known
+    code=error.get('code') if isinstance(error,dict) else None
+    text=str(error.get('message','') if isinstance(error,dict) else error).lower()
+    # Suggested hexadecimal block ranges can contain 403/429/4444. Those are
+    # block digits, not HTTP/RPC status codes, and must not prevent bisection.
+    def status(*values):
+        return code in values or any(re.search(r'(?<![a-z0-9])'+str(v)+r'(?![a-z0-9])',text) for v in values)
+    if status(4444) or any(x in text for x in ('pruned','missing trie','historical state','archive requests','history unavailable')):return 'history_unavailable'
+    if status(429) or any(x in text for x in ('rate limit','compute units','too many requests')):return 'rate_limit'
+    if status(401,403) or any(x in text for x in ('unauthorized','personal token','api key','access denied')):return 'authorization'
     if any(x in text for x in ('block range','blocks range','range limit','maximum block','too many results','response size','query returned more','range too large')):return 'range_limit'
-    if any(x in text for x in ('method not found','method_not','-32601','not support batch','not whitelisted')):return 'unsupported_method'
-    if any(x in text for x in ('network','timeout','timed out','temporarily unavailable','502','503','504')):return 'network'
+    if status(-32601) or any(x in text for x in ('method not found','method_not','not support batch','not whitelisted')):return 'unsupported_method'
+    if status(502,503,504) or any(x in text for x in ('network','timeout','timed out','temporarily unavailable')):return 'network'
     return 'rpc_error'
 
 class RpcError(RuntimeError):
@@ -102,7 +109,7 @@ class Rpc:
                     if isinstance(result,dict) and 'error' in result:
                         error=result['error'];failed(endpoint,error,attempt)
                         if method and self._method_denied(error):self._unsupported_methods[url,method]=error
-                        transient=transient or self._rate_limited(error)
+                        transient=transient or error_kind(error) in ('rate_limit','network')
                         continue
                     if isinstance(result,dict) and result.get('result') is None:
                         failed(endpoint,{'message':'Missing RPC result'},attempt);continue
@@ -116,8 +123,9 @@ class Rpc:
                         if isinstance(error,dict) and 'error' in error:
                             error=error['error'];failed(endpoint,error,attempt);parsed=True
                             if method and self._method_denied(error):self._unsupported_methods[url,method]=error
-                            transient=transient or self._rate_limited(error)
+                            transient=transient or error_kind(error) in ('rate_limit','network')
                     except (ValueError,UnicodeError):pass
+                    finally:exc.close()
                     if not parsed:
                         failures.append({'endpoint':endpoint,'code':exc.code,'message':'HTTP request rejected','attempt':attempt+1})
                     transient=transient or exc.code==429 or exc.code>=500
@@ -263,7 +271,7 @@ class Rpc:
         diagnostics=[];approved=[]
         for i,url in enumerate(self.urls,1):
             entry={'provider_id':i,'passed':False,'probes':[]}
-            r=Rpc(self.cache/'preflight',urls=[url],timeout=12,retry_attempts=1)
+            r=Rpc(self.cache/'preflight',urls=[url],timeout=12,retry_attempts=2)
             try:
                 if int(r.one('eth_chainId',[],cache=False),16)!=1:raise RpcError('Expected Ethereum chain 1',kind='wrong_chain')
                 for block in sorted({start,end}):

@@ -1,18 +1,18 @@
 """Three distinct data audits: structural, independent on-chain, research suitability."""
-import argparse,csv,json,hashlib,zlib,time,calendar
+import argparse,csv,json,hashlib,zlib,time,calendar,os
 from collections import Counter,defaultdict
 from datetime import datetime,timezone
 from decimal import Decimal as D
 from .recovery import RUN,OUT,OLD,database,export,merge_ranges,http
 from .pipeline import ROOT,CONTRACTS,csv_write,save_json,ts,utc,call
 from .expansion import read_csv
-from .evm import parse_events,decode_event,words,uint
-from .rpc import Rpc
+from .evm import parse_events,decode_event,words,uint,calldata
+from .rpc import Rpc,DEFAULT_RPC_URLS
 
 def record(check,passed,detail,severity='integrity'):
     return {'check':check,'passed':bool(passed),'severity':severity,'detail':detail}
 
-def pass1():
+def pass1(models=None):
     OUT.mkdir(parents=True,exist_ok=True);export();c=database();checks=[]
     integrity=c.execute('PRAGMA integrity_check').fetchone()[0]
     checks.append(record('SQLite integrity',integrity=='ok',integrity))
@@ -46,15 +46,21 @@ def pass1():
         actual=hashlib.sha256(json.dumps(keys).encode()).hexdigest()
         if len(keys)!=n or actual!=dig:mismatches.append({'protocol':p,'lo':lo,'hi':hi,'stored_count':n,'actual_count':len(keys)})
     checks.append(record('Shard keys/counts reconcile after dedup',not mismatches,{'mismatches':mismatches[:30],'count':len(mismatches)}))
-    save_json(RUN/'audit_1_structure.json',{'at_utc':utc(int(time.time())),'checks':checks,'records':count,'all_integrity_passed':all(x['passed'] for x in checks)})
+    result={'at_utc':utc(int(time.time())),'checks':checks,'records':count,'all_integrity_passed':all(x['passed'] for x in checks)}
+    if models is not None:result['models']=models
+    save_json(RUN/'audit_1_structure.json',result)
     c.close()
 
-def pass2():
-    c=database();checks=[];samples=[];rpc=Rpc(RUN/'independent_audit_cache',urls=['https://eth-mainnet.public.blastapi.io'],batch_size=10,multicall=True)
+def pass2(models=None):
+    c=database();checks=[];samples=[];rpc=Rpc(RUN/'independent_audit_cache',urls=os.getenv('ETH_AUDIT_RPC_URLS','https://eth-mainnet.public.blastapi.io'),batch_size=10,multicall=True)
+    if models is not None:
+        primary={s.strip().rstrip('/') for s in os.getenv('ETH_RPC_URLS',','.join(DEFAULT_RPC_URLS)).split(',') if s.strip()}
+        separate=not primary.intersection(u.rstrip('/') for u in rpc.urls)
+        checks.append(record('Audit endpoint differs from collection endpoint',separate,{'separate_endpoints':separate,'note':'Different endpoints alone do not prove independent infrastructure'}))
     prior=read_csv(OUT/'independent_onchain_samples.csv') if (OUT/'independent_onchain_samples.csv').exists() else []
     good={(r['protocol'],int(r['year']),int(r['quarter_month'])):r for r in prior if r['log_keys_match']=='True' and r['receipt_match']=='True'}
     c.execute('CREATE INDEX IF NOT EXISTS recovery_protocol_stamp ON events(protocol,stamp)');c.commit()
-    for p in CONTRACTS:
+    for p in (['aave_v3'] if models is not None else CONTRACTS):
         for year in range(2023,2027):
             for month in (1,4,7,10):
                 begin=calendar.timegm((year,month,1,0,0,0));last=calendar.timegm((year+(month==10),(month+3-1)%12+1,1,0,0,0))
@@ -62,7 +68,7 @@ def pass2():
                 anchor=c.execute('SELECT block,tx,idx,hash FROM events WHERE protocol=? AND stamp>=? AND stamp<? ORDER BY stamp LIMIT 1',(p,begin,last)).fetchone()
                 if not anchor:continue
                 b,tx,i,h=anchor;entry={'protocol':p,'year':year,'quarter_month':month,'block':b,'tx':tx}
-                if (p,year,month) in good:
+                if models is None and (p,year,month) in good:
                     entry=good[p,year,month];entry.update(log_keys_match=True,receipt_match=True)
                     samples.append(entry);continue
                 try:
@@ -78,6 +84,21 @@ def pass2():
                 except Exception as e:entry.update(log_keys_match=False,receipt_match=False,error=str(e)[:400])
                 samples.append(entry);print(f'AUDIT2 {p} {year}-{month}: {entry.get("log_keys_match")}',flush=True)
     checks.append(record('Quarterly independent log/receipt checks',bool(samples) and all(r['log_keys_match'] and r['receipt_match'] for r in samples),{'samples':len(samples),'mismatches':sum(not r['log_keys_match'] or not r['receipt_match'] for r in samples)}))
+    if models is not None:
+        if 1 in models:
+            validation=read_csv(RUN/'full_snapshot_21762264/validation.csv')
+            chosen=validation[::max(1,len(validation)//5)][:5];fresh=[]
+            for row in chosen:
+                try:
+                    value=rpc.one('eth_call',[{'to':CONTRACTS['aave_v3'][0],'data':calldata('getUserAccountData(address)',row['account'])},hex(21762264)],cache=False)
+                    w=words(value);debt=D(uint(w[1]))/10**8;hf=D(uint(w[5]))/10**18
+                    passed=(abs(debt-D(row['debt_reported_usd']))/max(debt,D(1))<=D('.0001') and abs(hf-D(row['hf_reported']))/max(hf,D(1))<=D('.0001'))
+                    fresh.append({'account':row['account'],'passed':passed})
+                except Exception as exc:fresh.append({'account':row['account'],'passed':False,'error':rpc._safe_message(exc)})
+            checks.append(record('Independent full-snapshot account samples',bool(fresh) and all(r['passed'] for r in fresh),fresh))
+        csv_write(OUT/'independent_onchain_samples.csv',samples)
+        save_json(RUN/'audit_2_onchain.json',{'at_utc':utc(int(time.time())),'models':models,'checks':checks,'all_integrity_passed':all(x['passed'] for x in checks)})
+        c.close();return
     accrual=read_csv(OUT/'morpho_accrual_validation.csv')
     checks.append(record('Morpho accrual matches transient on-chain execution',len(accrual)==52 and all(r['all_six_market_fields_match']=='True' for r in accrual),{'markets':len(accrual)}))
     snapshot=[]
@@ -92,7 +113,8 @@ def pass2():
     save_json(RUN/'audit_2_onchain.json',{'at_utc':utc(int(time.time())),'checks':checks,'all_integrity_passed':all(x['passed'] for x in checks)})
     c.close()
 
-def pass3():
+def pass3(models=None):
+    if models is not None:return scoped_research_audit(models)
     c=database();checks=[];prices=read_csv(OUT/'market_prices_hourly_full_period.csv');groups=defaultdict(list)
     print('AUDIT3 hourly price grid loaded',flush=True)
     for r in prices:groups[r['feed']].append(r)
@@ -141,6 +163,43 @@ def pass3():
         'all_readiness_passed':all(x['passed'] for x in checks if x['severity']=='readiness')})
     c.close()
 
+def scoped_research_audit(models):
+    """Audit RQ1/RQ4 inputs without certifying unrelated models or sample universes."""
+    from defi_models.core import Data,DEFAULTS,sha
+    checks=[];inventory=[]
+    for path in sorted(list(OUT.glob('*.csv'))+list((RUN/'full_snapshot_21762264').glob('*.csv'))):
+        inventory.append({'file':str(path.relative_to(RUN)),'sha256':sha(path)})
+    save_json(RUN/'freeze_manifest.json',{'at_utc':utc(int(time.time())),'models':models,'csv_files':inventory,'raw_database':str(RUN/'history.sqlite')})
+    data=Data(RUN,dict(DEFAULTS))
+    for n,suffix in [(1,'structure'),(2,'onchain')]:
+        path=RUN/f'audit_{n}_{suffix}.json'
+        prior=json.loads(path.read_text(encoding='utf8')) if path.exists() else {}
+        checks.append(record(f'Audit {n} passed for selected models',prior.get('all_integrity_passed') and set(models).issubset(prior.get('models',range(1,8))),{}))
+    if 1 in models:
+        try:
+            _,scope=data.snapshot()
+            checks.append(record('Full pre-stress snapshot and baseline HF reconcile',scope.get('borrower_history_complete'),scope))
+        except (ValueError,OSError,KeyError,TypeError) as exc:checks.append(record('Full pre-stress snapshot and baseline HF reconcile',False,str(exc)))
+    if 4 in models:
+        try:
+            from defi_models.core import stamp
+            bounds=json.loads((RUN/'block_range.json').read_text(encoding='utf8'))
+            first=ts(bounds['start_utc']);last=ts(bounds['end_exclusive_utc']);expected=list(range(first,last,3600))
+            counts=[r for r in data.read('liquidations_hourly_full_period.csv') if r['protocol']=='aave_v3']
+            prices=data.read('market_prices_hourly_full_period.csv');events=[r for r in data.read('liquidations_model_table.csv') if r['protocol']=='aave_v3']
+            prices_ok=True
+            for feed in ['ETH/USD','BTC/USD']:
+                rows=sorted((r for r in prices if r['feed']==feed),key=lambda r:r['timestamp_utc'])
+                prices_ok=prices_ok and [stamp(r['timestamp_utc']) for r in rows]==expected and all(D(r['price_usd'])>0 and stamp(r['source_update_utc'])<=stamp(r['timestamp_utc']) and stamp(r.get('source_available_utc') or r['source_update_utc'])<=stamp(r['timestamp_utc']) for r in rows)
+            checks.append(record('ETH/BTC full hourly grid, positive prices and no future alignment',prices_ok,{'expected_hours':len(expected)}))
+            actual=Counter(int(stamp(r['timestamp_utc']))//3600 for r in events)
+            counts=sorted(counts,key=lambda r:r['hour_utc'])
+            panel_ok=([stamp(r['hour_utc']) for r in counts]==expected and len({(r['tx'],r['logidx']) for r in events})==len(events) and all(int(r['liquidation_events'])==actual[int(stamp(r['hour_utc']))//3600] for r in counts if r['protocol_deployed']=='True') and all(first<=stamp(r['timestamp_utc'])<last for r in events))
+            checks.append(record('Liquidation events and full hourly panel reconcile',panel_ok,{'events':len(events),'hours':len(counts)}))
+        except (ValueError,OSError,KeyError,TypeError,ArithmeticError) as exc:checks.append(record('RQ4 complete tables and alignment',False,str(exc)))
+    result={'at_utc':utc(int(time.time())),'models':models,'checks':checks,'all_integrity_passed':all(x['passed'] for x in checks),'scope':'Only selected RQ1/RQ4 inputs; other models are not certified'}
+    save_json(RUN/'audit_3_research.json',result)
+
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('round',choices=['1','2','3']);a=p.parse_args()
-    {'1':pass1,'2':pass2,'3':pass3}[a.round]()
+    p=argparse.ArgumentParser();p.add_argument('round',choices=['1','2','3']);p.add_argument('--models',nargs='+',type=int,choices=[1,4]);a=p.parse_args()
+    {'1':pass1,'2':pass2,'3':pass3}[a.round](a.models)

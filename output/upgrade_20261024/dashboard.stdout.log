@@ -1,0 +1,333 @@
+DASHBOARD http://127.0.0.1:8790 | events poll 15s | positions/models 300s | confirmations 2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=1
+RPC progress: 25 HTTP requests, 0 cache hits
+RPC progress: 25 HTTP requests, 0 cache hits
+B snapshot mode=1 pass=True tokens=1
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=3
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+RPC progress: 50 HTTP requests, 0 cache hits
+B snapshot mode=1 pass=True tokens=1
+B snapshot mode=40 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=1 pass=True tokens=2
+RPC progress: 75 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 25 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 100 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 50 HTTP requests, 0 cache hits
+RPC progress: 25 HTTP requests, 0 cache hits
+RPC progress: 75 HTTP requests, 0 cache hits
+RPC progress: 100 HTTP requests, 0 cache hits
+RPC progress: 125 HTTP requests, 0 cache hits
+RPC progress: 150 HTTP requests, 0 cache hits
+RPC progress: 50 HTTP requests, 0 cache hits
+RPC progress: 175 HTTP requests, 0 cache hits
+RPC progress: 125 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=1
+RPC progress: 150 HTTP requests, 0 cache hits
+B snapshot mode=1 pass=True tokens=1
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=3
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+RPC progress: 175 HTTP requests, 0 cache hits
+B snapshot mode=1 pass=True tokens=1
+RPC progress: 200 HTTP requests, 0 cache hits
+B snapshot mode=40 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 200 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=6
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=40 pass=True tokens=3
+RPC progress: 225 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=10
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 225 HTTP requests, 0 cache hits
+RPC progress: 75 HTTP requests, 0 cache hits
+RPC progress: 250 HTTP requests, 0 cache hits
+RPC progress: 275 HTTP requests, 0 cache hits
+RPC progress: 300 HTTP requests, 0 cache hits
+RPC progress: 100 HTTP requests, 0 cache hits
+RPC progress: 325 HTTP requests, 0 cache hits
+RPC progress: 350 HTTP requests, 0 cache hits
+RPC progress: 250 HTTP requests, 0 cache hits
+RPC progress: 375 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=1 pass=True tokens=1
+RPC progress: 275 HTTP requests, 0 cache hits
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=3
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=1
+RPC progress: 300 HTTP requests, 0 cache hits
+B snapshot mode=40 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=3
+B snapshot mode=2 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 325 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=7
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=43 pass=True tokens=4
+B snapshot mode=1 pass=True tokens=2
+RPC progress: 350 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 400 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+RPC progress: 125 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 425 HTTP requests, 0 cache hits
+RPC progress: 450 HTTP requests, 0 cache hits
+RPC progress: 475 HTTP requests, 0 cache hits
+RPC progress: 50 HTTP requests, 0 cache hits
+RPC progress: 75 HTTP requests, 0 cache hits
+RPC progress: 150 HTTP requests, 0 cache hits
+RPC progress: 500 HTTP requests, 0 cache hits
+RPC progress: 525 HTTP requests, 0 cache hits
+RPC progress: 550 HTTP requests, 0 cache hits
+RPC progress: 375 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=1 pass=True tokens=1
+RPC progress: 400 HTTP requests, 0 cache hits
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=3
+RPC progress: 575 HTTP requests, 0 cache hits
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 175 HTTP requests, 0 cache hits
+B snapshot mode=1 pass=True tokens=2
+RPC progress: 425 HTTP requests, 0 cache hits
+B snapshot mode=1 pass=True tokens=1
+B snapshot mode=40 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=3
+B snapshot mode=2 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+RPC progress: 450 HTTP requests, 0 cache hits
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=43 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=43 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 475 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=5
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=4
+RPC progress: 600 HTTP requests, 0 cache hits
+RPC progress: 625 HTTP requests, 0 cache hits
+RPC progress: 650 HTTP requests, 0 cache hits
+RPC progress: 200 HTTP requests, 0 cache hits
+RPC progress: 675 HTTP requests, 0 cache hits
+RPC progress: 700 HTTP requests, 0 cache hits
+RPC progress: 725 HTTP requests, 0 cache hits
+RPC progress: 225 HTTP requests, 0 cache hits
+RPC progress: 750 HTTP requests, 0 cache hits
+RPC progress: 500 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=1
+RPC progress: 525 HTTP requests, 0 cache hits
+B snapshot mode=1 pass=True tokens=1
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=3
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+RPC progress: 550 HTTP requests, 0 cache hits
+B snapshot mode=1 pass=True tokens=1
+B snapshot mode=40 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=2 pass=True tokens=3
+B snapshot mode=2 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 575 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 600 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 775 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=5
+RPC progress: 800 HTTP requests, 0 cache hits
+RPC progress: 825 HTTP requests, 0 cache hits
+RPC progress: 850 HTTP requests, 0 cache hits
+RPC progress: 250 HTTP requests, 0 cache hits
+RPC progress: 875 HTTP requests, 0 cache hits
+RPC progress: 900 HTTP requests, 0 cache hits
+RPC progress: 925 HTTP requests, 0 cache hits
+RPC progress: 950 HTTP requests, 0 cache hits
+RPC progress: 975 HTTP requests, 0 cache hits
+RPC progress: 1000 HTTP requests, 0 cache hits
+RPC progress: 275 HTTP requests, 0 cache hits
+RPC progress: 1025 HTTP requests, 0 cache hits
+RPC progress: 625 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=1 pass=True tokens=1
+RPC progress: 650 HTTP requests, 0 cache hits
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=3
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=3
+B snapshot mode=1 pass=True tokens=2
+RPC progress: 100 HTTP requests, 0 cache hits
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 675 HTTP requests, 0 cache hits
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=1
+B snapshot mode=40 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=2 pass=True tokens=3
+B snapshot mode=2 pass=True tokens=3
+RPC progress: 1050 HTTP requests, 0 cache hits
+RPC progress: 700 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=3
+RPC progress: 725 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=4
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 300 HTTP requests, 0 cache hits
+RPC progress: 1075 HTTP requests, 0 cache hits
+RPC progress: 1100 HTTP requests, 0 cache hits
+RPC progress: 1125 HTTP requests, 0 cache hits
+RPC progress: 1150 HTTP requests, 0 cache hits
+RPC progress: 325 HTTP requests, 0 cache hits

@@ -13,6 +13,23 @@ class RpcResilienceTests(unittest.TestCase):
             r=self.rpc(d)
             with patch('urllib.request.urlopen',side_effect=[self.response({'error':{'code':4444,'message':'pruned history unavailable'}}),self.response({'result':[self.log()]})]):
                 self.assertEqual(len(r.logs('0xabc',['topic'],10,10)),1)
+    def test_temporary_json_rpc_service_failure_retries(self):
+        for via_http in (False,True):
+            with self.subTest(via_http=via_http),tempfile.TemporaryDirectory() as d,patch('time.sleep'):
+                r=self.rpc(d,['https://first.example'])
+                error={'error':{'code':-32603,'message':'service temporarily unavailable'}}
+                failed=urllib.error.HTTPError(r.urls[0],400,'Bad Request',{},io.BytesIO(json.dumps(error).encode())) if via_http else self.response(error)
+                with patch('urllib.request.urlopen',side_effect=[failed,self.response({'result':[self.log()]})]) as post:
+                    self.assertEqual(len(r.logs('0xabc',['topic'],10,10)),1)
+                self.assertEqual(post.call_count,2)
+    def test_persistent_temporary_service_failure_stops_after_retry_limit(self):
+        with tempfile.TemporaryDirectory() as d,patch('time.sleep'):
+            r=self.rpc(d,['https://first.example'])
+            error={'error':{'code':-32603,'message':'service temporarily unavailable'}}
+            with patch('urllib.request.urlopen',side_effect=lambda *a,**kw:self.response(error)) as post:
+                with self.assertRaises(RpcError) as raised:r.logs('0xabc',['topic'],10,11)
+            self.assertEqual(post.call_count,r.retry_attempts)
+            self.assertEqual(raised.exception.kind,'network')
     def test_range_limit_not_masked_by_pruned_fallback(self):
         with tempfile.TemporaryDirectory() as d,patch('time.sleep'):
             r=self.rpc(d)
@@ -23,6 +40,23 @@ class RpcResilienceTests(unittest.TestCase):
             r=self.rpc(d);r.one=MagicMock(side_effect=[RpcError('10 blocks range'),[self.log(10)],[self.log(11)]])
             self.assertEqual(len(r.logs('0xabc',['topic'],10,11)),2)
             self.assertEqual(r.one.call_count,3)
+    def test_hexadecimal_range_suggestion_does_not_become_authorization_error(self):
+        error={'code':-32602,'message':'Log response size exceeded. This block range should work: [0x16d5cf4, 0x16d8403]'}
+        with tempfile.TemporaryDirectory() as d:
+            r=self.rpc(d)
+            left=self.log(23944436);right={**self.log(23994435),'transactionHash':'other'}
+            with patch.object(r,'_post',side_effect=[{'error':error},{'result':[left]},{'result':[right]}]) as post:
+                self.assertEqual(r.logs('0xabc',['topic'],23944436,23994435),[left,right])
+            self.assertEqual(post.call_count,3)
+    def test_status_digits_inside_hexadecimal_block_numbers_are_not_status_codes(self):
+        for block in ['0x4444','0x429','0x401','0x403','0x502','0x503','0x504']:
+            with self.subTest(block=block):
+                self.assertEqual(error_kind({'code':-32602,'message':'Response size limit at '+block}),'range_limit')
+        for code,kind in [(4444,'history_unavailable'),(429,'rate_limit'),(401,'authorization'),(403,'authorization'),(503,'network'),(-32601,'unsupported_method')]:
+            self.assertEqual(error_kind({'code':code,'message':'Request rejected'}),kind)
+    def test_explicit_rpc_kind_is_not_changed_by_generic_historical_state_hint(self):
+        e=RpcError('Check historical state at requested block',kind='range_limit')
+        self.assertEqual(error_kind(e),'range_limit')
     def test_pruned_auth_rate_and_unknown_never_bisect(self):
         with tempfile.TemporaryDirectory() as d:
             for message in ['4444 pruned history unavailable','HTTP 403','429 rate limit','execution reverted','network request failed']:
@@ -39,6 +73,25 @@ class RpcResilienceTests(unittest.TestCase):
             r=self.rpc(d);params=[{'address':'0xabc','topics':[['topic']],'fromBlock':'0xa','toBlock':'0xa'}]
             r._path('eth_getLogs',params).write_text('[]')
             with patch.object(r,'_post',return_value={'result':[self.log()]}):self.assertEqual(len(r.logs('0xabc',['topic'],10,10)),1)
+    def test_preflight_retries_a_transient_receipt_timeout(self):
+        p=max((p for p in json.loads((Path(__file__).resolve().parents[1]/'data/sources/rpc_history_probes.json').read_text()) if p['block']<=21762264),key=lambda p:p['block'])
+        log={'address':p['address'],'blockNumber':hex(p['block']),'transactionHash':p['tx'],'logIndex':hex(p['log_index']),'blockHash':'known'}
+        receipt_calls=[]
+        def respond(request,**kwargs):
+            payload=json.loads(request.data);method=payload['method']
+            if method=='eth_chainId':value='0x1'
+            elif method=='eth_getBlockByNumber':value={'number':payload['params'][0]}
+            elif method=='eth_getLogs':value=[log]
+            elif method=='eth_getTransactionReceipt':
+                receipt_calls.append(method)
+                if len(receipt_calls)==1:raise urllib.error.URLError('temporary timeout')
+                value={'logs':[log]}
+            else:raise AssertionError(method)
+            return self.response({'result':value})
+        with tempfile.TemporaryDirectory() as d,patch('urllib.request.urlopen',side_effect=respond),patch('time.sleep'):
+            r=self.rpc(d,['https://offline.test/archive'])
+            self.assertTrue(r.preflight(21762264,21762300,Path(d)/'report.json')['passed'])
+        self.assertEqual(len(receipt_calls),2)
     def test_batch_pruned_item_retries_individually(self):
         with tempfile.TemporaryDirectory() as d:
             r=self.rpc(d);r._post=MagicMock(side_effect=[[{'id':0,'error':{'code':4444,'message':'pruned'}}],{'result':'0x1234'}])

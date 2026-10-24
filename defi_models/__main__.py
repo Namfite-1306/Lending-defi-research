@@ -47,12 +47,14 @@ def config(path):
     return cfg
 
 def preflight(run,cfg=None,selected=None):
+    selected=selected or list(MODELS)
     errors=[];checks=[]
     for n,suffix in [(1,'structure'),(2,'onchain'),(3,'research')]:
         path=run/f'audit_{n}_{suffix}.json'
         if not path.exists():errors.append(f'Missing {path.name}');continue
         obj=json.loads(path.read_text(encoding='utf8'));checks.append({'audit':n,'integrity_passed':obj.get('all_integrity_passed')})
         if not obj.get('all_integrity_passed'):errors.append(f'Audit {n} integrity did not pass')
+        if not set(selected).issubset(obj.get('models',range(1,8))):errors.append(f'Audit {n} does not cover selected models')
     cfg=cfg or dict(DEFAULTS);selected=selected or list(MODELS)
     needs={1:[],2:['liquidations_model_table.csv'],3:['liquidations_model_table.csv','recursive_candidates_full_history.csv' if cfg['recursive_label']=='temporal' else 'recursive_receipt_verification.csv'],4:['liquidations_model_table.csv','liquidations_hourly_full_period.csv','market_prices_hourly_full_period.csv'],5:['exposures_valued_sample.csv'],6:[],7:[]}
     try:
@@ -72,9 +74,15 @@ def main(argv=None):
     parser.add_argument('model',choices=['check','all']+[f'rq{i}' for i in range(1,8)])
     parser.add_argument('--data-run',type=Path,default=DEFAULT_RUN);parser.add_argument('--config',type=Path)
     parser.add_argument('--out',type=Path);parser.add_argument('--allow-exploratory',action='store_true')
+    parser.add_argument('--check-models',nargs='+',type=int,choices=range(1,8),help='Limit check to these RQs; only valid with check')
+    parser.add_argument('--models',nargs='+',type=int,choices=range(1,8),help='Run a selected subset; only valid with all')
     parser.add_argument('--smoke',action='store_true',help='Small scenario grid; full historical RQ2/3/4 data still used')
     args=parser.parse_args(argv);cfg=config(args.config)
+    require(args.check_models is None or args.model=='check','--check-models requires check')
+    require(args.models is None or args.model=='all','--models requires all')
     selected=list(MODELS) if args.model in ('all','check') else [int(args.model[2:])]
+    if args.check_models:selected=args.check_models
+    if args.models:selected=list(dict.fromkeys(args.models))
     gate=preflight(args.data_run,cfg,selected)
     if args.model=='check':print(json.dumps(gate,ensure_ascii=False,indent=2));return 0 if gate['passed'] else 2
     require(gate['passed'],'Source integrity gate failed: '+ '; '.join(gate['errors']))
@@ -88,6 +96,7 @@ def main(argv=None):
     manifest={'started_utc':datetime.now(timezone.utc).isoformat(),'mode':'smoke' if args.smoke else 'research_run',
        'argv':sys.argv[1:] if argv is None else argv,'data_run':str(args.data_run.resolve()),'config':cfg,'preflight':gate,
        'versions':{'defi_models':__version__,'python':platform.python_version(),'numpy':np.__version__,'scipy':scipy.__version__},'models':[]}
+    manifest['code_files']=[{'path':str(p.relative_to(ROOT)),'sha256':sha(p)} for p in sorted((ROOT/'defi_models').glob('*.py'))]
     failed=False
     for i in selected:
         target=output/f'rq{i}';target.mkdir();started=time.monotonic();print(f'RQ{i} starting',flush=True)
@@ -105,6 +114,16 @@ def main(argv=None):
        provenance='raw logical digest in audit_1_structure.json' if p.suffix=='.sqlite' else 'consumed file hash') for p in sorted(data.used)]
     manifest['finished_utc']=datetime.now(timezone.utc).isoformat();manifest['all_executed']=not failed
     write_json(output/'manifest.json',manifest)
+    if not failed and any(r['rq']==7 for r in manifest['models']):
+        try:
+            from .policy_report import generate
+            generate(output,output/'rq7/policy_report')
+            manifest['policy_report']={'execution':'completed','folder':'rq7/policy_report'}
+        except Exception as exc:
+            failed=True;manifest['all_executed']=False
+            manifest['policy_report']={'execution':'failed','error':str(exc)}
+            print(f'RQ7 report FAILED: {exc}',flush=True)
+        write_json(output/'manifest.json',manifest)
     text=['# Kết quả chạy mô hình','',f'Chế độ: {manifest["mode"]}.','',
           '| RQ | Chạy | Phạm vi kết quả |','|---|---|---|']
     text += [f'| RQ{r["rq"]} | {r["execution"]} | {r.get("readiness",r.get("error",""))} |' for r in manifest['models']]
