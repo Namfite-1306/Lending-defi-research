@@ -48,12 +48,14 @@ def config(path):
 
 def preflight(run,cfg=None,selected=None):
     selected=selected or list(MODELS)
+    selected=selected or list(MODELS)
     errors=[];checks=[]
     for n,suffix in [(1,'structure'),(2,'onchain'),(3,'research')]:
         path=run/f'audit_{n}_{suffix}.json'
         if not path.exists():errors.append(f'Missing {path.name}');continue
         obj=json.loads(path.read_text(encoding='utf8'));checks.append({'audit':n,'integrity_passed':obj.get('all_integrity_passed')})
         if not obj.get('all_integrity_passed'):errors.append(f'Audit {n} integrity did not pass')
+        if not set(selected).issubset(obj.get('models',range(1,8))):errors.append(f'Audit {n} does not cover selected models')
         if not set(selected).issubset(obj.get('models',range(1,8))):errors.append(f'Audit {n} does not cover selected models')
     cfg=cfg or dict(DEFAULTS);selected=selected or list(MODELS)
     needs={1:[],2:['liquidations_model_table.csv'],3:['liquidations_model_table.csv','recursive_candidates_full_history.csv' if cfg['recursive_label']=='temporal' else 'recursive_receipt_verification.csv'],4:['liquidations_model_table.csv','liquidations_hourly_full_period.csv','market_prices_hourly_full_period.csv'],5:['exposures_valued_sample.csv'],6:[],7:[]}

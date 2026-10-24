@@ -25,18 +25,29 @@ Code trong `defi_models/` đọc dữ liệu local, không crawl lại, không g
 
 ## 1. Cài đặt và kiểm tra
 
-Mở PowerShell trong thư mục `defi-research`:
+Mở PowerShell trong thư mục `Lending-defi-research`. Khi chưa có `.venv`, tạo và cài thư viện:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-models.txt
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
 .\.venv\Scripts\python.exe -m defi_models check
+```
+
+Nếu `python` là phiên bản cũ, thay lệnh đầu bằng `py -3.12 -m venv .venv` hoặc đường dẫn Python >= 3.11. Không cần activate môi trường. Nếu đã có `.venv`, dùng Python trong đó; tránh chạy lại `python -m venv .venv` bằng phiên bản Python khác vì có thể giữ lại thư viện biên dịch không tương thích.
+
+Có thể dùng `scripts/setup_models.ps1 -Python 'duong-dan-python.exe'`. Script tạo môi trường nếu chưa có, cài thư viện, kiểm tra import NumPy/SciPy và kiểm tra data. Tham số `-Python` chỉ dùng khi tạo môi trường mới. Thêm `-SkipDataCheck` nếu chỉ cài thư viện để chạy test, chưa có dataset. Nếu PowerShell chặn script, dùng trực tiếp các lệnh Python bên trên.
+
+Nếu test báo `cannot import name '_ccallback_c'` hoặc SciPy `extension modules cannot be imported`, kiểm tra Python đang dùng và cài lại wheel tương thích trong `.venv`:
+
+```powershell
+.\.venv\Scripts\python.exe --version
+.\.venv\Scripts\python.exe -m pip install --force-reinstall --no-cache-dir --only-binary=:all: -r requirements-models.txt
+.\.venv\Scripts\python.exe -c 'import numpy, scipy; from scipy.optimize import minimize; print(numpy.__version__, scipy.__version__)'
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-Nếu `python` là phiên bản cũ, thay lệnh đầu bằng `py -3.12 -m venv .venv` hoặc đường dẫn Python >= 3.11. Không cần activate môi trường. Đã có `.venv` đã kiểm tra trên máy hiện tại.
-
-Có thể dùng `scripts/setup_models.ps1 -Python 'duong-dan-python.exe'`. Script tạo môi trường, cài thư viện và kiểm tra data. Nếu PowerShell chặn script, dùng trực tiếp các lệnh Python bên trên.
+Lệnh script tương đương cho bước sửa thư viện: `.\scripts\setup_models.ps1 -Repair -SkipDataCheck`. `pip install` thông thường có thể báo đã cài đủ do metadata cũ, dù file `.pyd` còn thuộc Python khác (ví dụ `cp312` trong môi trường Python 3.14). Các unit test dùng fixture tổng hợp và không yêu cầu dataset nghiên cứu; `defi_models check` kiểm tra dataset riêng sau đó.
 
 Dataset mặc định: `data/runs/recovery_20261020/`. Folder này không nằm trên GitHub. Máy khác phải lấy dữ liệu riêng, giữ cấu trúc và các file audit/freeze manifest. Dùng `--data-run 'D:/du-lieu/recovery_20261020'` khi dữ liệu ở nơi khác.
 
