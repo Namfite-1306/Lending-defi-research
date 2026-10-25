@@ -48,7 +48,6 @@ def config(path):
 
 def preflight(run,cfg=None,selected=None):
     selected=selected or list(MODELS)
-    selected=selected or list(MODELS)
     errors=[];checks=[]
     for n,suffix in [(1,'structure'),(2,'onchain'),(3,'research')]:
         path=run/f'audit_{n}_{suffix}.json'
@@ -56,8 +55,7 @@ def preflight(run,cfg=None,selected=None):
         obj=json.loads(path.read_text(encoding='utf8'));checks.append({'audit':n,'integrity_passed':obj.get('all_integrity_passed')})
         if not obj.get('all_integrity_passed'):errors.append(f'Audit {n} integrity did not pass')
         if not set(selected).issubset(obj.get('models',range(1,8))):errors.append(f'Audit {n} does not cover selected models')
-        if not set(selected).issubset(obj.get('models',range(1,8))):errors.append(f'Audit {n} does not cover selected models')
-    cfg=cfg or dict(DEFAULTS);selected=selected or list(MODELS)
+    cfg=cfg or dict(DEFAULTS)
     needs={1:[],2:['liquidations_model_table.csv'],3:['liquidations_model_table.csv','recursive_candidates_full_history.csv' if cfg['recursive_label']=='temporal' else 'recursive_receipt_verification.csv'],4:['liquidations_model_table.csv','liquidations_hourly_full_period.csv','market_prices_hourly_full_period.csv'],5:['exposures_valued_sample.csv'],6:[],7:[]}
     try:
         data=Data(run,cfg)
@@ -72,7 +70,7 @@ def preflight(run,cfg=None,selected=None):
     return {'passed':not errors,'checks':checks,'errors':errors,'note':'Integrity is not full-model readiness; RQ5-7 require exploratory flag'}
 
 def main(argv=None):
-    parser=argparse.ArgumentParser(description='Offline RQ1–7 research runners; see README_MODELS.md')
+    parser=argparse.ArgumentParser(description='Offline RQ1–7 research runners; see docs/models/README_MODELS.md')
     parser.add_argument('model',choices=['check','all']+[f'rq{i}' for i in range(1,8)])
     parser.add_argument('--data-run',type=Path,default=DEFAULT_RUN);parser.add_argument('--config',type=Path)
     parser.add_argument('--out',type=Path);parser.add_argument('--allow-exploratory',action='store_true')
@@ -88,7 +86,7 @@ def main(argv=None):
     gate=preflight(args.data_run,cfg,selected)
     if args.model=='check':print(json.dumps(gate,ensure_ascii=False,indent=2));return 0 if gate['passed'] else 2
     require(gate['passed'],'Source integrity gate failed: '+ '; '.join(gate['errors']))
-    if any(i>=5 for i in selected):require(args.allow_exploratory,'RQ5–7 need --allow-exploratory: sampled exposures / uncalibrated simulation. Read README_MODELS.md')
+    if any(i>=5 for i in selected):require(args.allow_exploratory,'RQ5–7 need --allow-exploratory: sampled exposures / uncalibrated simulation. Read docs/models/README_MODELS.md')
     if args.smoke:
         cfg.update(shock_step=.1,shock_max=.3,bootstrap_repetitions=30,cascade_shocks=[.2],max_rounds=3,
                    policy_close_factors=[.5],policy_bonuses=[.05],policy_lt_shifts=[0.0],hawkes_half_lives_hours=[.5,2])

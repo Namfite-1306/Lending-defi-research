@@ -15,3 +15,6 @@ output/research_h124_*/
 output/research_h123_repair_*/
 output/research_h123_sources_*/
 data/research_h123_sources_*/
+tmp/
+output/restructure_*/
+*.log

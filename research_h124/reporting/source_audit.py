@@ -1,6 +1,7 @@
 """Independent read-only checks of new source pages, quotes and primary model scope."""
 import gzip,json,sqlite3
 from pathlib import Path
+from . import PACKAGE_DIR,source_files
 from .next_common import *
 from .market_prices import parse_page,LATENCY
 
@@ -45,7 +46,7 @@ def run():
       'old_files_checked':len(protected),'old_outputs_preserved':bool(protected) and not mismatches,'old_output_mismatches':mismatches,
       'priced_quotes_verified':quote_checks,'quarantined_pages':quarantined,'same_test_support':sorted(support),'primary_end_exclusive':PRIMARY_END_UTC,
       'input_hashes':{str(p.relative_to(CANONICAL)):digest(p) for p in inputs},
-      'source_hashes':{p.name:digest(p) for p in Path(__file__).parent.glob('*.py')},
+      'source_hashes':{p.relative_to(PACKAGE_DIR).as_posix():digest(p) for p in source_files()},
       'limitations':['Verifies stored source consistency; not an independent exchange/provider confirmation','PIT model misspecification remains despite technical audit passing']}
     save(OUT/'source_audit.json',result)
     if errors:raise RuntimeError('Source audit failed; inspect source_audit.json')

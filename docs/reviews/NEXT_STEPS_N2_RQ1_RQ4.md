@@ -12,7 +12,7 @@ Cập nhật 22/10/2026 sau tích hợp commit mô hình từ GitHub. Người 2
 
 ## 1. Chốt đặc tả và chuẩn bị mã khi đang chờ dữ liệu — D1-N2
 
-Dùng `configs/models.example.json` làm mẫu, chốt bản cấu hình riêng cho thí nghiệm của Người 2 và đặc tả đầu vào. Xem [README_MODELS.md](README_MODELS.md) để dùng đúng CLI đã có; chưa cần tạo pipeline RQ1/RQ4 song song trong `defi_data/`.
+Dùng `configs/models.example.json` làm mẫu, chốt bản cấu hình riêng cho thí nghiệm của Người 2 và đặc tả đầu vào. Xem [README_MODELS.md](../models/README_MODELS.md) để dùng đúng CLI đã có; chưa cần tạo pipeline RQ1/RQ4 song song trong `defi_data/`.
 
 | Nội dung | RQ1 | RQ4 |
 |---|---|---|

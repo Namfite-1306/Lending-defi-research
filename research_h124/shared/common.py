@@ -3,7 +3,7 @@ import os
 from contextlib import contextmanager
 from pathlib import Path
 from datetime import datetime,timezone
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 def resolve_source():
     for name in ['merged_7rq_20261023_final','full_7rq_20261022_final']:
         file=ROOT/'results'/name/'manifest.json'

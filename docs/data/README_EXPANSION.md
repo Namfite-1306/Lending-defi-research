@@ -1,6 +1,6 @@
 # Triển khai A–E: kỳ mục tiêu đến 30/09/2026
 
-**Lưu ý:** đây là luồng expansion cũ, không phải lệnh chạy mô hình. Bản sửa crawl/RPC: [README_CRAWL.md](README_CRAWL.md). Chạy RQ bằng dữ liệu recovery: [README_MODELS.md](README_MODELS.md). Không cần crawl lại để chạy mô hình offline.
+**Lưu ý:** đây là luồng expansion cũ, không phải lệnh chạy mô hình. Bản sửa crawl/RPC: [README_CRAWL.md](README_CRAWL.md). Chạy RQ bằng dữ liệu recovery: [README_MODELS.md](../models/README_MODELS.md). Không cần crawl lại để chạy mô hình offline.
 
 ## Phạm vi và nơi lưu
 
@@ -85,7 +85,7 @@ Sau khi có đủ dữ liệu lịch sử và endpoint hoạt động, tạo l�
 
 Đã chạy **46/46 test offline**, gồm 20 test hồi quy mới trong `tests/test_review_regressions.py`, có cả đường hợp lệ và đường phải chặn. Chưa chạy lại toàn bộ qua RPC thật; sửa code không cung cấp thêm archive history cho các endpoint đang prune.
 
-Kế hoạch bàn giao Người 2 và lệnh chạy tiếp nằm ở [NEXT_STEPS_N2_RQ1_RQ4.md](NEXT_STEPS_N2_RQ1_RQ4.md).
+Kế hoạch bàn giao Người 2 và lệnh chạy tiếp nằm ở [NEXT_STEPS_N2_RQ1_RQ4.md](../reviews/NEXT_STEPS_N2_RQ1_RQ4.md).
 
 ## Nguồn
 

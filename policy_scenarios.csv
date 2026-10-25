@@ -1,7 +1,0 @@
-﻿scenario_id,name,close_factor,bonus,lt_shift,description
-S0,Co_so,0.5,0.05,0.0,Cau hinh chuan hien tai Aave V3
-S1,Thuong_thap,0.5,0.03,0.0,Giam phan thuong bot xuong 3%
-S2,Thuong_cao,0.5,0.08,0.0,Tang phan thuong bot len 8%
-S3,Nguong_than_trong,0.5,0.05,0.03,"Siet chat an toan, tang LT 3%"
-S4,Xu_ly_nhieu_hon,1.0,0.05,0.0,Cho phep tra het 100% no trong 1 lan
-S5,Bao_ve_nguoi_vay,0.25,0.03,0.03,Giam CF xuong 25% va thuong 3% de bao ve nguoi vay
