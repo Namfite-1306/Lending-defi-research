@@ -1,0 +1,416 @@
+[
+  {
+    "window": "common_calendar_2024",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "protocol": "aave_v3",
+    "metric": "count",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 123,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.0017536675371909113,
+      0.004526132053435751
+    ],
+    "top1_percent_95": [
+      0.055969200005554554,
+      0.08662186621074681
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_calendar_2024",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "protocol": "aave_v3",
+    "metric": "USDC_upper",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 123,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.07799853822281622,
+      0.31973612840221666
+    ],
+    "top1_percent_95": [
+      0.399684886113309,
+      0.7025443568699352
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_calendar_2024",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "protocol": "compound_v3_usdc",
+    "metric": "count",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 31,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.0005652416769540503,
+      0.009077226605778196
+    ],
+    "top1_percent_95": [
+      0.02814945226917058,
+      0.06537019179256402
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_calendar_2024",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "protocol": "compound_v3_usdc",
+    "metric": "USDC_upper",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 31,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.1234569869364716,
+      0.8210052232259684
+    ],
+    "top1_percent_95": [
+      0.3488825072088273,
+      0.9062305130332619
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_calendar_2024",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "protocol": "morpho_blue",
+    "metric": "count",
+    "status": "insufficient_days",
+    "days": 1,
+    "replications": 199
+  },
+  {
+    "window": "common_calendar_2024",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "protocol": "morpho_blue",
+    "metric": "USDC_upper",
+    "status": "insufficient_days",
+    "days": 1,
+    "replications": 199
+  },
+  {
+    "window": "common_calendar_2024",
+    "token": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+    "protocol": "aave_v3",
+    "metric": "count",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 46,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.0016865988865851491,
+      0.013221993327185128
+    ],
+    "top1_percent_95": [
+      0.04174996933644057,
+      0.10072198308758429
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_calendar_2024",
+    "token": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+    "protocol": "aave_v3",
+    "metric": "USDC_upper",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 46,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.04393715083906291,
+      0.34195290066968786
+    ],
+    "top1_percent_95": [
+      0.1915661269550315,
+      0.5799250709789612
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_calendar_2024",
+    "token": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+    "protocol": "compound_v3_usdc",
+    "metric": "count",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 14,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.0029719516912205253,
+      0.02953916910331383
+    ],
+    "top1_percent_95": [
+      0.045454545454545456,
+      0.18181818181818182
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_calendar_2024",
+    "token": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+    "protocol": "compound_v3_usdc",
+    "metric": "USDC_upper",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 14,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.17987604287323788,
+      0.5196134503365363
+    ],
+    "top1_percent_95": [
+      0.3355231940502969,
+      0.7206783928789557
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_calendar_2024",
+    "token": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+    "protocol": "morpho_blue",
+    "metric": "count",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 8,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.006835937500000007,
+      0.38775510204081637
+    ],
+    "top1_percent_95": [
+      0.13579545454545452,
+      0.7142857142857143
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_calendar_2024",
+    "token": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+    "protocol": "morpho_blue",
+    "metric": "USDC_upper",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 8,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.09416957953009478,
+      0.8408606768617629
+    ],
+    "top1_percent_95": [
+      0.2801207610885619,
+      0.9437951645543919
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_extended",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "protocol": "aave_v3",
+    "metric": "count",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 421,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.0003754322866945944,
+      0.000687480048076326
+    ],
+    "top1_percent_95": [
+      0.06270386843474904,
+      0.08438553187861328
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_extended",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "protocol": "aave_v3",
+    "metric": "USDC_upper",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 421,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.014312527190421163,
+      0.040036903164276876
+    ],
+    "top1_percent_95": [
+      0.4646198989652524,
+      0.5790850773514234
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_extended",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "protocol": "compound_v3_usdc",
+    "metric": "count",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 100,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.0004960405675662821,
+      0.0018861747151817728
+    ],
+    "top1_percent_95": [
+      0.025380331843321464,
+      0.04968112753758648
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_extended",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "protocol": "compound_v3_usdc",
+    "metric": "USDC_upper",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 100,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.08271494810816664,
+      0.29067645615063803
+    ],
+    "top1_percent_95": [
+      0.42144335214320666,
+      0.7765186412645537
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_extended",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "protocol": "morpho_blue",
+    "metric": "count",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 22,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.0101221174629696,
+      0.13935301732781333
+    ],
+    "top1_percent_95": [
+      0.09983870967741935,
+      0.4121067031463747
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_extended",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "protocol": "morpho_blue",
+    "metric": "USDC_upper",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 22,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.11606769203676746,
+      0.918293614216095
+    ],
+    "top1_percent_95": [
+      0.26013727659860264,
+      0.9612989464887748
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_extended",
+    "token": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+    "protocol": "aave_v3",
+    "metric": "count",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 178,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.000638965525552344,
+      0.0015534847424377568
+    ],
+    "top1_percent_95": [
+      0.045381397864310044,
+      0.07037259079293282
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_extended",
+    "token": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+    "protocol": "aave_v3",
+    "metric": "USDC_upper",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 178,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.01791481317472978,
+      0.05526563704278096
+    ],
+    "top1_percent_95": [
+      0.2953870591238566,
+      0.4844225888327636
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_extended",
+    "token": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+    "protocol": "compound_v3_usdc",
+    "metric": "count",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 45,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.001871548599384469,
+      0.007418722671602078
+    ],
+    "top1_percent_95": [
+      0.023046672428694903,
+      0.06495933972569486
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_extended",
+    "token": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+    "protocol": "compound_v3_usdc",
+    "metric": "USDC_upper",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 45,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.12078908916869634,
+      0.4767817427625531
+    ],
+    "top1_percent_95": [
+      0.22506977481136967,
+      0.6802773695307931
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_extended",
+    "token": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+    "protocol": "morpho_blue",
+    "metric": "count",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 74,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.0016389399253330915,
+      0.005176673983668016
+    ],
+    "top1_percent_95": [
+      0.030736793327154774,
+      0.07380642954856352
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  },
+  {
+    "window": "common_extended",
+    "token": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+    "protocol": "morpho_blue",
+    "metric": "USDC_upper",
+    "status": "descriptive_day_cluster_bootstrap",
+    "days": 74,
+    "replications": 199,
+    "hhi_normalized_95": [
+      0.04976175713039161,
+      0.1940135053740486
+    ],
+    "top1_percent_95": [
+      0.1812647897798691,
+      0.5075837956158937
+    ],
+    "scope": "Resamples observed event days; does not include event-free days, owner uncertainty or protocol-level causal inference"
+  }
+]

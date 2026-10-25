@@ -1,0 +1,27 @@
+{
+  "updated_utc": "2026-10-24T03:01:12.599476+00:00",
+  "status": "completed_scoped",
+  "bins": 334080,
+  "features": [
+    "log1p_Borrow_events_prior24h",
+    "log1p_Repay_events_prior24h",
+    "log1p_Supply_events_prior24h",
+    "log1p_Withdraw_events_prior24h",
+    "log_Borrow_Repay_activity_ratio_prior24h"
+  ],
+  "source_events": {
+    "Borrow": 734504,
+    "Repay": 580318,
+    "Supply": 1263666,
+    "Withdraw": 1001219
+  },
+  "availability_delay_seconds": 30,
+  "panel_sha256": "f4b6c06440ed676fb6f523540eb93d12d71c69b1b88f4a2f98f67f1d332ee758",
+  "base_panel_sha256": "77b2455913aef7dc27a53c4946ec092b97146c454c0001b90317e8ff8c091a6a",
+  "limitations": [
+    "Activity counts are not TVL, risk debt or HF queue",
+    "30s availability is a conservative assumption, not actual receipt timestamps",
+    "Short/slow liquidation history shifts by availability delay before lagging",
+    "Endogenous activity does not establish causal contagion"
+  ]
+}

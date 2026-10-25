@@ -1,0 +1,168 @@
+{
+  "created_utc": "2026-10-24T05:22:26.750990+00:00",
+  "primary_end_exclusive": "2026-04-01T00:00:00+00:00",
+  "source_data": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\data\\runs\\recovery_20261020",
+  "legacy_code_scope": "RQ2 legacy history may extend beyond primary period; RQ3/5/6 use block21762264 where applicable",
+  "files": [
+    {
+      "export": "evidence\\H1_quarter_scope.json",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h123_sources_20261024\\h1_primary_scope.json",
+      "sha256": "72d9d8e59dd55af4293a9dc730607e61fc00bf55887272ecd70d317ac5fbb0c2"
+    },
+    {
+      "export": "evidence\\H1_baseline.csv",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h124_20261024\\h1\\baseline_by_quarter.csv",
+      "sha256": "215f1e21d4cb3fa46cecf4e080b1ef486bbe2307ab529cc3a8dfea5ca85bcb4b"
+    },
+    {
+      "export": "evidence\\H1_stress_curves.csv",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h124_20261024\\h1\\stress_curves.csv",
+      "sha256": "45a9088d541e3f68f574f7c0dfd5226dd6cbe02331e222b0f4a3407d2b17f70a"
+    },
+    {
+      "export": "evidence\\H1_breakpoints.csv",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h124_20261024\\h1\\breakpoints.csv",
+      "sha256": "741d197fd3246dbed450b618c241fb57a43b6f5a2a289136af72cb75d85cb636"
+    },
+    {
+      "export": "evidence\\H1_leave_one_quarter_out.csv",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h124_20261024\\h1\\leave_one_quarter_out.csv",
+      "sha256": "ed51e9054232cdc4c05c457ffa9adacf93de843fdd1562abe69b66cab72ab691"
+    },
+    {
+      "export": "evidence\\H1_denominator_sensitivity.csv",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h123_repair_20261024\\h1\\denominator_sensitivity.csv",
+      "sha256": "8f33589a3af19e4070e97524df9ad56c9a18d98a039ee2b22d49d873c477f02a"
+    },
+    {
+      "export": "evidence\\H2_concentration_market.csv",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h123_sources_20261024\\h2_market_concentration.csv",
+      "sha256": "1a9191d7493ca156a74dbe4476e9780aa572cb069fc7295b7e56903e2dff0800"
+    },
+    {
+      "export": "evidence\\H2_coverage_market.csv",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h123_sources_20261024\\h2_market_coverage.csv",
+      "sha256": "bf44d5b85f7589ea8189697ad559f6076c8502eef9873363231c164d25fef0c7"
+    },
+    {
+      "export": "evidence\\H2_readiness.json",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h123_sources_20261024\\market_data_readiness.json",
+      "sha256": "801afb03fb1f7889a1b11198a554646a0cf350824d88eb8873dbc8e562e51d59"
+    },
+    {
+      "export": "evidence\\H2_Comet_summary.json",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h124_20261024\\h2\\summary.json",
+      "sha256": "205bff6af42844013787b5b3109e9564e21f48ba1beafc5de0c3e205da5cd04a"
+    },
+    {
+      "export": "evidence\\H2_Comet_state_validation.json",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h124_20261024\\h2\\archive_state_validation.json",
+      "sha256": "0330d4a39e531a0a7345c5f97dd2d3f1e7b22898eff5b3049a60faae271e2a76"
+    },
+    {
+      "export": "evidence\\H2_repair_concentration_OLDER_SCOPE.csv",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h123_repair_20261024\\h2\\concentration.csv",
+      "sha256": "f3f0f7c11137502a9b28f634a269e21fa1cef068d880535921f2a8d6c8fe7071"
+    },
+    {
+      "export": "evidence\\H2_day_bootstrap_OLDER_SCOPE.json",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h123_repair_20261024\\h2\\uncertainty.json",
+      "sha256": "07842321a50d972472244273c87d65c41c2a7b00c6b2cf7a893a54f8b461c06e"
+    },
+    {
+      "export": "evidence\\H3_models.csv",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h123_sources_20261024\\h3\\model_comparison.csv",
+      "sha256": "080581e3f7009d48b9235cca0c8e40ad370b43afff561eb7eeebba03715c66a0"
+    },
+    {
+      "export": "evidence\\H3_residuals.json",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h123_sources_20261024\\h3\\residuals.json",
+      "sha256": "e7dfb491a35b550232b7e02b2ed619a0078833649795e7c5c48dde21481ac555"
+    },
+    {
+      "export": "evidence\\H3_rolling.csv",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h123_sources_20261024\\h3\\rolling_quarter_scores.csv",
+      "sha256": "529cd3974f82744785587e898b7135ad5a3915c5f76e459ebaa74974a8283346"
+    },
+    {
+      "export": "evidence\\H3_common_test.csv",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h123_sources_20261024\\h3\\common_primary_comparison.csv",
+      "sha256": "37e051650d737ec6700d7606da2113373d306cff5f7df6858b60cb5af166731a"
+    },
+    {
+      "export": "evidence\\H3_probability_calibration.csv",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h123_sources_20261024\\h3\\event_calibration.csv",
+      "sha256": "f180f12b74d171d170cbe5b177ab8743dc1b203debf24ed2ef15089d3b214888"
+    },
+    {
+      "export": "evidence\\H3_protocol.json",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h123_sources_20261024\\h3\\protocol.json",
+      "sha256": "e8d14be3a577197773656efdacbea6cad88003beb613cb7ac56ff0f23270e4d1"
+    },
+    {
+      "export": "evidence\\H3_activity_readiness.json",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h123_sources_20261024\\activity_readiness.json",
+      "sha256": "1845e97538a8838a63a98cb12dfeaa47597cbc980758de8694405fec0983fe79"
+    },
+    {
+      "export": "evidence\\RQ3_summary_20250202.json",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq3\\summary.json",
+      "sha256": "f81e7aa322fe276281b95e5d2903fc939e73ce69220149c42cab36b892ac887f"
+    },
+    {
+      "export": "evidence\\RQ3_balance_20250202.csv",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq3\\matching_balance.csv",
+      "sha256": "9279777c4b6603bb8a55edcb14f7f30a530cbaa5cf6a45c59001917478d9234a"
+    },
+    {
+      "export": "evidence\\RQ5_summary_SAMPLED.json",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq5\\summary.json",
+      "sha256": "2b3cbb5b5a57f15e2b589130ee7208944e07f662b1ddf8a6bd4f698ea0040d29"
+    },
+    {
+      "export": "evidence\\RQ5_overlap_SAMPLED.csv",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq5\\protocol_overlap.csv",
+      "sha256": "4513e962680af0a239c7a53927c4ba3c0d01aae22de5f8fad11b777980e85feb"
+    },
+    {
+      "export": "evidence\\RQ6_stylized_scenarios.csv",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq6\\cascade_scenarios.csv",
+      "sha256": "23b7d774a94852478083389716387f636dc7cad4d9e2ca31738fed06e9748f6d"
+    },
+    {
+      "export": "evidence\\RQ6_summary.json",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq6\\summary.json",
+      "sha256": "857160d43f2411b20fee7ad7635dc75858ab6e06e8b0f0b3efb90617de75a5cc"
+    },
+    {
+      "export": "evidence\\RQ7_policy_grid_STYLIZED.csv",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq7\\policy_grid.csv",
+      "sha256": "89403d7adddbf24198d4db88c6de1a94ca7c95ca1e04dda654785fe9ed01cf44"
+    },
+    {
+      "export": "evidence\\RQ7_summary.json",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq7\\summary.json",
+      "sha256": "c2059d4d2325b588e564389fc4884c10c8161a16f63292b8163d9061bc79cf1a"
+    },
+    {
+      "export": "evidence\\cascade_actual_path_DIAGNOSTIC.csv",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h124_v2_20261024\\cascade\\actual_path_backtest.csv",
+      "sha256": "2505ca19c9ab4b40fed7ae1773a501d16dff74e7c94b459bdadb8c53617ca22f"
+    },
+    {
+      "export": "evidence\\source_audit.json",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h123_sources_20261024\\source_audit.json",
+      "sha256": "0694fe2b4ca1285679d20ede142fd4a6ea0afec9d2a4dd15315709c4a4035cde"
+    },
+    {
+      "export": "evidence\\tests.json",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h123_sources_20261024\\tests.json",
+      "sha256": "e5bac1ea942e6619295966dec8ce155f74132f0a411c314958648275aa920c83"
+    },
+    {
+      "export": "evidence\\source_report.md",
+      "source": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\research_h123_sources_20261024\\BAO_CAO_NGUON_VA_KET_QUA_H1_H2_H3.md",
+      "sha256": "5321c98b812de3eceacfc5d14188d451d2018385505030442024ae31d364c09a"
+    }
+  ]
+}

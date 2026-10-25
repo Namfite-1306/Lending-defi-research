@@ -1,0 +1,10 @@
+{
+  "updated_utc": "2026-10-24T03:19:12.483636+00:00",
+  "run": 249,
+  "passed": 243,
+  "skipped": 6,
+  "failures": 0,
+  "errors": 0,
+  "log": "output/research_h123_sources_20261024/tests_full.log",
+  "initial_sandbox_attempt": "Socket restrictions; rerun with local socket access passed"
+}

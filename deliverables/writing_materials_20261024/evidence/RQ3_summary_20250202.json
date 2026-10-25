@@ -1,0 +1,44 @@
+{
+  "status": "exploratory",
+  "description": "Matched observational comparison using labels available before snapshot",
+  "limitations": [
+    "No-observed-motif controls are not proven unlevered",
+    "Temporal labels are candidates; verified positives are a small selected sample",
+    "Conditional associations and paired bootstrap are not causal identification; no population extrapolation",
+    "Bootstrap holds matching fixed; balance and unmatched treated must be reviewed"
+  ],
+  "label_mode": "temporal",
+  "cutoff_utc": "2025-02-02T23:59:47+00:00",
+  "outcome_end_utc": "2025-02-09T23:59:47+00:00",
+  "treated_in_snapshot": 3863,
+  "matched_pairs": 3656,
+  "unmatched_treated": 207,
+  "liquidation_risk_difference": 0.015317286652078774,
+  "paired_bootstrap_95": [
+    0.0069679978118161925,
+    0.02477434354485775
+  ],
+  "stress_eligibility_difference": 0.023522975929978117,
+  "regression": {
+    "status": "penalized_association_only",
+    "converged": true,
+    "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+    "coefficients": [
+      -8.81206125639492,
+      0.1873303386931735,
+      0.44129657807059264,
+      -10.630175164779601,
+      0.18517042803297806,
+      -0.3913469175735073
+    ],
+    "coefficient_names": [
+      "intercept",
+      "treated",
+      "log1p_debt_z",
+      "HF_z",
+      "ETH_share_z",
+      "BTC_share_z"
+    ],
+    "ridge": 0.001
+  }
+}

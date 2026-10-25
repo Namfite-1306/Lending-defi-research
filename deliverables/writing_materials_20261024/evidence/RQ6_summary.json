@@ -1,0 +1,34 @@
+{
+  "status": "exploratory",
+  "description": "Liquidation cascade sensitivity with no-impact controls",
+  "limitations": [
+    "Stylized simulator, not historical Aave execution or a validated full-system model",
+    "Each wallet action repays a proportional debt basket and seizes the largest available enabled collateral; real Aave requires a chosen debt/collateral pair",
+    "Generic uniform liquidity depth and square-root impact are user assumptions, not calibrated historical liquidity",
+    "No cross-DEX routing, intra-block ordering, flash-loan constraints or exact GHO risk/repayment conversion",
+    "Synchronous batch profitability uses tentative all-eligible sales; exclusions can make this a conservative execution screen",
+    "Terminal collateral shortfall is a model accounting measure, not recorded on-chain bad debt",
+    "No-policy-shock LT comparisons hold original balances fixed; they omit borrower responses"
+  ],
+  "snapshot": {
+    "block": 21762264,
+    "pool": "0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2",
+    "oracle": "0x54586be62e3c3580375ae3723c145253060ca0c2",
+    "provider": "0x41393e5e337606dc3821075af65aee84d7688cbd",
+    "pool_revision": 6,
+    "historical_borrowers": 32847,
+    "wallets_scanned": 32847,
+    "active_debt_wallets": 17084,
+    "passed": 17084,
+    "reported_debt_usd": "11113944830.70521725",
+    "failed_debt_usd": "0",
+    "borrower_history_complete": true,
+    "full_snapshot_complete": true,
+    "timing": "block end before pilot stress begins",
+    "all_market_dates": false
+  },
+  "liquidity_depth_usd": 100000000,
+  "historical_quote_calibration": false,
+  "scenarios": 6,
+  "warnings": []
+}

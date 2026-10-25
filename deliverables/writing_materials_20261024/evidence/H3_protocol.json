@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-10-24T03:01:12.934369+00:00",
+  "ridge_grid": [
+    0.0001,
+    0.001,
+    0.01
+  ],
+  "specs": [
+    "constant",
+    "market",
+    "activity",
+    "activity_history"
+  ],
+  "selection": "validation loglik; count-ratio screen 0.5–2 for selection; failed-screen controls retained",
+  "activity_panel_sha256": "f4b6c06440ed676fb6f523540eb93d12d71c69b1b88f4a2f98f67f1d332ee758",
+  "all_models_same_test_mask": true,
+  "test_previously_seen": true,
+  "new_untouched_holdout": false,
+  "target_period_complete": true,
+  "primary_end_exclusive": "2026-04-01T00:00:00+00:00"
+}

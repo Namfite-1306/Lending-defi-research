@@ -1,0 +1,32 @@
+{
+  "activity_history": {
+    "reference": "Monte Carlo iid-uniform PIT null; fixed training fit, not parametric event bootstrap",
+    "replications": 499,
+    "bins": 78643,
+    "segments": 270,
+    "KS": 0.0056588137014056406,
+    "max_within_segment_ACF": 0.016431306549999542,
+    "uniform_null_KS_p": 0.02,
+    "uniform_null_ACF_p": 0.002,
+    "limitations": [
+      "Predictive PIT calibration diagnostic, not parameter uncertainty or causal inference",
+      "Not numerically identical to earlier fixed-market parametric-bootstrap p-values",
+      "Data/model choice remains exploratory after earlier test inspection"
+    ]
+  },
+  "activity": {
+    "reference": "Monte Carlo iid-uniform PIT null; fixed training fit, not parametric event bootstrap",
+    "replications": 499,
+    "bins": 78643,
+    "segments": 270,
+    "KS": 0.008117436629277441,
+    "max_within_segment_ACF": 0.01763706140080665,
+    "uniform_null_KS_p": 0.002,
+    "uniform_null_ACF_p": 0.002,
+    "limitations": [
+      "Predictive PIT calibration diagnostic, not parameter uncertainty or causal inference",
+      "Not numerically identical to earlier fixed-market parametric-bootstrap p-values",
+      "Data/model choice remains exploratory after earlier test inspection"
+    ]
+  }
+}

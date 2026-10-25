@@ -1,0 +1,94 @@
+{
+  "updated_utc": "2026-10-24T03:20:11.015029+00:00",
+  "primary_start": "2023-01-27T00:00:00+00:00",
+  "primary_end_exclusive": "2026-04-01T00:00:00+00:00",
+  "last_quarter": "2026Q1",
+  "required_snapshots": 13,
+  "full_snapshots": 13,
+  "status": "completed_within_revised_scope",
+  "quarters": [
+    {
+      "quarter": "2023Q1",
+      "complete_and_hash_verified": true,
+      "historical_borrowers": 2440,
+      "active_debt_wallets": 1664
+    },
+    {
+      "quarter": "2023Q2",
+      "complete_and_hash_verified": true,
+      "historical_borrowers": 4438,
+      "active_debt_wallets": 2829
+    },
+    {
+      "quarter": "2023Q3",
+      "complete_and_hash_verified": true,
+      "historical_borrowers": 7411,
+      "active_debt_wallets": 4721
+    },
+    {
+      "quarter": "2023Q4",
+      "complete_and_hash_verified": true,
+      "historical_borrowers": 10953,
+      "active_debt_wallets": 6599
+    },
+    {
+      "quarter": "2024Q1",
+      "complete_and_hash_verified": true,
+      "historical_borrowers": 14617,
+      "active_debt_wallets": 8339
+    },
+    {
+      "quarter": "2024Q2",
+      "complete_and_hash_verified": true,
+      "historical_borrowers": 19238,
+      "active_debt_wallets": 10947
+    },
+    {
+      "quarter": "2024Q3",
+      "complete_and_hash_verified": true,
+      "historical_borrowers": 24675,
+      "active_debt_wallets": 13892
+    },
+    {
+      "quarter": "2024Q4",
+      "complete_and_hash_verified": true,
+      "historical_borrowers": 30691,
+      "active_debt_wallets": 16346
+    },
+    {
+      "quarter": "2025Q1",
+      "complete_and_hash_verified": true,
+      "historical_borrowers": 39072,
+      "active_debt_wallets": 18419
+    },
+    {
+      "quarter": "2025Q2",
+      "complete_and_hash_verified": true,
+      "historical_borrowers": 48281,
+      "active_debt_wallets": 22572
+    },
+    {
+      "quarter": "2025Q3",
+      "complete_and_hash_verified": true,
+      "historical_borrowers": 61433,
+      "active_debt_wallets": 27612
+    },
+    {
+      "quarter": "2025Q4",
+      "complete_and_hash_verified": true,
+      "historical_borrowers": 70147,
+      "active_debt_wallets": 28128
+    },
+    {
+      "quarter": "2026Q1",
+      "complete_and_hash_verified": true,
+      "historical_borrowers": 78281,
+      "active_debt_wallets": 29688
+    }
+  ],
+  "scope_change": "User excluded Q2/Q3 2026; original datasets/results retained, not relabelled as full 15-quarter coverage",
+  "limitations": [
+    "Within-scope interface/HF/debt reconciliation; independent-provider checks remain unavailable",
+    "Quarter-end stock is not high-frequency risk position history"
+  ]
+}

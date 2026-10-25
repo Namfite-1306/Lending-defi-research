@@ -1,0 +1,80 @@
+{
+  "updated_utc": "2026-10-24T03:20:10.313625+00:00",
+  "passed": true,
+  "errors": [],
+  "pages_verified": 1249,
+  "page_trade_rows_verified_including_overlap": 1249000,
+  "old_files_checked": 40,
+  "old_outputs_preserved": true,
+  "old_output_mismatches": [],
+  "priced_quotes_verified": 7262,
+  "quarantined_pages": [
+    {
+      "since": "1713068850000000000",
+      "reason": "First returned trade is 19525.7556 seconds after requested since; cannot verify initial gap. Raw page retained, excluded from coverage.",
+      "excluded_from_coverage": true
+    }
+  ],
+  "same_test_support": [
+    [
+      78643,
+      10448
+    ]
+  ],
+  "primary_end_exclusive": "2026-04-01T00:00:00+00:00",
+  "input_hashes": {
+    "data\\research_h123_sources_20261024\\activity_panel.npz": "f4b6c06440ed676fb6f523540eb93d12d71c69b1b88f4a2f98f67f1d332ee758",
+    "results\\research_h124_v2_20261024\\h4_prefix_data_readiness.json": "808bf17df2da156f5e8777b96044e004241fcdb3f467afacc748396d106fc9bb",
+    "results\\research_h124_20261024\\h2\\episodes.csv": "f42cad56ac647d36ae6faeaf09333634dc253cd5889dde5df6d48ea0d6279627",
+    "results\\research_h124_20261024\\h2\\collateral_legs.csv": "7f579a22ae8e9fad84d7f2ccf0abe74f267b5d0361187bbd7f987f0e65251e3f"
+  },
+  "source_hashes": {
+    "activity_controls.py": "5eeba24ac444d458055e2942723f96d8ee03b894ac37c2d5418283b84b361774",
+    "audit_v2.py": "a2e3a53e653275b1743b38e5fc109ac3cd802327669c0db2547fa8f49987f4ce",
+    "cascade.py": "b949a461d316cc998f990bde0f69e681794968e548d81280475314b0cbdacdf1",
+    "cascade_data.py": "f5a0d4a1cd1825c307e3287667a70dc4d051cd7d7c404275ffe35a5efc499b94",
+    "common.py": "aa9d10dbcee4a6c459e91e9665f890a522b8073892bfec8baa3f47f437318d77",
+    "h1.py": "b56ea40ad18769ae9834b879352a01a08ed6fc428fbf1bf84b3ddbf3eee27e9c",
+    "h1_analysis.py": "2c87cf649913cbec384e58cc64784e7f2e64a347c16efbe68177a47c8b145a7f",
+    "h1_attribution.py": "5a94e757f6b335af77f87c13e37aa03ed9b8950a606618c96bcf89f5ff66cac9",
+    "h2.py": "4e657a94f1680213686e026dbabe1b8448527a47b8e5949e66b45f5540d062bd",
+    "h2_v2.py": "39d87db9155a9099232f08ec395d3411bdd63122535efdafb763023fbdda9b7c",
+    "h2_validate.py": "188c74bb84c62c814568c184cbd8d45ed598993861c3d3b073da1afd88241983",
+    "h4.py": "f61e687a1d0a0095f20a33e912ae6c44c36f77bcd21801f52045fa8d20d06ba3",
+    "h4_data.py": "ecfe7fa1229b3e771040a9b09f0d1551394d1b6b9e4a42ee23b8fa735dc7b009",
+    "h4_extended.py": "fe904db4bae582b91d0034cc0db33bd0b70bf890fef7aae887d0a90320c29d7a",
+    "h4_extended_nb.py": "94eab32f340e228abf3589bbbc36eaddfb8db87074ccaf530d64d9be12845005",
+    "h4_nb.py": "cf01d3bfb32febf6b33534d0a7ab48653b8080b7ec17988ca3dad82410fbbc7c",
+    "h4_utilization.py": "ba0d415122021dc1cd60201b0d8bbca32c4c1129cb1036c86e6ae2118ed3f4f5",
+    "hurdle_model.py": "f8f3c50fa7d718e33a3c77f671045b17063f77d8dbee9ecca38796e59c28cda7",
+    "hurdle_rolling.py": "64b9f5601d7e675e6d5cd9542277751db3d61afa3d9912d419c4231003503fd3",
+    "hypotheses.py": "9cdc85416c0dd848925a6ff3e0a1b9e0af0c48a8e2b5928b1e298fb8cbebeea9",
+    "literature.py": "ab941e64492b3d827f62b89792f5cf789d3595920b6ab237d902b72523983b96",
+    "market_prices.py": "13d3941c889e3642d224bc0a7e77e1e80c76702cfed71fa5334e0021ce6b9659",
+    "model_quality_v2.py": "a8fdab3d6619e3859765a88c6e68874b2f7893081f8a68c9a3600f16986fce66",
+    "next_common.py": "18c6099eecac01cd44fb4fafd065751f849f9b6846a11b846489a3995c0e2e5d",
+    "offline_v2.py": "64f6b88ab38dac0225c5f4b30e1cb52e772db66e0052f4d5724a67f064534b4a",
+    "preflight.py": "886021f49fd607edbb4fc8c916a0a001e0b01aab87018d2f56912c0a016adfb0",
+    "primary_comparison.py": "a9dea6bb54a43c8980d3fe800c9d1ac58f545a1fb9a7e7074def9f21f39ac59d",
+    "quarter_context.py": "7285e666e9deb2f48ba4a4ad47e74a1a719c92b1487fd1fd3d0adbffa4c6e89b",
+    "repair_common.py": "a4687bf49a4821430f273a9678c039dc75448d9e51e8fa1d31bf10313dbca98d",
+    "repair_diagnostics.py": "5980e4d288e274184d6b1e933ebaeb8335add99cbb66e8c1b5fa6a6ad6660440",
+    "repair_h1.py": "0fde4833788240af50556649168c22ef50e8ca3d7d3a7c8c8e890033f6750c69",
+    "repair_h2.py": "c2988b3d46bf114329256b454e04e30905a0fae72277cec20ef14c757369c782",
+    "repair_h3.py": "29572a3331bd42c1cd6a186ff0df201f19235c371e1487621f3ac9a53f3c913c",
+    "repair_report.py": "13b6caf88cd9610aed7f4c50458b3ded2d4091dfa90d2d6930830884a06e475c",
+    "report.py": "f7642e50ee2bc88684179874d26bac64302c9537e0c6038e0b2a1e8ea5b70995",
+    "report_v2.py": "240215540efb5822bf5fa341eb065291183c68d4efeea61a2c8bbea6883c334a",
+    "residual_v2.py": "ee12783cb5f5880d84b0039957711db30893531b9028cdb53946a5962954c522",
+    "review_findings.py": "c409a342c8453f94b401a69f2d797c38623a57ba00585f9b83cac11578342d1b",
+    "runner_v2.py": "d82633241f6e82b8723f70c9baa3002f673dc6c8c1996acae98a5910b1d5103b",
+    "source_analysis.py": "808f2e4b9c6e23adb8802bfe2bd588ef95799e9bcef40b4985b0d85693ada07a",
+    "source_audit.py": "d1a3c10be598bfdafce594df6f48678f9b3339de7d39ff3928468f38f10fa681",
+    "v2_common.py": "ee46b43a547ca9efffa6f09ab2ac32d4d88d4dfb8395b8799d8c4e26bfd973b0",
+    "__init__.py": "f23ae4444ebfbe3c66028292297d54b793591977042c67d601854ad013437a79"
+  },
+  "limitations": [
+    "Verifies stored source consistency; not an independent exchange/provider confirmation",
+    "PIT model misspecification remains despite technical audit passing"
+  ]
+}

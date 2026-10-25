@@ -1,0 +1,14 @@
+{
+  "generated_utc": "2026-10-23T19:01:27.125751+00:00",
+  "selected": 64,
+  "passed": 54,
+  "mismatches": 0,
+  "requires_intra_block": 10,
+  "errors": 0,
+  "scope": "Pre-block principal/index accrued to event timestamp; excludes known earlier selected Comet logs in block",
+  "limitations": [
+    "Not full intra-transaction trace verification",
+    "Unlogged earlier market calls may exist",
+    "Cannot prove implementation equivalence across all upgrades"
+  ]
+}

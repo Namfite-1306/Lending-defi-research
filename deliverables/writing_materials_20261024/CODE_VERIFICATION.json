@@ -1,0 +1,120 @@
+{
+  "all_three_scripts_executed_on_real_data": true,
+  "validators_passed": true,
+  "all_outputs_match_frozen": true,
+  "files_checked": 14,
+  "checks": [
+    {
+      "rq": 3,
+      "file": "matched_pairs.csv",
+      "new_run": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\writing_code_check_20261024_rq3\\rq3\\matched_pairs.csv",
+      "reference": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq3\\matched_pairs.csv",
+      "sha256": "de73da89952a9cb5f856f465a01a7de0d79f362112081508c488ba9aa19990c6",
+      "same_as_frozen": true
+    },
+    {
+      "rq": 3,
+      "file": "matching_balance.csv",
+      "new_run": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\writing_code_check_20261024_rq3\\rq3\\matching_balance.csv",
+      "reference": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq3\\matching_balance.csv",
+      "sha256": "9279777c4b6603bb8a55edcb14f7f30a530cbaa5cf6a45c59001917478d9234a",
+      "same_as_frozen": true
+    },
+    {
+      "rq": 3,
+      "file": "summary.json",
+      "new_run": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\writing_code_check_20261024_rq3\\rq3\\summary.json",
+      "reference": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq3\\summary.json",
+      "sha256": "f81e7aa322fe276281b95e5d2903fc939e73ce69220149c42cab36b892ac887f",
+      "same_as_frozen": true
+    },
+    {
+      "rq": 6,
+      "file": "cascade_rounds.csv",
+      "new_run": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\writing_code_check_20261024_rq6\\rq6\\cascade_rounds.csv",
+      "reference": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq6\\cascade_rounds.csv",
+      "sha256": "7fa477e7bd906c9e7195c747cb6fb63235416f9f86f53f57d4faac4ade8ba39d",
+      "same_as_frozen": true
+    },
+    {
+      "rq": 6,
+      "file": "cascade_scenarios.csv",
+      "new_run": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\writing_code_check_20261024_rq6\\rq6\\cascade_scenarios.csv",
+      "reference": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq6\\cascade_scenarios.csv",
+      "sha256": "23b7d774a94852478083389716387f636dc7cad4d9e2ca31738fed06e9748f6d",
+      "same_as_frozen": true
+    },
+    {
+      "rq": 6,
+      "file": "summary.json",
+      "new_run": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\writing_code_check_20261024_rq6\\rq6\\summary.json",
+      "reference": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq6\\summary.json",
+      "sha256": "857160d43f2411b20fee7ad7635dc75858ab6e06e8b0f0b3efb90617de75a5cc",
+      "same_as_frozen": true
+    },
+    {
+      "rq": 2,
+      "file": "concentration.csv",
+      "new_run": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\writing_code_check_20261024_rq25\\rq2\\concentration.csv",
+      "reference": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq2\\concentration.csv",
+      "sha256": "353903d37e604bbc42d70ace0b7feb43b3a1a896d65dcc46625858094ebe9548",
+      "same_as_frozen": true
+    },
+    {
+      "rq": 2,
+      "file": "summary.json",
+      "new_run": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\writing_code_check_20261024_rq25\\rq2\\summary.json",
+      "reference": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq2\\summary.json",
+      "sha256": "13661cba921f26fcc8d7e6060280dd09075834a6f2d3201202641eb5fafc5c67",
+      "same_as_frozen": true
+    },
+    {
+      "rq": 2,
+      "file": "top_entities.csv",
+      "new_run": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\writing_code_check_20261024_rq25\\rq2\\top_entities.csv",
+      "reference": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq2\\top_entities.csv",
+      "sha256": "8251e15f2f992b44a13e9f14143078a684e02a23872b144c92d581f669b35986",
+      "same_as_frozen": true
+    },
+    {
+      "rq": 2,
+      "file": "valuation_coverage.csv",
+      "new_run": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\writing_code_check_20261024_rq25\\rq2\\valuation_coverage.csv",
+      "reference": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq2\\valuation_coverage.csv",
+      "sha256": "02a58924140617d27bb464e21869cfd7dc225da5d3713ba49701904b43f8e9cc",
+      "same_as_frozen": true
+    },
+    {
+      "rq": 5,
+      "file": "common_wallet_sensitivity.csv",
+      "new_run": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\writing_code_check_20261024_rq25\\rq5\\common_wallet_sensitivity.csv",
+      "reference": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq5\\common_wallet_sensitivity.csv",
+      "sha256": "1f9f8c5bb638b6036ccbccd41dc445093ae7832eaec04064e34b11c8cec92a98",
+      "same_as_frozen": true
+    },
+    {
+      "rq": 5,
+      "file": "protocol_overlap.csv",
+      "new_run": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\writing_code_check_20261024_rq25\\rq5\\protocol_overlap.csv",
+      "reference": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq5\\protocol_overlap.csv",
+      "sha256": "4513e962680af0a239c7a53927c4ba3c0d01aae22de5f8fad11b777980e85feb",
+      "same_as_frozen": true
+    },
+    {
+      "rq": 5,
+      "file": "summary.json",
+      "new_run": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\writing_code_check_20261024_rq25\\rq5\\summary.json",
+      "reference": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq5\\summary.json",
+      "sha256": "2b3cbb5b5a57f15e2b589130ee7208944e07f662b1ddf8a6bd4f698ea0040d29",
+      "same_as_frozen": true
+    },
+    {
+      "rq": 5,
+      "file": "valued_edges.csv",
+      "new_run": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\writing_code_check_20261024_rq25\\rq5\\valued_edges.csv",
+      "reference": "C:\\Users\\HAI NAM\\Finance1\\defi-research\\results\\full_7rq_20261022_final\\rq5\\valued_edges.csv",
+      "sha256": "a5d807b2ab69fe15f1642eadf7cf9e008ca18ee32f9af1bed9a4d38b6dfdc951",
+      "same_as_frozen": true
+    }
+  ]
+}

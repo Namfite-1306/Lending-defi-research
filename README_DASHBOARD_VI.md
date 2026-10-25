@@ -2,6 +2,24 @@
 
 Mở **http://127.0.0.1:8790/guide** để đọc hướng dẫn ngay trong dashboard.
 
+## Giao diện dễ dùng cập nhật 25/10/2026
+
+Bắt đầu tại **http://127.0.0.1:8790/start**. Trang này giải thích đóng góp và giới hạn
+ở cả 5 mục tiêu, đồng thời đọc số snapshot, coverage giá và trạng thái nguồn live.
+
+- **Kết quả nghiên cứu:** chọn tab H1/H2/H3/Cascade. Kho kết quả trước được thu gọn,
+  giữ nguyên sample và output cũ. Đổi bộ lọc không refit; Đọc lại kết quả chỉ tải cache.
+- **Đặt lại bộ lọc:** về mặc định; H1 về quý cuối đã có output. Ngày cascade chưa đủ
+  snapshot được vô hiệu hóa trong dropdown, vẫn hiển thị thiếu trong bảng coverage.
+- **Thử kịch bản:** đổi tham số rồi bấm Tính lại kịch bản. Đây là what-if theo giả định.
+- **Giám sát nguồn:** đọc block, độ trễ và trạng thái collector; catching-up/stale/error
+  chưa được xem là dữ liệu real-time đầy đủ. Research page là lịch sử, không phải live forecast.
+- **Kiểm chứng / Hướng dẫn:** đọc coverage và cách diễn giải. CSV giữ tên cột và đơn vị
+  gốc; nhãn trên màn hình được diễn đạt lại cho dễ hiểu.
+
+Điều hướng tab hỗ trợ phím trái/phải và Home/End. Bảng có thể cuộn ngang trên
+điện thoại; dữ liệu thiếu có giải thích thay vì được xem như zero risk.
+
 ## Khởi động / mở lại
 
 Trong PowerShell, mở thư mục `E:\OneDrive\Documents\GitHub\Clone\Lending-defi-research`, chạy:

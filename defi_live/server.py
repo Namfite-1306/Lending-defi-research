@@ -22,8 +22,8 @@ def make_server(store,models,host,port,poll_seconds,snapshot_seconds):
             self.send_header('X-Content-Type-Options','nosniff');self.send_header('Content-Length',str(len(body)));self.end_headers();self.wfile.write(body)
         def do_GET(self):
             path=urlparse(self.path);query=parse_qs(path.query)
-            if path.path in ['/','/app.js','/style.css','/lab','/lab.js','/lab.css','/validation','/validation.js','/research','/research.js','/guide']:
-                name={'/':'index.html','/app.js':'app.js','/style.css':'style.css','/lab':'lab.html','/lab.js':'lab.js','/lab.css':'lab.css','/validation':'validation.html','/validation.js':'validation.js','/research':'research.html','/research.js':'research.js','/guide':'guide.html'}[path.path]
+            if path.path in ['/','/app.js','/style.css','/lab','/lab.js','/lab.css','/validation','/validation.js','/research','/research.js','/guide','/start','/ux.css','/ux.js','/overview.js']:
+                name={'/':'index.html','/app.js':'app.js','/style.css':'style.css','/lab':'lab.html','/lab.js':'lab.js','/lab.css':'lab.css','/validation':'validation.html','/validation.js':'validation.js','/research':'research.html','/research.js':'research.js','/guide':'guide.html','/start':'overview.html','/ux.css':'ux.css','/ux.js':'ux.js','/overview.js':'overview.js'}[path.path]
                 mime='text/html; charset=utf-8' if name.endswith('.html') else 'text/javascript; charset=utf-8' if name.endswith('.js') else 'text/css; charset=utf-8'
                 return self.send(200,(STATIC/name).read_bytes(),mime)
             try:

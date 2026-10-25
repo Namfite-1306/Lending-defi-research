@@ -1,0 +1,22 @@
+{
+  "updated_utc": "2026-10-24T03:20:12.302550+00:00",
+  "source": "Kraken public USDC/USD trade history",
+  "scope": "2024-02-01 to 2026-04-01T00:00:00+00:00; matched USDC-debt single-WETH/WBTC-collateral events",
+  "events": 7264,
+  "verified_events": 7263,
+  "fresh_60s_events": 7149,
+  "fresh_300s_events": 7259,
+  "fresh_3600s_events": 7262,
+  "latency_assumption_seconds": 5,
+  "primary_coverage_lookback_seconds": 300,
+  "quote_table_sha256": "5053104aac885276ff32de841964bc086aa541cadc04412053f83e4217362f74",
+  "paid_source_used": false,
+  "account_source_used": false,
+  "limitations": [
+    "Single exchange; historical trade time plus assumed 5s latency, not verified receipt time",
+    "No carry beyond maximum quote age; no USD peg substitution",
+    "Event-targeted quotes cannot be used as full-clock H3 covariates",
+    "No trades in a window can leave no fresh quote; coverage is not automatically 100%"
+  ],
+  "quarantined_pages": 1
+}

@@ -9,7 +9,7 @@ def run_member(models, argv=None):
     from .__main__ import main
     parser=argparse.ArgumentParser(description='Run '+', '.join(f'RQ{i}' for i in models)+' with the shared audited engine.')
     parser.add_argument('--data-run',type=Path,default=DEFAULT_RUN)
-    parser.add_argument('--config',type=Path,default=ROOT/'configs/models.reference.json')
+    parser.add_argument('--config',type=Path,default=ROOT/'configs/models.full_7rq_20261022.json')
     parser.add_argument('--out',type=Path)
     parser.add_argument('--allow-exploratory',action='store_true')
     if len(models)>1:parser.add_argument('--only',type=int,choices=models)

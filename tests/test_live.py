@@ -83,6 +83,10 @@ class LiveTests(unittest.TestCase):
             self.assertEqual(s['state'],'starting')
             with urllib.request.urlopen(base) as r:self.assertIn(b'DeFi Observatory',r.read())
             with urllib.request.urlopen(base+'/research') as r:self.assertIn(b'research.js',r.read())
+            with urllib.request.urlopen(base+'/start') as r:self.assertIn(b'objective-5',r.read())
+            with urllib.request.urlopen(base+'/ux.js') as r:self.assertIn(b'data-research-tab',r.read())
+            with urllib.request.urlopen(base+'/ux.css') as r:self.assertIn(b'focus-visible',r.read())
+            with urllib.request.urlopen(base+'/overview.js') as r:self.assertIn(b'/api/research',r.read())
             with urllib.request.urlopen(base+'/guide') as r:self.assertIn('H3'.encode('utf8'),r.read())
             model.research_results=Path(self.tmp.name)/'no-results'
             model.research_data=Path(self.tmp.name)/'no-data'

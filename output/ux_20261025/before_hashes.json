@@ -1,0 +1,54 @@
+{
+  "defi_live/server.py": {
+    "C": "c8f60c020a292da21ad7e698b9113ec03c299952cbb37176069ddb3b8cba8f2a",
+    "E": "c8f60c020a292da21ad7e698b9113ec03c299952cbb37176069ddb3b8cba8f2a"
+  },
+  "defi_live/web/app.js": {
+    "C": "f265beb0996d399b3b8a0a33aed3a702ef1676c8f75f6d6729c497da6337a8dd",
+    "E": "f265beb0996d399b3b8a0a33aed3a702ef1676c8f75f6d6729c497da6337a8dd"
+  },
+  "defi_live/web/guide.html": {
+    "C": "da3c2932ff52693e239be7f5ace3121cb7dae6fd07b5c3fdd55b525f09e475bc",
+    "E": "da3c2932ff52693e239be7f5ace3121cb7dae6fd07b5c3fdd55b525f09e475bc"
+  },
+  "defi_live/web/index.html": {
+    "C": "852f7c069e30070afdc063e6d915525cfa6676ec80a7b3fe976835ec82e141c6",
+    "E": "852f7c069e30070afdc063e6d915525cfa6676ec80a7b3fe976835ec82e141c6"
+  },
+  "defi_live/web/lab.css": {
+    "C": "81c5fd2df903456d3afaa30534eabbe730b76bce651811d90acca6630c4e7144",
+    "E": "81c5fd2df903456d3afaa30534eabbe730b76bce651811d90acca6630c4e7144"
+  },
+  "defi_live/web/lab.html": {
+    "C": "80aa73ae635ceae6f3c3e4ed7706b7bead5c42ee558acef80fbe061dca16b173",
+    "E": "80aa73ae635ceae6f3c3e4ed7706b7bead5c42ee558acef80fbe061dca16b173"
+  },
+  "defi_live/web/lab.js": {
+    "C": "29a6fd1cda95d55fa928c1b059440b113808f883fed5270a2da5fee4438b9034",
+    "E": "29a6fd1cda95d55fa928c1b059440b113808f883fed5270a2da5fee4438b9034"
+  },
+  "defi_live/web/research.html": {
+    "C": "e3d4c16e49a671531a06168c0c1ed5a59da25133105836cf266b2c868db81972",
+    "E": "e3d4c16e49a671531a06168c0c1ed5a59da25133105836cf266b2c868db81972"
+  },
+  "defi_live/web/research.js": {
+    "C": "02a74ac03143ec95cf705cf0dbf29304d6ea2225a63cf9c06d54359e028f47b3",
+    "E": "02a74ac03143ec95cf705cf0dbf29304d6ea2225a63cf9c06d54359e028f47b3"
+  },
+  "defi_live/web/style.css": {
+    "C": "532e375b357d00303ae8392b6591e2d310f5fe3aea8ff22148f0a27bcc9bb72c",
+    "E": "532e375b357d00303ae8392b6591e2d310f5fe3aea8ff22148f0a27bcc9bb72c"
+  },
+  "defi_live/web/validation.html": {
+    "C": "4c5c4d7ae4cc07342faf7c0bc0e78c2ffb0607343ee68563e5044bbe6b098d28",
+    "E": "4c5c4d7ae4cc07342faf7c0bc0e78c2ffb0607343ee68563e5044bbe6b098d28"
+  },
+  "defi_live/web/validation.js": {
+    "C": "a931d1a2a8b96a28444af05fd77dc9fe46e4e2d9f9e41475c1a510fe07408a4b",
+    "E": "a931d1a2a8b96a28444af05fd77dc9fe46e4e2d9f9e41475c1a510fe07408a4b"
+  },
+  "README_DASHBOARD_VI.md": {
+    "C": "9ddb1ac0e82f48ab18b938f3ada5df2ba83638eeaed2c9d406fb10e1e52a37b8",
+    "E": "9ddb1ac0e82f48ab18b938f3ada5df2ba83638eeaed2c9d406fb10e1e52a37b8"
+  }
+}

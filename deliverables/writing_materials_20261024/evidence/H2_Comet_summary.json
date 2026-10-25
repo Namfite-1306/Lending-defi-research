@@ -1,0 +1,32 @@
+{
+  "status": "completed_scoped_with_semantic_limits",
+  "generated_utc": "2026-10-23T19:19:27.650231+00:00",
+  "episodes": 35282,
+  "comet_episodes": 1381,
+  "comet_collateral_legs": 2115,
+  "comet_missing_collateral_episodes": 0,
+  "comet_credit_corrections": 1196,
+  "comet_rounding_bounded": 1381,
+  "sensitivity_rows": 528,
+  "primary_scope": "2024-02-01 to 2025-01-01; USDC debt, exactly one collateral token, exact WETH/WBTC address",
+  "limitations": [
+    "Cross-protocol financing differs: Comet protocol absorption versus Aave repayment; do not label all as liquidator repayment",
+    "Comet credit correction has principal-rounding interval and assumes archived implementation semantics, not all-upgrade trace verification",
+    "Aave event debt excludes unobserved extra deficit writeoffs, particularly relevant for extended newer-period comparison",
+    "Aave collateral event may be net of protocol fee, so no pooled gross-collateral-USD ranking is claimed",
+    "Prior-block Chainlink value, no within-block future quote; WBTC uses BTC proxy with unmeasured basis",
+    "Large-wallet exclusions are ex-post influence checks; addresses are not identified beneficial owners",
+    "N=1 normalized HHI/Gini undefined; NA not zero"
+  ],
+  "inputs": {
+    "audit_1_structure.json": "5d14db16e32288ea3db0d3555a6ba03e0f7330872aef1b6f445c131f86e737b0",
+    "audit_2_onchain.json": "22a596d4a9857cd84e7d1f2d84790b7791d4338fa7032e4ff3a8d9fbcbd4493d",
+    "audit_3_research.json": "9a016c7e2af020d0962e6ebe8b449581b8acc0775e0b62cc1cd35db7ceb67793",
+    "block_range.json": "0e5371d7b5fbdd4915e5b088c90b39249429b8cf68c9540f388e62ee5aff2534",
+    "freeze_manifest.json": "408bb088c97df04aa1de12453f92d3ae4158fc91fbb3a69b20c4043c5f333ba1",
+    "processed\\chainlink_price_updates.csv": "5ef0e02d1e4027cf215d8c538f9f2d45bd4316acd765ce4ad1350d1b5ba0cd4d",
+    "processed\\liquidations_model_table.csv": "d552520e53ada66651db35ad3277fff6e7c48cca29db13266a0736559401cc29",
+    "processed\\morpho_market_registry_full.csv": "3c6917e71ec55ff43c69e23158610f372abf5e640fffb00cc46c4cf5dce3daff",
+    "processed\\token_registry.csv": "0a626b7561daa183301c3ae2a75dcd0ef4fe623542c1df28f8b4dd58b90b5495"
+  }
+}
