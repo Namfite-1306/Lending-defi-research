@@ -1,4 +1,4 @@
-/* Navigation and progressive disclosure only. No model refitting or data mutation. */
+/* Navigation and progressive disclosure. No model refitting or data mutation. */
 (()=>{'use strict';
 const page=location.pathname,kind=page==='/start'?'overview':page==='/research'?'research':page==='/lab'?'lab':page==='/guide'?'guide':page==='/validation'?'validation':'live';
 document.body.dataset.uxPage=kind;

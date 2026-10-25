@@ -29,3 +29,78 @@ body[data-ux-page=research]{background:var(--ux-bg)}
 body[data-ux-page=lab] aside p,body[data-ux-page=lab] .view-heading p,body[data-ux-page=lab] #scope,body[data-ux-page=lab] .note,body[data-ux-page=lab] .panel p{font-size:13px}body[data-ux-page=lab] label,body[data-ux-page=lab] output{font-size:12px}body[data-ux-page=lab] select,body[data-ux-page=lab] input[type=number],body[data-ux-page=lab] button{font-size:14px;min-height:42px}body[data-ux-page=lab] .metric small,body[data-ux-page=lab] .metric p{font-size:12px}body[data-ux-page=lab] th{font-size:12px}body[data-ux-page=lab] td{font-size:13px}
 
 body[data-ux-page=lab] .view-heading{align-items:flex-start}body[data-ux-page=lab] .view-heading>div{min-width:0;flex:1}body[data-ux-page=lab] .view-heading h2{font-size:24px;line-height:1.4;overflow-wrap:anywhere}body[data-ux-page=lab] .view-heading>.badge{white-space:nowrap;margin-top:5px}.rq-reading-guide{border:1px solid #ccddd1;background:#fff;border-radius:10px;margin:18px 0 22px}.rq-reading-guide>summary{margin:0;padding:15px 18px;font-size:15px;font-weight:650;line-height:1.6;color:#245d49;cursor:pointer}.rq-reading-guide>summary>span{display:block;padding-left:18px;color:#53695c;font-size:12px;font-weight:400}.rq-guide-body{padding:0 22px 20px;font-size:14px;line-height:1.8}.rq-guide-body p,.rq-guide-body li{font-size:14px!important;line-height:1.8}.rq-guide-body ol{padding-left:23px}.rq-guide-body li{padding-left:4px;margin:12px 0}.rq-guide-limit{border-top:1px solid #e1e9e0;padding-top:14px;color:#645022}@media(max-width:600px){body[data-ux-page=lab] .view-heading{flex-direction:column;gap:6px}body[data-ux-page=lab] .view-heading h2{font-size:21px}.rq-guide-body{padding:0 16px 18px}.rq-reading-guide>summary{padding:13px 15px}}
+
+/* Cinematic editorial theme. Presentation only: grid, controls and data remain unchanged.
+   Local font names fall back to system sans; no external font requests. */
+:root{
+  color-scheme:dark;
+  --ux-ink:#EBDCC4;--ux-muted:#B6A596;--ux-line:#66473B;
+  --ux-green:#DC9F85;--ux-bg:#181818;--ux-amber:#DC9F85;
+  --bg:#181818;--paper:#181818;--ink:#EBDCC4;--muted:#B6A596;
+  --line:#66473B;--border:#66473B;--green:#DC9F85;--lime:#EBDCC4;
+  --white:#181818;--amber:#DC9F85;
+}
+html{background:#181818;scrollbar-color:#66473B #181818}
+body,body.overview-page,body[data-ux-page]{background:#181818!important;color:#EBDCC4!important;font-family:'Segoe UI',sans-serif!important}
+body::after{content:'';position:fixed;inset:0;z-index:999;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23EBDCC4' filter='url(%23n)' d='M0 0h180v180H0z'/%3E%3C/svg%3E")}
+body *,body *::before,body *::after{box-shadow:none!important;background-image:none;border-radius:4px!important}
+body::after{border-radius:0!important}
+body h1,body h2,body h3{font-family:'Segoe UI',sans-serif!important;font-weight:700;letter-spacing:-.035em;text-transform:uppercase;color:#EBDCC4!important}
+/* Retain existing heading sizes and readable RQ wrapping within the current grid. */
+body h1,body.overview-page .ux-hero h1,body[data-ux-page=research] h1{line-height:.85;letter-spacing:-.045em}
+body h2,body h3{line-height:1.3}
+body p,body li{font-weight:400}
+body label,body button,body select,body input{font-family:'Segoe UI',sans-serif!important}
+body a{color:#DC9F85}
+body .app-nav,body>header,body aside,body .research-tabs{background:#181818!important;border-color:#66473B!important}
+body .app-nav{box-shadow:none!important}
+body .app-brand,body .brand{color:#EBDCC4!important}
+body .app-icon,body .logo{background:#DC9F85!important;color:#181818!important}
+body .app-nav nav a{color:#B6A596}
+body .app-nav nav a[aria-current=page],body .app-nav nav a:hover{background:#35211A;color:#EBDCC4}
+body .local-label,body .eyebrow,body .ux-kicker,body .step-number,body .rq-label{color:#DC9F85!important;letter-spacing:.14em}
+body .muted,body .note,body .footnote,body .legend,body #scope,body .ux-note,body .ux-explainer,body .ux-glossary dd,
+body .ux-hero p,body .objective-card p,body .metric p,body .metric small,body .panel p,body .view-heading p,body .table-head span,
+body .rq-card p,body .stats small,body .stats article>span,body .price small,body .price em,body footer{color:#B6A596!important}
+body .panel,body .metric,body .stats article,body .rq-card,body .prices,body .table-scroll,body .table-wrap,
+body .ux-health,body .objective-card,body .ux-path,body .ux-glossary,body section,body .ux-archive,
+body .rq-reading-guide,body .metrics>div,body .compare>div{background:#181818!important;border-color:#66473B!important}
+body .notice,body .notice.error,body .ux-error,body .compare .impact{background:#35211A!important;color:#EBDCC4!important;border-color:#DC9F85!important}
+body .badge,body .badge.amber,body .pill,body .protocol,body .ux-status,body .ux-status.good{background:#35211A!important;color:#EBDCC4!important;border:1px solid #66473B!important}
+body .rq-reading-guide>summary,body summary,body output,body #job-status,body .ux-archive>summary{color:#DC9F85!important}
+body .rq-reading-guide>summary>span,body .rq-guide-limit{color:#B6A596!important}
+body .rq-guide-limit,body .aside-note,body .objective-card .limit,body footer,body .scroll,body .chain-box{border-color:#66473B!important}
+body button,body .ux-button,body select,body input[type=number],body input[type=search],body input[type=date],body input[type=text]{background:#181818!important;color:#EBDCC4!important;border:1px solid #66473B!important;transition:background-color .2s ease,color .2s ease,border-color .2s ease}
+body input::placeholder{color:#B6A596;opacity:.8}
+body button:hover,body .ux-button:hover{background:#35211A!important;border-color:#DC9F85!important;filter:none}
+body .primary,body .ux-button.strong,body #rq-tabs button.active,body .research-tabs button[aria-selected=true]{background:#DC9F85!important;color:#181818!important;border-color:#DC9F85!important}
+body .primary:hover,body .ux-button.strong:hover{background:#EBDCC4!important;border-color:#EBDCC4!important}
+body button:disabled{opacity:.5}
+body input[type=range],body input[type=checkbox]{accent-color:#DC9F85}
+body a:focus-visible,body button:focus-visible,body input:focus-visible,body select:focus-visible,body summary:focus-visible{outline:2px solid #DC9F85!important;outline-offset:3px}
+body table,body td{color:#EBDCC4;border-color:#35211A!important}
+body th{background:#35211A!important;color:#B6A596!important;border-color:#66473B!important}
+body tbody tr:nth-child(even){background:#181818!important}
+body tbody tr:hover{background:#35211A!important}
+body .price.stale,body code,body pre{background:#35211A!important;color:#EBDCC4!important}
+body .bar-track{background:#35211A!important}
+body .bar,body .line-key{background:#DC9F85!important}
+body svg text{fill:#B6A596!important}
+body svg [stroke='#e4ebdf'],body svg [stroke='#e8eee8'],body svg [stroke='#cbd3e1'],body svg [stroke='#dce1eb']{stroke:#66473B!important}
+body svg [stroke='#246b51'],body svg [stroke='#256e54'],body svg [stroke='#236b58'],body svg [stroke='#4168d9']{stroke:#DC9F85!important}
+body svg [stroke='#b28b42']{stroke:#EBDCC4!important}
+body svg [fill='#246b51'],body svg [fill='#256e54'],body svg [fill='#236b58'],body svg [fill='#4168d9']{fill:#DC9F85!important}
+body svg [fill='#edf3e8']{fill:#35211A!important}
+body .chart circle:hover{fill:#EBDCC4!important}
+body ::selection{background:#DC9F85;color:#181818}
+@keyframes editorial-reveal{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:no-preference){body main{animation:editorial-reveal .65s ease both}body #content>.view-heading,body #content>.rq-reading-guide{animation:editorial-reveal .35s ease both}}
+body .mark,body .dot{background:#DC9F85!important;color:#181818!important}
+body aside .nav,body .workspace,body .aside-bottom,body .crumb{color:#B6A596!important}
+body aside .nav.active,body aside .nav:hover{background:#35211A!important;color:#EBDCC4!important;border-color:#66473B!important}
+body .price{border-color:#66473B!important}
+body .skip-link{background:#DC9F85;color:#181818}
+body #overview-live{color:#DC9F85!important}
+
+/* One typeface for headings, copy, controls, numbers, code and chart labels. */
+body,body *,body *::before,body *::after{font-family:'Segoe UI',sans-serif!important;text-shadow:none!important;box-shadow:none!important;-webkit-text-stroke:0!important}

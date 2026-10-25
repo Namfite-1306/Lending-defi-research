@@ -1,0 +1,7 @@
+Theme-only update: matte #181818, beige #EBDCC4, coral #DC9F85, earth borders.
+Preserves existing grids, controls, model code, datasets and outputs.
+System font fallbacks; no font downloads or new dependencies.
+QA: all 6 pages dark, no horizontal desktop overflow, no browser console errors.
+RQ5 guide opens and stays open when filters change.
+Reduced-motion media query disables transitions and reveal animation.
+Previous theme: ux.before.css and ux.before.js in this folder.
