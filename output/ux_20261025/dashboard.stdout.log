@@ -3773,3 +3773,22 @@ B snapshot mode=0 pass=True tokens=2
 B snapshot mode=0 pass=True tokens=4
 B snapshot mode=0 pass=True tokens=3
 B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=3
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 8875 HTTP requests, 0 cache hits
+B snapshot mode=0 pass=True tokens=1
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=43 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+B snapshot mode=1 pass=True tokens=2
+B snapshot mode=0 pass=True tokens=2
+RPC progress: 14500 HTTP requests, 0 cache hits
+RPC progress: 575 HTTP requests, 0 cache hits
+RPC progress: 14525 HTTP requests, 0 cache hits
+RPC progress: 14550 HTTP requests, 0 cache hits
+RPC progress: 3800 HTTP requests, 0 cache hits
+RPC progress: 14575 HTTP requests, 0 cache hits
+RPC progress: 14600 HTTP requests, 0 cache hits

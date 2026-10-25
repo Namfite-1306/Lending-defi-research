@@ -87,6 +87,7 @@ class LiveTests(unittest.TestCase):
             with urllib.request.urlopen(base+'/ux.js') as r:self.assertIn(b'data-research-tab',r.read())
             with urllib.request.urlopen(base+'/ux.css') as r:self.assertIn(b'focus-visible',r.read())
             with urllib.request.urlopen(base+'/overview.js') as r:self.assertIn(b'/api/research',r.read())
+            with urllib.request.urlopen(base+'/rq-guides.js') as r:self.assertIn(b'RQ_GUIDES',r.read())
             with urllib.request.urlopen(base+'/guide') as r:self.assertIn('H3'.encode('utf8'),r.read())
             model.research_results=Path(self.tmp.name)/'no-results'
             model.research_data=Path(self.tmp.name)/'no-data'
