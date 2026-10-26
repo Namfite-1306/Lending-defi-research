@@ -1,4 +1,5 @@
-import json,time
+import json,time,threading,secrets
+from collections import defaultdict,deque
 from http.server import ThreadingHTTPServer,BaseHTTPRequestHandler
 from urllib.parse import urlparse,parse_qs
 from pathlib import Path
@@ -12,21 +13,41 @@ def freshness(product,limit,now=None,source_now=None):
     age=max(0,source_now-product['source_stamp']);built=max(0,now-product['built_at'])
     return {'state':'fresh' if age<=limit and built<=limit else 'stale','source_age_seconds':round(age,1),'calculation_age_seconds':round(built,1)}
 
-def make_server(store,models,host,port,poll_seconds,snapshot_seconds):
+class RequestWindow:
+    def __init__(self,limit):self.limit=limit;self.lock=threading.Lock();self.calls=defaultdict(deque)
+    def allow(self,key,now=None):
+        now=time.monotonic() if now is None else now
+        with self.lock:
+            if len(self.calls)>1024:self.calls.clear()
+            q=self.calls[key]
+            while q and now-q[0]>=60:q.popleft()
+            if len(q)>=self.limit:return False
+            q.append(now);return True
+
+def make_server(store,models,host,port,poll_seconds,snapshot_seconds,api_token=None,post_per_minute=12):
     from .lab import ResearchLab,LabBusy
     lab=ResearchLab(store,models,source_stale_seconds=max(120,snapshot_seconds*2))
+    if not isinstance(post_per_minute,int) or post_per_minute<1:raise ValueError('Invalid POST rate limit')
+    limiter=RequestWindow(post_per_minute)
     class Handler(BaseHTTPRequestHandler):
         def log_message(self,*args):pass
+        def authorized(self):
+            if api_token is None:return True
+            header=self.headers.get('Authorization','')
+            return header.startswith('Bearer ') and secrets.compare_digest(header[7:].encode(),api_token.encode())
         def send(self,status,body,mime='application/json; charset=utf-8'):
             self.send_response(status);self.send_header('Content-Type',mime);self.send_header('Cache-Control','no-store')
             self.send_header('X-Content-Type-Options','nosniff');self.send_header('Content-Length',str(len(body)));self.end_headers();self.wfile.write(body)
         def do_GET(self):
             path=urlparse(self.path);query=parse_qs(path.query)
-            if path.path in ['/','/app.js','/style.css','/lab','/lab.js','/lab.css','/validation','/validation.js','/research','/research.js','/guide','/start','/ux.css','/ux.js','/overview.js','/rq-guides.js']:
-                name={'/':'index.html','/app.js':'app.js','/style.css':'style.css','/lab':'lab.html','/lab.js':'lab.js','/lab.css':'lab.css','/validation':'validation.html','/validation.js':'validation.js','/research':'research.html','/research.js':'research.js','/guide':'guide.html','/start':'overview.html','/ux.css':'ux.css','/ux.js':'ux.js','/overview.js':'overview.js','/rq-guides.js':'rq-guides.js'}[path.path]
+            if path.path.startswith('/api/') and not self.authorized():return self.send(401,b'{"error":"authentication_required"}')
+            if path.path in ['/','/app.js','/style.css','/lab','/lab.js','/lab.css','/validation','/validation.js','/research','/research.js','/guide','/start','/ux.css','/ux.js','/overview.js','/rq-guides.js','/findings.js']:
+                name={'/':'index.html','/app.js':'app.js','/style.css':'style.css','/lab':'lab.html','/lab.js':'lab.js','/lab.css':'lab.css','/validation':'validation.html','/validation.js':'validation.js','/research':'research.html','/research.js':'research.js','/guide':'guide.html','/start':'overview.html','/ux.css':'ux.css','/ux.js':'ux.js','/overview.js':'overview.js','/rq-guides.js':'rq-guides.js','/findings.js':'findings.js'}[path.path]
                 mime='text/html; charset=utf-8' if name.endswith('.html') else 'text/javascript; charset=utf-8' if name.endswith('.js') else 'text/css; charset=utf-8'
                 return self.send(200,(STATIC/name).read_bytes(),mime)
             try:
+                if path.path=='/api/deployment':
+                    return self.send(200,json.dumps({'mode':'local','live_enabled':True,'whatif_enabled':True,'historical_mode':'local_frozen'}).encode())
                 if path.path=='/api/research':
                     from .research import research_data
                     return self.send(200,json.dumps(research_data(models.research_results,models.research_data),ensure_ascii=False,allow_nan=False).encode('utf8'))
@@ -108,6 +129,8 @@ def make_server(store,models,host,port,poll_seconds,snapshot_seconds):
             except Exception:self.send(503,b'{"error":"data_not_available_retry"}')
         def do_POST(self):
             if urlparse(self.path).path!='/api/lab/simulate':return self.send(404,b'{"error":"not_found"}')
+            if not self.authorized():return self.send(401,b'{"error":"authentication_required"}')
+            if not limiter.allow(self.client_address[0]):return self.send(429,b'{"error":"rate_limit_retry_after_60_seconds"}')
             origin=self.headers.get('Origin')
             if origin and urlparse(origin).netloc!=self.headers.get('Host'):return self.send(403,b'{"error":"origin_not_allowed"}')
             try:

@@ -1,0 +1,42 @@
+{
+  "python_tests": {
+    "total": 253,
+    "passed": 247,
+    "skipped": 6
+  },
+  "node_deployment_tests": {
+    "total": 10,
+    "passed": 10
+  },
+  "static_build_C": "passed",
+  "static_build_E": "passed",
+  "cloud_deployment_verified": false,
+  "committed_or_pushed": false,
+  "legacy_model_results_modified": false,
+  "new_paid_or_account_source_used": false,
+  "snapshot_checks": {
+    "cascade.json.gz": {
+      "local_absolute_path_occurrences": 0,
+      "compressed_bytes": 578546
+    },
+    "lab.json.gz": {
+      "local_absolute_path_occurrences": 0,
+      "compressed_bytes": 840045
+    },
+    "research.json.gz": {
+      "local_absolute_path_occurrences": 0,
+      "compressed_bytes": 661235
+    },
+    "validation.json.gz": {
+      "local_absolute_path_occurrences": 0,
+      "compressed_bytes": 39437
+    }
+  },
+  "browser_checks": [
+    "H2 finding changes with WETH/WBTC filter",
+    "H3 includes score gain and failed PIT calibration",
+    "Cascade full dates unlocked and scenario finding updates with shock",
+    "Frozen deployment lists 7 RQs and disables what-if with explanation",
+    "No browser console errors observed"
+  ]
+}

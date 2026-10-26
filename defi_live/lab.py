@@ -24,6 +24,7 @@ class ResearchLab:
         self.store=store;self.models=models;self.lock=threading.Lock()
         self.source_stale_seconds=source_stale_seconds
         self.history_lock=threading.Lock();self.history=None;self.jobs={};self.busy=False
+        self.job_owner=uuid.uuid4().hex
 
     def historical(self):
         with self.history_lock:
@@ -72,14 +73,23 @@ class ResearchLab:
             if self.busy:raise LabBusy('Đang tính một kịch bản khác. Vui lòng đợi hoàn tất.')
             self.busy=True;identifier=uuid.uuid4().hex
             self.jobs[identifier]={'id':identifier,'state':'running','submitted_at':time.time(),'parameters':values}
+            try:self.store.put_job(identifier,self.jobs[identifier],self.job_owner)
+            except Exception:
+                self.busy=False;self.jobs.pop(identifier,None);raise
             while len(self.jobs)>8:self.jobs.pop(next(iter(self.jobs)))
         threading.Thread(target=self.calculate,args=(identifier,values),daemon=True,name='interactive-scenario').start()
         return {'id':identifier,'state':'running'}
 
     def job(self,identifier):
         with self.lock:
-            require(identifier in self.jobs,'Kịch bản không tồn tại hoặc đã hết phiên.')
-            return dict(self.jobs[identifier])
+            if identifier in self.jobs:return dict(self.jobs[identifier])
+            require(isinstance(identifier,str) and len(identifier)<=128,'Mã kịch bản không hợp lệ.')
+            stored=self.store.get_job(identifier)
+            require(stored is not None,'Kịch bản không tồn tại hoặc đã hết thời hạn lưu.')
+            owner,value=stored
+            if value['state']=='running' and owner!=self.job_owner:
+                return dict(value,state='interrupted',error='Job thuộc phiên backend trước hoặc instance khác. Dùng một worker; gửi lại kịch bản sau khi kiểm tra backend.')
+            return value
 
     def calculate(self,identifier,values):
         try:
@@ -124,4 +134,7 @@ class ResearchLab:
         except Exception as exc:
             with self.lock:self.jobs[identifier].update(state='failed',error=str(exc)[:300],finished_at=time.time())
         finally:
-            with self.lock:self.busy=False
+            with self.lock:
+                try:
+                    if identifier in self.jobs:self.store.put_job(identifier,self.jobs[identifier],self.job_owner)
+                finally:self.busy=False

@@ -1,0 +1,23 @@
+# Vercel hosts the web UI and Node proxy; Python collectors stay on a worker.
+.git
+.venv*
+.env*
+.streamlit
+__pycache__
+**/__pycache__
+data
+results
+output
+tmp
+archive
+apps
+deliverables
+research_h124
+defi_data
+defi_models
+defi_live/*.py
+requirements*.txt
+streamlit_app.py
+rq7_policy_sensitivity.py
+*.log
+public

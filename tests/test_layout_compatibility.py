@@ -25,7 +25,10 @@ class LayoutCompatibilityTests(unittest.TestCase):
         self.assertEqual(research_root,ROOT)
         paths=source_files()
         names=[p.name for p in paths]
-        self.assertEqual(len(names),len(set(names)),'Duplicate module names would make resolution ambiguous')
+        identifiers=[str(p.relative_to(ROOT/'research_h124')) for p in paths]
+        self.assertEqual(len(identifiers),len(set(identifiers)),'Duplicate source identities')
+        public=[p.stem for p in paths if p.parent.name in ('shared','positions','concentration','temporal','cascade_engine','reporting','orchestration')]
+        self.assertEqual(len(public),len(set(public)),'Flat public module resolution must be unambiguous')
         self.assertIn('hurdle_model.py',names)
         self.assertIn('source_audit.py',names)
 
@@ -45,3 +48,4 @@ class LayoutCompatibilityTests(unittest.TestCase):
         self.assertIn('run',r.stdout)
 
 if __name__=='__main__':unittest.main()
+

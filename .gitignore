@@ -18,3 +18,8 @@ data/research_h123_sources_*/
 tmp/
 output/restructure_*/
 *.log
+
+# Generated static hosting build
+public/
+.vercel/
+node_modules/

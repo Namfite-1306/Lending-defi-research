@@ -1,0 +1,29 @@
+{
+  "mode": "frozen_historical",
+  "exported_utc": "2026-10-26T06:40:49.476048+00:00",
+  "live_data_included": false,
+  "files": {
+    "research.json.gz": {
+      "sha256": "4890c190f57298d52a93d3f5e93ddc0ded3c8620e53edeaff1d88339c491e9f2",
+      "compressed_bytes": 680086,
+      "json_bytes": 5296441
+    },
+    "lab.json.gz": {
+      "sha256": "dc2dab2f2c92ba4ec2dfa01b4cda22b17e59edf1cb81577f446ee6948432cab3",
+      "compressed_bytes": 840044,
+      "json_bytes": 5841579
+    },
+    "validation.json.gz": {
+      "sha256": "dd15b5741de0bfbb1fcdff56a6011892463c44ce5aaa7b78587cb7325d56c38b",
+      "compressed_bytes": 39437,
+      "json_bytes": 380893
+    },
+    "cascade.json.gz": {
+      "sha256": "0ae0109811f3234e95ec53fb0ec9f32ed5226d857ea5c823b7e743c9a4646ee8",
+      "compressed_bytes": 578546,
+      "json_bytes": 2857404
+    }
+  },
+  "primary_end_exclusive": "2026-04-01T00:00:00+00:00",
+  "full_snapshots": 13
+}

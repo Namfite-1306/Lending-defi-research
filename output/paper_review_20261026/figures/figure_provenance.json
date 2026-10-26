@@ -1,0 +1,31 @@
+{
+  "inputs_sha256": {
+    "deliverables\\writing_materials_20261024\\evidence\\H1_stress_curves.csv": "45a9088d541e3f68f574f7c0dfd5226dd6cbe02331e222b0f4a3407d2b17f70a",
+    "deliverables\\writing_materials_20261024\\evidence\\RQ6_stylized_scenarios.csv": "23b7d774a94852478083389716387f636dc7cad4d9e2ca31738fed06e9748f6d",
+    "data\\runs\\recovery_20261020\\processed\\exposures_valued_sample.csv": "54fedf2cb569be1aaa0df06faaa01d604dfda41269922fd160b2105e09757c79",
+    "data\\runs\\recovery_20261020\\processed\\token_registry.csv": "0a626b7561daa183301c3ae2a75dcd0ef4fe623542c1df28f8b4dd58b90b5495"
+  },
+  "H1_quarters": [
+    "2023Q1",
+    "2023Q2",
+    "2023Q3",
+    "2023Q4",
+    "2024Q1",
+    "2024Q2",
+    "2024Q3",
+    "2024Q4",
+    "2025Q1",
+    "2025Q2",
+    "2025Q3",
+    "2025Q4",
+    "2026Q1"
+  ],
+  "H1_points": 793,
+  "network_wallets": 69,
+  "network_priced_records": 188,
+  "network_positive_records": 122,
+  "network_unpriced_records": 10,
+  "network_shared_wallet": "0x00a2913501c4b09b92b825dc8a2937efdad9953b",
+  "D1_scenarios": 6,
+  "sources_unchanged": true
+}

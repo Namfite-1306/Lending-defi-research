@@ -1,0 +1,42 @@
+{
+  "defi_live/web/research.html": {
+    "C": "8595837afd038b7e73e0b6eee12029b3fe4cfe483a2f83113a91dbe3ee5619c8",
+    "E": "8595837afd038b7e73e0b6eee12029b3fe4cfe483a2f83113a91dbe3ee5619c8"
+  },
+  "defi_live/web/research.js": {
+    "C": "c1d4ad2b1a2dd0efa9a262b277b93a8f32a053c68abf008de33a7a31aa17ba9f",
+    "E": "c1d4ad2b1a2dd0efa9a262b277b93a8f32a053c68abf008de33a7a31aa17ba9f"
+  },
+  "defi_live/web/ux.css": {
+    "C": "d68bbc0e36c4a3c676ca814b5cc3681e24db53e9abcc16d600e83eaac3698a96",
+    "E": "d68bbc0e36c4a3c676ca814b5cc3681e24db53e9abcc16d600e83eaac3698a96"
+  },
+  "defi_live/web/ux.js": {
+    "C": "8d5a794d0e6c0a9b2e05a68b66af8545d225a70d8d97a6189a55039f6024f481",
+    "E": "8d5a794d0e6c0a9b2e05a68b66af8545d225a70d8d97a6189a55039f6024f481"
+  },
+  "defi_live/web/lab.js": {
+    "C": "17258191de040fb93ca5a746037802e2117c22347fe2c1c70271d6227723a954",
+    "E": "17258191de040fb93ca5a746037802e2117c22347fe2c1c70271d6227723a954"
+  },
+  "defi_live/web/overview.js": {
+    "C": "d209cd4940640e07084c565b7ae81baf9d9e19b3b71b501a92715f868b5c0c7a",
+    "E": "d209cd4940640e07084c565b7ae81baf9d9e19b3b71b501a92715f868b5c0c7a"
+  },
+  "defi_live/web/app.js": {
+    "C": "f265beb0996d399b3b8a0a33aed3a702ef1676c8f75f6d6729c497da6337a8dd",
+    "E": "f265beb0996d399b3b8a0a33aed3a702ef1676c8f75f6d6729c497da6337a8dd"
+  },
+  "defi_live/server.py": {
+    "C": "5d0a932197298ae9d70432ed00813cec58f75f627b9a44c860b394b9469e8525",
+    "E": "5d0a932197298ae9d70432ed00813cec58f75f627b9a44c860b394b9469e8525"
+  },
+  ".gitignore": {
+    "C": "e1c5ddb8068f9739a9c04f8c695a8bf2d17b7cd3d86251f645dfbbef80376ae4",
+    "E": "899d4bf342a12c4665171f3005e9e0c8b89fef01c761ee84770c3dc2521a0f8d"
+  },
+  "README.md": {
+    "C": "a625e2e45beb48c6abd8d86dec03db264b823bf970cbacddbbba8eacb4d4047e",
+    "E": "a625e2e45beb48c6abd8d86dec03db264b823bf970cbacddbbba8eacb4d4047e"
+  }
+}

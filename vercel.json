@@ -1,0 +1,27 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "",
+  "buildCommand": "node scripts/deployment/build_vercel.mjs",
+  "outputDirectory": "public",
+  "cleanUrls": true,
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 30,
+      "includeFiles": "deployment/snapshot/cascade.json.gz"
+    }
+  },
+  "rewrites": [
+    {"source": "/api/research", "destination": "/snapshot/research.json"},
+    {"source": "/api/lab/data", "destination": "/snapshot/lab.json"},
+    {"source": "/api/validation", "destination": "/snapshot/validation.json"},
+    {"source": "/api/:path*", "destination": "/api/index?route=:path*"}
+  ],
+  "headers": [
+    {"source": "/(.*)", "headers": [
+      {"key": "X-Content-Type-Options", "value": "nosniff"},
+      {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"}
+    ]},
+    {"source": "/snapshot/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=0, must-revalidate"}]}
+  ]
+}

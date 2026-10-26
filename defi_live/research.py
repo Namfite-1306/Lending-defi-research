@@ -14,6 +14,14 @@ def csv_file(path,limit=20000):
             rows.append(row)
     return rows
 
+def robustness_data(results):
+    root=Path(results).parent/'limitations_upgrade_20261026'
+    return {'summary':json_file(root/'summary.json',{}),'h1':csv_file(root/'h1/basis_stress.csv'),'h1_audit':csv_file(root/'h1/audit.csv'),
+      'h2_intervals':csv_file(root/'h2/intervals.csv'),'h2_differences':csv_file(root/'h2/paired_differences.csv'),'h2_summary':json_file(root/'h2/summary.json',{}),
+      'h3':csv_file(root/'h3/comparison.csv'),'h3_summary':json_file(root/'h3/summary.json',{}),
+      'cascade':csv_file(root/'cascade/forward_backtest.csv'),'cascade_coverage':csv_file(root/'cascade/coverage.csv'),'cascade_window_coverage':csv_file(root/'cascade/window_coverage.csv'),'cascade_summary':json_file(root/'cascade/summary.json',{}),
+      'source_probe':json_file(root/'source_probe.json',{})}
+
 def generation_two(results,data):
     results=Path(results).parent/'research_h124_v2_20261024';data=Path(data).parent/'research_h124_v2_20261024'
     return {'manifest':json_file(results/'manifest.json',{}),'header_progress':json_file(data/'header_progress.json',{}),
@@ -66,7 +74,7 @@ def research_data(results,data):
     sources={'manifest':json_file(stage/'manifest.json',{}),'concentration':csv_file(stage/'h2_market_concentration.csv'),'coverage':csv_file(stage/'h2_market_coverage.csv'),
       'models':csv_file(stage/'h3/model_comparison.csv'),'residuals':json_file(stage/'h3/residuals.json',{}),'rolling':csv_file(stage/'h3/rolling_quarter_scores.csv'),
       'comparison':csv_file(stage/'h3/common_primary_comparison.csv'),'calibration':csv_file(stage/'h3/event_calibration.csv')}
-    return {'source_stage':sources,'repair':repaired,'manifest':json_file(results/'manifest.json',{'status':'research_worker_starting'}),'snapshots':snapshots,'tables':tables,'v2':generation_two(results,data),
+    return {'robustness':robustness_data(results),'source_stage':sources,'repair':repaired,'manifest':json_file(results/'manifest.json',{'status':'research_worker_starting'}),'snapshots':snapshots,'tables':tables,'v2':generation_two(results,data),
       'h4_residuals':json_file(results/'h4/residuals.json',{}),'h4_nb_residuals':json_file(results/'h4_nb/residuals.json',{}),
       'comet_state_validation':json_file(results/'h2/archive_state_validation.json',{}),
       'literature':json_file(results/'literature/sources.json',{}),'block_date_check':json_file(results/'literature/ssrn_preprint_block_date_check.json',{}),

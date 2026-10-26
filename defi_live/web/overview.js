@@ -1,5 +1,5 @@
 (()=>{'use strict';const $=id=>document.getElementById(id),fmt=new Intl.NumberFormat('vi-VN');let busy=false;
-async function read(url){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);try{const response=await fetch(url,{cache:'no-store',signal:controller.signal});if(!response.ok)throw Error('HTTP '+response.status);return await response.json()}finally{clearTimeout(timer)}}
+async function read(url){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);try{const response=await fetch(url,{cache:url==='/api/research'?'no-cache':'no-store',signal:controller.signal});if(!response.ok)throw Error('HTTP '+response.status);return await response.json()}finally{clearTimeout(timer)}}
 function status(id,value,good=false){$(id).textContent=value;$(id).classList.toggle('good',good)}
 async function refresh(){if(busy)return;busy=true;$('overview-reload').disabled=true;$('overview-error').textContent='';
 try{const [research,live]=await Promise.allSettled([read('/api/research'),read('/api/status')]);
@@ -9,7 +9,7 @@ status('objective-1',complete?'Đủ '+scope.full_snapshots+' snapshot trong k�
 status('objective-3',r.tables?.h1_curves?.length?'Có stress và sensitivity':'Chưa có bảng stress');status('objective-4',r.source_stage?.concentration?.length?'Đạt một phần · concentration đã có':'Chưa có bảng concentration');
 $('overview-updated').textContent=s.updated_utc?'Kết quả được tổng hợp: '+new Date(s.updated_utc).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh'})+' (giờ Việt Nam).':'Chưa có timestamp kết quả nghiên cứu';
 }else{$('overview-error').className='ux-error';$('overview-error').textContent='Chưa đọc được kết quả nghiên cứu. Các mô tả mục tiêu là giới thiệu tính năng; số liệu hiển thị trước đó chưa được xác nhận lại. Bấm Đọc lại trạng thái để thử lại.';$('overview-quarters').textContent='Không tải được';$('overview-pricing').textContent='Không tải được';for(const n of [1,2,3,4])status('objective-'+n,'Chưa đọc được bằng chứng');}
-const state=live.status==='fulfilled'?live.value.state:null;const labels={fresh:'Nguồn đang cập nhật',error:'Lỗi nguồn · chưa gọi là real-time',stale:'Nguồn đã cũ',starting:'Đang chờ block đầu tiên',catching_up:'Đang bắt kịp chain'};$('overview-live').textContent=labels[state]||'Không kết nối được backend';$('overview-live').style.color=state==='fresh'?'#215f4d':'#775118';
+const state=live.status==='fulfilled'?live.value.state:null;const labels={snapshot_only:'Kết quả lịch sử · chưa bật live',fresh:'Nguồn đang cập nhật',error:'Lỗi nguồn · chưa gọi là real-time',stale:'Nguồn đã cũ',starting:'Đang chờ block đầu tiên',catching_up:'Đang bắt kịp chain'};$('overview-live').textContent=labels[state]||'Không kết nối được backend';if(state==='snapshot_only')status('objective-5','Bản lịch sử trên Vercel · live chưa cấu hình');$('overview-live').style.color=state==='fresh'?'#215f4d':'#775118';
 }finally{busy=false;$('overview-reload').disabled=false}}
 $('overview-reload').addEventListener('click',refresh);refresh();setInterval(refresh,30000);
 })();

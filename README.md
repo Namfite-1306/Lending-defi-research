@@ -39,3 +39,8 @@ output/            Logs, audit, backup và artifact tạm
 ```
 
 Các tên lệnh/import hiện có vẫn dùng được, ví dụ `python -m research_h124.market_prices --help`, `python scripts/validate_model_run.py --help` và `python -m streamlit run streamlit_app.py`. Không cần sửa pipeline theo tên các folder nhóm mới.
+
+
+## Dashboard trên Vercel
+
+Bản deploy dùng static evidence và Node API adapter, không chạy collector Python trong Function. Hướng dẫn cấu hình, cập nhật snapshot và bật backend real-time: [Deploy Vercel](docs/dashboard/DEPLOY_VERCEL.md). Quy trình xử lý các giới hạn nghiên cứu: [Kế hoạch năm mục tiêu](docs/research/KE_HOACH_KHAC_PHUC_5_MUC_TIEU.md).

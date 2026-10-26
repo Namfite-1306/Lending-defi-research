@@ -1,4 +1,4 @@
-import argparse,threading,time
+import argparse,threading,time,os
 from pathlib import Path
 from .store import Store
 from .collector import Collector,collector_loop
@@ -23,7 +23,12 @@ def main():
     p.add_argument('--backtest-dir',type=Path,default=ROOT/'data/stress_backtests_20261024')
     p.add_argument('--research-results',type=Path,default=ROOT/'results/research_h124_20261024')
     p.add_argument('--research-data',type=Path,default=ROOT/'data/research_h124_20261024')
+    p.add_argument('--api-token-env',help='Optional environment variable holding backend bearer token; never pass the token as an argument')
+    p.add_argument('--post-per-minute',type=int,default=12,help='Per-client limit on simulation submissions')
     a=p.parse_args()
+    token=os.environ.get(a.api_token_env) if a.api_token_env else None
+    if a.api_token_env and not token:p.error('Configured backend token environment variable is empty')
+    if a.post_per_minute<1:p.error('POST limit must be positive')
     if a.poll_seconds<5 or a.snapshot_seconds<30 or a.confirmations<1 or not 1<=a.chunk<=100 or a.lookback_blocks<1 or a.wallet_limit<0:p.error('Invalid timing/block/cohort limits')
     store=Store(a.state_dir);collector=Collector(store,a.confirmations,a.lookback_blocks,a.chunk,start_block=a.start_block)
     models=LiveModels(store,a.wallet_limit,a.wallet_file,a.historical_results)
@@ -41,7 +46,7 @@ def main():
         collector.poll();collector.prices()
         if models.universe:models.universe.scan()
         models.update();models.update_exposures();print('One-shot complete; not a continuing real-time service');return
-    stop=threading.Event();server=make_server(store,models,'127.0.0.1',a.port,a.poll_seconds,a.snapshot_seconds)
+    stop=threading.Event();server=make_server(store,models,'127.0.0.1',a.port,a.poll_seconds,a.snapshot_seconds,api_token=token,post_per_minute=a.post_per_minute)
     threading.Thread(target=collector_loop,args=(collector,stop,a.poll_seconds),daemon=True,name='chain-collector').start()
     if models.universe:threading.Thread(target=universe_loop,args=(models.universe,stop,a.universe_seconds),daemon=True,name='borrower-census').start()
     if models.universe:threading.Thread(target=discovery_loop,args=(models.universe,stop),daemon=True,name='borrower-discovery-gap').start()

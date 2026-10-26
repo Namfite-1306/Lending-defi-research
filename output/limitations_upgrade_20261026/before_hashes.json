@@ -1,0 +1,34 @@
+{
+  "defi_live/store.py": {
+    "C": "deb5e91b3e7abd4e086e384d4a1e17dd59cfbc8491ae244ebcd073d54f4cc383",
+    "E": "deb5e91b3e7abd4e086e384d4a1e17dd59cfbc8491ae244ebcd073d54f4cc383"
+  },
+  "defi_live/lab.py": {
+    "C": "d978c736aa0d6d3b87da3c7868fa68cfae8d9b7f6f6149b0ac961e8f55cce6e3",
+    "E": "d978c736aa0d6d3b87da3c7868fa68cfae8d9b7f6f6149b0ac961e8f55cce6e3"
+  },
+  "defi_live/server.py": {
+    "C": "8b44c000a9510c62f8d791d35dd19ef6a003b470c887099a8fcf398eb63be26a",
+    "E": "8b44c000a9510c62f8d791d35dd19ef6a003b470c887099a8fcf398eb63be26a"
+  },
+  "defi_live/research.py": {
+    "C": "cd4e2ca21e2e7af7ee585d450633aa46553d93e3995ca0169fd6ae03760cbba7",
+    "E": "cd4e2ca21e2e7af7ee585d450633aa46553d93e3995ca0169fd6ae03760cbba7"
+  },
+  "defi_live/__main__.py": {
+    "C": "582c732cfaf47535bcb3ccdafba1b887bb528fc6a399073020d41a22300876d3",
+    "E": "582c732cfaf47535bcb3ccdafba1b887bb528fc6a399073020d41a22300876d3"
+  },
+  "defi_live/web/research.html": {
+    "C": "416a59636e5bc4542d68cd2691eda73b72e7f78b7279a8b3f5559b4944824a4d",
+    "E": "416a59636e5bc4542d68cd2691eda73b72e7f78b7279a8b3f5559b4944824a4d"
+  },
+  "defi_live/web/research.js": {
+    "C": "cb5454fd2c57ba95e591a946ec334ef24d2d09479f65ad4cf3100dfb1dd2ea05",
+    "E": "cb5454fd2c57ba95e591a946ec334ef24d2d09479f65ad4cf3100dfb1dd2ea05"
+  },
+  "defi_live/web/ux.css": {
+    "C": "24110f4eb8b5db125cad92e4372e5807487f8723f6a335b2c3cabe8be830ee36",
+    "E": "24110f4eb8b5db125cad92e4372e5807487f8723f6a335b2c3cabe8be830ee36"
+  }
+}

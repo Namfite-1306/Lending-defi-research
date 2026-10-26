@@ -104,3 +104,14 @@ body #overview-live{color:#DC9F85!important}
 
 /* One typeface for headings, copy, controls, numbers, code and chart labels. */
 body,body *,body *::before,body *::after{font-family:'Segoe UI',sans-serif!important;text-shadow:none!important;box-shadow:none!important;-webkit-text-stroke:0!important}
+/* Findings are derived from the displayed evidence; retain limits beside the result. */
+.research-finding{margin:22px 0;padding:24px;border:1px solid #66473B;border-left:3px solid #DC9F85;background:#35211A;border-radius:4px}
+.research-finding .finding-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#DC9F85;font-weight:700}
+body[data-ux-page=research] .research-finding h3{font-size:23px;line-height:1.35;margin:12px 0 20px;text-transform:none;letter-spacing:-.025em}
+.finding-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:16px 0}
+.finding-metrics span{display:block;color:#B6A596;font-size:12px}
+.finding-metrics strong{display:block;color:#DC9F85;font-size:23px;line-height:1.4;margin-top:6px}
+.finding-scope{color:#B6A596;font-size:12px!important}
+.finding-limit{border-top:1px solid #66473B;padding-top:13px;font-size:13px!important;color:#EBDCC4}
+@media(max-width:700px){.research-finding{padding:18px}.finding-metrics{grid-template-columns:1fr;gap:12px}body[data-ux-page=research] .research-finding h3{font-size:20px}}
+.finding-followup{font-size:13px!important;line-height:1.75;border-top:1px solid #66473B;padding-top:14px;color:#EBDCC4}

@@ -14,6 +14,14 @@ class Store:
             CREATE INDEX IF NOT EXISTS live_event_block ON events(block);
             CREATE INDEX IF NOT EXISTS live_event_account ON events(protocol,account,block);
             CREATE TABLE IF NOT EXISTS products (name TEXT PRIMARY KEY,block INTEGER,hash TEXT,source_stamp INTEGER,built_at REAL,payload TEXT);''')
+            c.execute('CREATE TABLE IF NOT EXISTS research_jobs (id TEXT PRIMARY KEY, state TEXT, owner TEXT, updated REAL, payload TEXT)')
+    def put_job(self,identifier,value,owner):
+        with self.db() as c:
+            c.execute('INSERT OR REPLACE INTO research_jobs VALUES (?,?,?,?,?)',(identifier,value['state'],owner,time.time(),json.dumps(value,allow_nan=False)))
+            c.execute("DELETE FROM research_jobs WHERE state!='running' AND id IN (SELECT id FROM research_jobs WHERE state!='running' ORDER BY updated DESC LIMIT -1 OFFSET 32)")
+    def get_job(self,identifier):
+        with self.db() as c:r=c.execute('SELECT owner,payload FROM research_jobs WHERE id=?',(identifier,)).fetchone()
+        return (r['owner'],json.loads(r['payload'])) if r else None
     @contextmanager
     def db(self):
         c=sqlite3.connect(self.path,timeout=30);c.row_factory=sqlite3.Row

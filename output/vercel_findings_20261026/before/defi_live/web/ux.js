@@ -1,0 +1,16 @@
+/* Navigation and progressive disclosure. No model refitting or data mutation. */
+(()=>{'use strict';
+const page=location.pathname,kind=page==='/start'?'overview':page==='/research'?'research':page==='/lab'?'lab':page==='/guide'?'guide':page==='/validation'?'validation':'live';
+document.body.dataset.uxPage=kind;
+const links=[['/start','Tổng quan'],['/research','Kết quả nghiên cứu'],['/lab','Thử kịch bản'],['/','Giám sát nguồn'],['/validation','Kiểm chứng'],['/guide','Hướng dẫn']];
+const nav=document.createElement('div');nav.className='app-nav';nav.innerHTML='<a class="app-brand" href="/start"><span class="app-icon" aria-hidden="true">D</span>DeFi Research Lab</a><nav aria-label="Điều hướng dashboard">'+links.map(([url,label])=>'<a href="'+url+'"'+(url===page?' aria-current="page"':'')+'>'+label+'</a>').join('')+'</nav><span class="local-label">Local · Chỉ đọc</span>';
+document.body.prepend(nav);const skip=document.createElement('a');skip.href='#main-content';skip.className='skip-link';skip.textContent='Bỏ qua điều hướng';document.body.prepend(skip);const main=document.querySelector('main');if(main){main.id='main-content';main.tabIndex=-1;}
+if(kind!=='research')return;
+const tabMap={sources:'h2',h1:'h1',h2:'h2',h3:'h3',cascade:'cascade',repair:'archive',archive:'archive'};
+function activate(name,focus=false){const selected=document.querySelector('[data-research-tab="'+name+'"]');if(!selected)return;document.querySelectorAll('[data-research-tab]').forEach(b=>{const yes=b===selected;b.setAttribute('aria-selected',String(yes));b.tabIndex=yes?0:-1;document.getElementById(b.getAttribute('aria-controls')).hidden=!yes});if(focus)selected.focus();if(location.hash==='#repair'){const archive=document.querySelector('#panel-archive details');if(archive)archive.open=true}}
+const buttons=[...document.querySelectorAll('[data-research-tab]')];
+for(const b of buttons){b.addEventListener('click',()=>{const name=b.dataset.researchTab;history.replaceState(null,'','#'+(name==='h2'?'sources':name));activate(name)});b.addEventListener('keydown',event=>{let j=buttons.indexOf(b);if(event.key==='ArrowRight')j=(j+1)%buttons.length;else if(event.key==='ArrowLeft')j=(j-1+buttons.length)%buttons.length;else if(event.key==='Home')j=0;else if(event.key==='End')j=buttons.length-1;else return;event.preventDefault();buttons[j].click();buttons[j].focus()})}
+activate(tabMap[location.hash.slice(1)]||'h1');window.addEventListener('hashchange',()=>activate(tabMap[location.hash.slice(1)]||'h1'));
+for(const b of document.querySelectorAll('[data-reset-panel]'))b.addEventListener('click',()=>{const panel=document.getElementById(b.dataset.resetPanel);for(const s of panel.querySelectorAll('select')){const original=s.id==='quarter'?s.options[s.options.length-1]:[...s.options].find(o=>o.defaultSelected)||s.options[0];if(original){s.value=original.value;s.dispatchEvent(new Event('change',{bubbles:true}))}}});
+const reload=document.getElementById('research-reload');if(reload)reload.addEventListener('click',async()=>{reload.disabled=true;reload.textContent='Đang đọc kết quả…';try{if(typeof window.refresh==='function')await window.refresh()}finally{reload.disabled=false;reload.textContent='Đọc lại kết quả'}});
+})();

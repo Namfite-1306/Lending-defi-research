@@ -1,0 +1,9 @@
+{
+  "name": "defi-research-dashboard",
+  "private": true,
+  "engines": {"node": "22.x"},
+  "scripts": {
+    "build": "node scripts/deployment/build_vercel.mjs",
+    "test:deployment": "node --test tests/deployment.test.cjs"
+  }
+}
