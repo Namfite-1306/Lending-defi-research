@@ -1,0 +1,5 @@
+{
+  "H1": "Trên các snapshot cuối quý của Aave V3, dư nợ đủ điều kiện thanh lý phản ứng phi tuyến với cú sốc giá ETH/BTC và vị trí thay đổi độ dốc khác nhau giữa các quý.",
+  "H2": "Trong mẫu khớp cùng kỳ và cặp tài sản, giá trị thanh lý tập trung vào một nhóm nhỏ địa chỉ người vay và mức concentration mô tả khác nhau giữa các giao thức có đủ số quan sát.",
+  "H3": "Bổ sung lịch sử thanh lý đã lag vào mô hình có điều kiện thị trường và hoạt động giao thức cải thiện log-score dự báo trên cùng tập đánh giá theo thời gian, so với mô hình không có lịch sử."
+}
